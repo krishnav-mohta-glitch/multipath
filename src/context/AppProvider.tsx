@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import type { NavTab, UserSessionState } from '../types/session';
+import type { NavTab, UserSessionState, RecentTopicVisit } from '../types/session';
 import type { SubjectId } from '../types/subject';
 import type { LearningPathId } from '../types/learningPath';
 import { TOPICS } from '../data/topics';
@@ -17,13 +17,48 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [activePath, setActivePathState] = useState<LearningPathId>('structured-explanation');
   const [selectedSubjectId, setSelectedSubjectId] = useState<SubjectId | 'all'>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [sessionState, setSessionState] = useState<UserSessionState>(INITIAL_SESSION_STATE);
+  const [sessionState, setSessionState] = useState<UserSessionState>(() => {
+    // Hydrate bookmarks from persistent local storage on initial mount
+    const savedBookmarks = storageService.getBookmarks();
+    return {
+      ...INITIAL_SESSION_STATE,
+      savedTopicIds: savedBookmarks.length > 0 ? savedBookmarks : INITIAL_SESSION_STATE.savedTopicIds
+    };
+  });
   const [featureModal, setFeatureModal] = useState<FeatureModalState>({
     isOpen: false,
     feature: null,
   });
 
   const activeTopic = TOPICS.find((t) => t.id === selectedTopicId) || null;
+
+  // Hydrate recent visits from actual persistent activity records on application startup
+  useEffect(() => {
+    storageService.getAllActivities().then((activities) => {
+      if (activities && activities.length > 0) {
+        const visitMap = new Map<string, RecentTopicVisit>();
+        for (const act of activities) {
+          if (act.topicId && !visitMap.has(act.topicId)) {
+            const timeAgo = new Date(act.timestamp).toLocaleDateString(undefined, {
+              month: 'short',
+              day: 'numeric'
+            });
+            visitMap.set(act.topicId, {
+              topicId: act.topicId,
+              lastVisited: timeAgo,
+              lastPathUsed: (act.pathId as LearningPathId) || 'structured-explanation'
+            });
+          }
+        }
+        if (visitMap.size > 0) {
+          setSessionState((prev) => ({
+            ...prev,
+            recentVisits: Array.from(visitMap.values()).slice(0, 8)
+          }));
+        }
+      }
+    }).catch((e) => console.warn('[AppProvider] Hydration error:', e));
+  }, []);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -105,11 +140,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const toggleBookmark = (topicId: string) => {
     setSessionState((prev) => {
       const exists = prev.savedTopicIds.includes(topicId);
+      const nextSavedIds = exists
+        ? prev.savedTopicIds.filter((id) => id !== topicId)
+        : [...prev.savedTopicIds, topicId];
+      // Persist to local-first storage immediately
+      storageService.saveBookmarks(nextSavedIds);
       return {
         ...prev,
-        savedTopicIds: exists
-          ? prev.savedTopicIds.filter((id) => id !== topicId)
-          : [...prev.savedTopicIds, topicId],
+        savedTopicIds: nextSavedIds,
       };
     });
   };

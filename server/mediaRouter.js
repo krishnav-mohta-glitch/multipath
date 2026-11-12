@@ -19,10 +19,13 @@ function sanitizeString(input, maxLength = 200) {
  * Health check
  */
 mediaRouter.get('/health', (req, res) => {
+  const isConfigured = geminiService.isConfigured();
   res.json({
     status: 'ok',
     service: 'Adaptive Media Generation Engine',
-    geminiConfigured: geminiService.isConfigured(),
+    geminiConfigured: isConfigured,
+    model: geminiService.model,
+    mode: isConfigured ? `Live Gemini AI (${geminiService.model})` : 'Demonstration Mode',
     timestamp: new Date().toISOString()
   });
 });

@@ -129,7 +129,15 @@ export function evaluateScienceResponse(topicId, studentText) {
     }
   }
 
+  if (clean.length > 5) {
+    return {
+      conceptRecognized: 'general_scientific_inquiry',
+      evaluation: 'insufficient-info',
+      guidanceTip: 'In empirical science, focus on the underlying physical mechanism: what particles, forces, or energy transfers govern this specific process?'
+    };
+  }
+
   return {
-    evaluation: null, // Let contextual Socratic engine evaluate
+    evaluation: null,
   };
 }

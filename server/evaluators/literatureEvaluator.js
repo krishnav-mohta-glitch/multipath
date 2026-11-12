@@ -7,7 +7,12 @@
 export function evaluateLiteratureResponse(topicId, studentText) {
   const clean = studentText.toLowerCase();
 
-  if (topicId === 'eng-metaphors') {
+  const isMetaphorTopic =
+    topicId === 'eng-understanding-metaphors' ||
+    topicId === 'eng-metaphors' ||
+    (typeof topicId === 'string' && topicId.startsWith('eng-'));
+
+  if (isMetaphorTopic) {
     // Check for Tenor / Vehicle / Ground recognition
     const mentionsTenor = /tenor|subject|target|thing being described|real subject/.test(clean);
     const mentionsVehicle = /vehicle|image|comparison|symbol|figure/.test(clean);
@@ -51,6 +56,14 @@ export function evaluateLiteratureResponse(topicId, studentText) {
         conceptRecognized: 'affective_literary_interpretation',
         evaluation: 'correct',
         guidanceTip: 'Perceptive textual reading: In literature, multiple interpretations of metaphor are valid as long as they are grounded in textual connotations and emotional resonance.'
+      };
+    }
+
+    if (clean.length > 5) {
+      return {
+        conceptRecognized: 'emerging_interpretive_reading',
+        evaluation: 'insufficient-info',
+        guidanceTip: 'In literary analysis, focus closely on the comparison: what is the literal concept (the tenor), and what concrete image (the vehicle) is used to describe it?'
       };
     }
   }

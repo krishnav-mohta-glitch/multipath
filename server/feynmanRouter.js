@@ -24,7 +24,8 @@ feynmanRouter.get('/health', (req, res) => {
     status: 'ok',
     service: 'Feynman Mode Curious Learner API',
     geminiConfigured: isConfigured,
-    mode: isConfigured ? 'Live Gemini AI' : 'Demonstration Mode',
+    model: geminiService.model,
+    mode: isConfigured ? `Live Gemini AI Learner (${geminiService.model})` : 'Demonstration Mode',
     timestamp: new Date().toISOString()
   });
 });
@@ -67,10 +68,11 @@ feynmanRouter.post('/start', async (req, res) => {
 /**
  * Submit student teaching explanation/turn
  * POST /api/feynman/respond
+ * Body: { sessionId, studentExplanation, session }
  */
 feynmanRouter.post('/respond', async (req, res) => {
   try {
-    const { sessionId, studentExplanation } = req.body || {};
+    const { sessionId, studentExplanation, session } = req.body || {};
 
     if (!sessionId || !studentExplanation) {
       return res.status(400).json({ error: 'Missing sessionId or studentExplanation.' });
@@ -85,8 +87,14 @@ feynmanRouter.post('/respond', async (req, res) => {
 
     const result = await feynmanEngine.processTurn({
       sessionId: cleanSessionId,
-      studentExplanation: cleanExplanation
+      studentExplanation: cleanExplanation,
+      sessionPayload: session
     });
+
+    if (result.error) {
+      const statusCode = result.code === 'SESSION_NOT_FOUND' ? 404 : 400;
+      return res.status(statusCode).json(result);
+    }
 
     return res.json(result);
   } catch (error) {
@@ -98,20 +106,25 @@ feynmanRouter.post('/respond', async (req, res) => {
 /**
  * Trigger diagnostic assessment & knowledge gap report
  * POST /api/feynman/assess
+ * Body: { sessionId, session }
  */
 feynmanRouter.post('/assess', async (req, res) => {
   try {
-    const { sessionId } = req.body || {};
+    const { sessionId, session } = req.body || {};
 
     if (!sessionId) {
       return res.status(400).json({ error: 'Missing sessionId.' });
     }
 
     const cleanSessionId = sanitizeString(sessionId, 100);
-    const assessmentResult = await feynmanEngine.generateAssessment({ sessionId: cleanSessionId });
+    const assessmentResult = await feynmanEngine.generateAssessment({
+      sessionId: cleanSessionId,
+      sessionPayload: session
+    });
 
     if (assessmentResult.error) {
-      return res.status(400).json(assessmentResult);
+      const statusCode = assessmentResult.code === 'SESSION_NOT_FOUND' ? 404 : 400;
+      return res.status(statusCode).json(assessmentResult);
     }
 
     return res.json(assessmentResult);

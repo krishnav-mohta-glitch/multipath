@@ -489,6 +489,27 @@ class StorageService {
   // 4. PRIVACY, STATS & EXPORT CONTROLS
   // =========================================================================
 
+  getBookmarks(): string[] {
+    if (typeof window === 'undefined') return [];
+    try {
+      const raw = localStorage.getItem('multipath_saved_bookmarks');
+      if (!raw) return [];
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+
+  saveBookmarks(bookmarks: string[]): void {
+    if (typeof window === 'undefined') return;
+    try {
+      localStorage.setItem('multipath_saved_bookmarks', JSON.stringify(bookmarks));
+    } catch (e) {
+      console.warn('[StorageService] saveBookmarks error:', e);
+    }
+  }
+
   async getStorageStats(): Promise<{
     activitiesCount: number;
     topicsExploredCount: number;
@@ -522,11 +543,13 @@ class StorageService {
     const activities = await this.getAllActivities();
     const topics = this.getAllTopicHistoryFromLS();
     const media = await this.getAllMediaResources();
+    const bookmarks = this.getBookmarks();
 
     const backup = {
       application: 'MULTIPATH Educational Platform',
-      version: '1.0.0',
+      version: '2.0.0',
       exportedAt: new Date().toISOString(),
+      bookmarks,
       activities,
       topics,
       mediaResources: media,
@@ -542,6 +565,23 @@ class StorageService {
         localStorage.removeItem(LS_ACTIVITIES_KEY);
         localStorage.removeItem(LS_TOPICS_KEY);
         localStorage.removeItem(LS_MEDIA_KEY);
+        localStorage.removeItem('multipath_saved_bookmarks');
+
+        // Clear active session keys
+        const keysToRemove: string[] = [];
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          if (
+            key &&
+            (key.startsWith('multipath_active_discovery_') ||
+              key.startsWith('multipath_active_feynman_'))
+          ) {
+            keysToRemove.push(key);
+          }
+        }
+        for (const k of keysToRemove) {
+          localStorage.removeItem(k);
+        }
       } catch {
         // ignore
       }

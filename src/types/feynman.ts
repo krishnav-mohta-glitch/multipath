@@ -96,17 +96,23 @@ export interface FeynmanAssessmentData {
   evaluatedAt: string;
 }
 
+export interface FeynmanSession {
+  id: string;
+  topicId: string;
+  subject: string;
+  topicTitle: string;
+  learningObjectives: string[];
+  studentExplanations: string[];
+  history: FeynmanMessage[];
+  assessment?: FeynmanAssessmentData | null;
+  adaptiveMediaPayload?: AdaptiveMediaPayload | null;
+  isCompleted: boolean;
+  createdAt?: string;
+}
+
 export interface StartFeynmanResponse {
   sessionId: string;
-  session: {
-    id: string;
-    topicId: string;
-    subject: string;
-    topicTitle: string;
-    learningObjectives: string[];
-    history: FeynmanMessage[];
-    isCompleted: boolean;
-  };
+  session: FeynmanSession;
   isDemonstrationMode: boolean;
   modeNotice: string;
 }
@@ -118,6 +124,7 @@ export interface FeynmanTurnResponse {
   isDemonstrationMode: boolean;
   modeNotice: string;
   turnCount: number;
+  session?: FeynmanSession;
 }
 
 export interface FeynmanAssessmentResponse {
@@ -126,4 +133,5 @@ export interface FeynmanAssessmentResponse {
   modeNotice: string;
   assessment: FeynmanAssessmentData;
   adaptiveMediaPayload: AdaptiveMediaPayload;
+  session?: FeynmanSession;
 }

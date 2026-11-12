@@ -22,8 +22,10 @@ discoveryRouter.get('/health', (req, res) => {
   const isConfigured = geminiService.isConfigured();
   res.json({
     status: 'ok',
+    service: 'Guided Discovery Socratic API',
     geminiConfigured: isConfigured,
-    mode: isConfigured ? 'Live Gemini AI' : 'Demonstration Mode',
+    model: geminiService.model,
+    mode: isConfigured ? `Live Gemini AI (${geminiService.model})` : 'Demonstration Mode',
     timestamp: new Date().toISOString()
   });
 });
@@ -63,11 +65,11 @@ discoveryRouter.post('/start', (req, res) => {
 /**
  * Submit student response
  * POST /api/discovery/respond
- * Body: { sessionId, studentMessage }
+ * Body: { sessionId, studentMessage, session }
  */
 discoveryRouter.post('/respond', async (req, res) => {
   try {
-    const { sessionId, studentMessage } = req.body || {};
+    const { sessionId, studentMessage, session } = req.body || {};
 
     if (!sessionId || !studentMessage) {
       return res.status(400).json({ error: 'Missing sessionId or studentMessage.' });
@@ -82,8 +84,14 @@ discoveryRouter.post('/respond', async (req, res) => {
 
     const result = await socraticEngine.processTurn({
       sessionId: cleanSessionId,
-      studentMessage: cleanMessage
+      studentMessage: cleanMessage,
+      sessionPayload: session
     });
+
+    if (result.error) {
+      const statusCode = result.code === 'SESSION_NOT_FOUND' ? 404 : 400;
+      return res.status(statusCode).json(result);
+    }
 
     return res.json(result);
   } catch (error) {
@@ -95,21 +103,25 @@ discoveryRouter.post('/respond', async (req, res) => {
 /**
  * Request progressive hint
  * POST /api/discovery/hint
- * Body: { sessionId }
+ * Body: { sessionId, session }
  */
 discoveryRouter.post('/hint', async (req, res) => {
   try {
-    const { sessionId } = req.body || {};
+    const { sessionId, session } = req.body || {};
 
     if (!sessionId) {
       return res.status(400).json({ error: 'Missing sessionId.' });
     }
 
     const cleanSessionId = sanitizeString(sessionId, 100);
-    const hintData = await socraticEngine.provideHint({ sessionId: cleanSessionId });
+    const hintData = await socraticEngine.provideHint({
+      sessionId: cleanSessionId,
+      sessionPayload: session
+    });
 
     if (hintData.error) {
-      return res.status(404).json(hintData);
+      const statusCode = hintData.code === 'SESSION_NOT_FOUND' ? 404 : 400;
+      return res.status(statusCode).json(hintData);
     }
 
     return res.json(hintData);
@@ -122,21 +134,25 @@ discoveryRouter.post('/hint', async (req, res) => {
 /**
  * Request complete solution
  * POST /api/discovery/solution
- * Body: { sessionId }
+ * Body: { sessionId, session }
  */
 discoveryRouter.post('/solution', async (req, res) => {
   try {
-    const { sessionId } = req.body || {};
+    const { sessionId, session } = req.body || {};
 
     if (!sessionId) {
       return res.status(400).json({ error: 'Missing sessionId.' });
     }
 
     const cleanSessionId = sanitizeString(sessionId, 100);
-    const solutionData = await socraticEngine.provideSolution({ sessionId: cleanSessionId });
+    const solutionData = await socraticEngine.provideSolution({
+      sessionId: cleanSessionId,
+      sessionPayload: session
+    });
 
     if (solutionData.error) {
-      return res.status(404).json(solutionData);
+      const statusCode = solutionData.code === 'SESSION_NOT_FOUND' ? 404 : 400;
+      return res.status(statusCode).json(solutionData);
     }
 
     return res.json(solutionData);

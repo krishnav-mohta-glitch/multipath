@@ -52,6 +52,7 @@ export interface RespondResponse {
   modeNotice: string;
   turnCount: number;
   history: DiscoveryMessage[];
+  session?: DiscoverySession;
 }
 
 export interface HintResponse {
@@ -59,9 +60,11 @@ export interface HintResponse {
   hint: string;
   isDemonstrationMode: boolean;
   remainingHints: number;
+  session?: DiscoverySession;
 }
 
 export interface SolutionResponse {
   isDemonstrationMode: boolean;
   solution: DiscoverySolution;
+  session?: DiscoverySession;
 }

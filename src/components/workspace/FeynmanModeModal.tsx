@@ -25,7 +25,8 @@ import type {
   FeynmanMessage,
   FeynmanAssessmentData,
   AdaptiveMediaPayload,
-  FeynmanConceptStatus
+  FeynmanConceptStatus,
+  FeynmanSession
 } from '../../types/feynman';
 import type { ReassessmentComparison } from '../../types/history';
 import { feynmanService } from '../../services/feynmanService';
@@ -56,6 +57,7 @@ export const FeynmanModeModal: React.FC<FeynmanModeModalProps> = ({
   
   // Session State
   const [sessionId, setSessionId] = useState<string | null>(null);
+  const [activeSession, setActiveSession] = useState<FeynmanSession | null>(null);
   const [messages, setMessages] = useState<FeynmanMessage[]>([]);
   const [studentInput, setStudentInput] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -80,7 +82,25 @@ export const FeynmanModeModal: React.FC<FeynmanModeModalProps> = ({
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const hasInitializedRef = useRef<boolean>(false);
 
+  const STORAGE_FEYNMAN_KEY = `multipath_active_feynman_${topic.id}`;
+
   const startInitialSession = useCallback(async () => {
+    // 1. Check if an active session exists in browser storage
+    try {
+      const rawSaved = localStorage.getItem(STORAGE_FEYNMAN_KEY);
+      if (rawSaved) {
+        const parsed: FeynmanSession = JSON.parse(rawSaved);
+        if (parsed && parsed.id && Array.isArray(parsed.history) && parsed.history.length > 0 && !parsed.isCompleted) {
+          setSessionId(parsed.id);
+          setActiveSession(parsed);
+          setMessages(parsed.history);
+          return;
+        }
+      }
+    } catch (e) {
+      console.warn('[FeynmanMode] Error checking saved session:', e);
+    }
+
     setIsLoading(true);
     setErrorNotice(null);
 
@@ -93,15 +113,18 @@ export const FeynmanModeModal: React.FC<FeynmanModeModalProps> = ({
       });
 
       setSessionId(res.sessionId);
+      setActiveSession(res.session);
       setMessages(res.session.history);
       setIsDemonstrationMode(res.isDemonstrationMode);
       setModeNotice(res.modeNotice);
+
+      localStorage.setItem(STORAGE_FEYNMAN_KEY, JSON.stringify(res.session));
     } catch (err: unknown) {
       setErrorNotice(err instanceof Error ? err.message : 'Failed to connect to Feynman Engine.');
     } finally {
       setIsLoading(false);
     }
-  }, [topic.id, topic.subjectId, topic.title, topic.learningObjectives]);
+  }, [topic.id, topic.subjectId, topic.title, topic.learningObjectives, STORAGE_FEYNMAN_KEY]);
 
   // Scroll to bottom on conversation change
   useEffect(() => {
@@ -115,7 +138,7 @@ export const FeynmanModeModal: React.FC<FeynmanModeModalProps> = ({
         setIsDemonstrationMode(!health.geminiConfigured);
         setModeNotice(
           health.geminiConfigured
-            ? 'Live Gemini 1.5 Flash AI'
+            ? (health.mode || 'Live Gemini AI Learner')
             : 'Demonstration Mode (Curious Socratic Learner)'
         );
       });
@@ -192,10 +215,14 @@ export const FeynmanModeModal: React.FC<FeynmanModeModalProps> = ({
     setMessages((prev) => [...prev, tempStudentMsg]);
 
     try {
-      const res = await feynmanService.submitExplanation(sessionId, currentText);
+      const res = await feynmanService.submitExplanation(sessionId, currentText, activeSession);
       setMessages(res.history);
       setIsDemonstrationMode(res.isDemonstrationMode);
       setModeNotice(res.modeNotice);
+      if (res.session) {
+        setActiveSession(res.session);
+        localStorage.setItem(STORAGE_FEYNMAN_KEY, JSON.stringify(res.session));
+      }
     } catch (err: unknown) {
       setErrorNotice(err instanceof Error ? err.message : 'Error sending explanation to learner.');
     } finally {
@@ -211,9 +238,14 @@ export const FeynmanModeModal: React.FC<FeynmanModeModalProps> = ({
     setErrorNotice(null);
 
     try {
-      const res = await feynmanService.requestAssessment(sessionId);
+      const res = await feynmanService.requestAssessment(sessionId, activeSession);
       setAssessment(res.assessment);
       setAdaptiveMediaPayload(res.adaptiveMediaPayload);
+      if (res.session) {
+        setActiveSession(res.session);
+        // Clear active session since it's completed
+        localStorage.removeItem(STORAGE_FEYNMAN_KEY);
+      }
 
       // Record to storage and check for prior reassessment comparison
       const result = await storageService.recordFeynmanAssessment(
@@ -238,11 +270,17 @@ export const FeynmanModeModal: React.FC<FeynmanModeModalProps> = ({
       speechControllerRef.current.stop();
       setIsRecording(false);
     }
+    try {
+      localStorage.removeItem(STORAGE_FEYNMAN_KEY);
+    } catch {
+      // ignore
+    }
     setAssessment(null);
     setReassessmentComparison(null);
     setAdaptiveMediaPayload(null);
     setCurrentStage('teaching');
     setStudentInput('');
+    setActiveSession(null);
     startInitialSession();
   };
 
@@ -341,7 +379,7 @@ export const FeynmanModeModal: React.FC<FeynmanModeModalProps> = ({
                   isDemonstrationMode ? 'bg-amber-500 animate-pulse' : 'bg-emerald-500'
                 }`}
               />
-              <span>{isDemonstrationMode ? 'Demonstration Mode' : 'Live Gemini 1.5'}</span>
+              <span>{isDemonstrationMode ? 'Demonstration Mode' : (modeNotice.includes('Gemini') ? modeNotice : 'Live Gemini AI')}</span>
             </div>
 
             <button

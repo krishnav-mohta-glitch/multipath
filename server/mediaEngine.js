@@ -16,13 +16,54 @@ export class MediaEngine {
   }
 
   /**
+   * Unified generator dispatcher accepting format in options.
+   */
+  async generateMedia({ format, topicId, subject, topicTitle, selectedGaps, gapDetails }) {
+    const cleanFormat = (format || '').toLowerCase();
+    if (cleanFormat === 'mindmap') {
+      return this.generateMindMap({ topicId, subject, topicTitle, selectedGaps, gapDetails });
+    }
+    if (cleanFormat === 'podcast') {
+      return this.generatePodcast({ topicId, subject, topicTitle, selectedGaps, gapDetails });
+    }
+    if (cleanFormat === 'video') {
+      return this.generateVideoStoryboard({ topicId, subject, topicTitle, selectedGaps, gapDetails });
+    }
+    throw new Error(`Unsupported media format: ${format}`);
+  }
+
+  /**
    * Generates a structured Mind Map specifically tailored to the selected knowledge gaps.
    */
   async generateMindMap({ topicId, subject, topicTitle, selectedGaps, gapDetails }) {
-    // If Gemini is configured, we could prompt Gemini for structured mindmap, or fallback to deterministic
+    if (geminiService.isConfigured()) {
+      const aiResult = await geminiService.generateMindMap({
+        topicId,
+        subject,
+        topicTitle,
+        selectedGaps,
+        gapDetails
+      });
+
+      if (!aiResult.isDemonstrationMode && aiResult.content) {
+        return {
+          resourceId: `res_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+          format: 'mindmap',
+          topicId,
+          subject,
+          topicTitle,
+          selectedGaps,
+          content: aiResult.content,
+          generatedAt: new Date().toISOString(),
+          isDemonstrationMode: false,
+          modeNotice: aiResult.modeNotice
+        };
+      }
+    }
+
     const mindMapData = this.buildDeterministicMindMap(topicId, subject, topicTitle, selectedGaps, gapDetails);
-    
     return {
+      resourceId: `res_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
       format: 'mindmap',
       topicId,
       subject,
@@ -30,7 +71,8 @@ export class MediaEngine {
       selectedGaps,
       content: mindMapData,
       generatedAt: new Date().toISOString(),
-      isDemonstrationMode: !geminiService.isConfigured()
+      isDemonstrationMode: true,
+      modeNotice: 'Demonstration Mode (Deterministic Visual Graph)'
     };
   }
 
@@ -38,9 +80,34 @@ export class MediaEngine {
    * Generates an educational Podcast episode script tailored to the selected gaps.
    */
   async generatePodcast({ topicId, subject, topicTitle, selectedGaps, gapDetails }) {
-    const podcastData = this.buildDeterministicPodcast(topicId, subject, topicTitle, selectedGaps, gapDetails);
+    if (geminiService.isConfigured()) {
+      const aiResult = await geminiService.generatePodcast({
+        topicId,
+        subject,
+        topicTitle,
+        selectedGaps,
+        gapDetails
+      });
 
+      if (!aiResult.isDemonstrationMode && aiResult.content) {
+        return {
+          resourceId: `res_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+          format: 'podcast',
+          topicId,
+          subject,
+          topicTitle,
+          selectedGaps,
+          content: aiResult.content,
+          generatedAt: new Date().toISOString(),
+          isDemonstrationMode: false,
+          modeNotice: aiResult.modeNotice
+        };
+      }
+    }
+
+    const podcastData = this.buildDeterministicPodcast(topicId, subject, topicTitle, selectedGaps, gapDetails);
     return {
+      resourceId: `res_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
       format: 'podcast',
       topicId,
       subject,
@@ -48,7 +115,8 @@ export class MediaEngine {
       selectedGaps,
       content: podcastData,
       generatedAt: new Date().toISOString(),
-      isDemonstrationMode: !geminiService.isConfigured()
+      isDemonstrationMode: true,
+      modeNotice: 'Demonstration Mode (Deterministic Audio Script)'
     };
   }
 
@@ -56,9 +124,34 @@ export class MediaEngine {
    * Generates a structured Explainer Video Storyboard with animated visual scenes.
    */
   async generateVideoStoryboard({ topicId, subject, topicTitle, selectedGaps, gapDetails }) {
-    const videoData = this.buildDeterministicVideo(topicId, subject, topicTitle, selectedGaps, gapDetails);
+    if (geminiService.isConfigured()) {
+      const aiResult = await geminiService.generateVideoStoryboard({
+        topicId,
+        subject,
+        topicTitle,
+        selectedGaps,
+        gapDetails
+      });
 
+      if (!aiResult.isDemonstrationMode && aiResult.content) {
+        return {
+          resourceId: `res_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+          format: 'video',
+          topicId,
+          subject,
+          topicTitle,
+          selectedGaps,
+          content: aiResult.content,
+          generatedAt: new Date().toISOString(),
+          isDemonstrationMode: false,
+          modeNotice: aiResult.modeNotice
+        };
+      }
+    }
+
+    const videoData = this.buildDeterministicVideo(topicId, subject, topicTitle, selectedGaps, gapDetails);
     return {
+      resourceId: `res_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
       format: 'video',
       topicId,
       subject,
@@ -66,7 +159,8 @@ export class MediaEngine {
       selectedGaps,
       content: videoData,
       generatedAt: new Date().toISOString(),
-      isDemonstrationMode: !geminiService.isConfigured()
+      isDemonstrationMode: true,
+      modeNotice: 'Demonstration Mode (Deterministic Storyboard)'
     };
   }
 

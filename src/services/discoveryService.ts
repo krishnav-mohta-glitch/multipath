@@ -7,7 +7,8 @@ import type {
   StartSessionResponse,
   RespondResponse,
   HintResponse,
-  SolutionResponse
+  SolutionResponse,
+  DiscoverySession
 } from '../types/discovery';
 
 const BASE_URL = '/api/discovery';
@@ -33,46 +34,72 @@ export class DiscoveryService {
     return res.json();
   }
 
-  async submitResponse(sessionId: string, studentMessage: string): Promise<RespondResponse> {
+  async submitResponse(
+    sessionId: string,
+    studentMessage: string,
+    sessionContext?: DiscoverySession | null
+  ): Promise<RespondResponse> {
     const res = await fetch(`${BASE_URL}/respond`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ sessionId, studentMessage })
+      body: JSON.stringify({
+        sessionId,
+        studentMessage,
+        session: sessionContext || undefined
+      })
     });
 
     if (!res.ok) {
       const err = await res.json().catch(() => ({ error: 'Failed to process response' }));
-      throw new Error(err.error || `HTTP error ${res.status}`);
+      const error = new Error(err.error || `HTTP error ${res.status}`);
+      (error as Error & { code?: string }).code = err.code;
+      throw error;
     }
 
     return res.json();
   }
 
-  async requestHint(sessionId: string): Promise<HintResponse> {
+  async requestHint(
+    sessionId: string,
+    sessionContext?: DiscoverySession | null
+  ): Promise<HintResponse> {
     const res = await fetch(`${BASE_URL}/hint`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ sessionId })
+      body: JSON.stringify({
+        sessionId,
+        session: sessionContext || undefined
+      })
     });
 
     if (!res.ok) {
       const err = await res.json().catch(() => ({ error: 'Failed to request hint' }));
-      throw new Error(err.error || `HTTP error ${res.status}`);
+      const error = new Error(err.error || `HTTP error ${res.status}`);
+      (error as Error & { code?: string }).code = err.code;
+      throw error;
     }
 
     return res.json();
   }
 
-  async requestSolution(sessionId: string): Promise<SolutionResponse> {
+  async requestSolution(
+    sessionId: string,
+    sessionContext?: DiscoverySession | null
+  ): Promise<SolutionResponse> {
     const res = await fetch(`${BASE_URL}/solution`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ sessionId })
+      body: JSON.stringify({
+        sessionId,
+        session: sessionContext || undefined
+      })
     });
 
     if (!res.ok) {
       const err = await res.json().catch(() => ({ error: 'Failed to request solution' }));
-      throw new Error(err.error || `HTTP error ${res.status}`);
+      const error = new Error(err.error || `HTTP error ${res.status}`);
+      (error as Error & { code?: string }).code = err.code;
+      throw error;
     }
 
     return res.json();

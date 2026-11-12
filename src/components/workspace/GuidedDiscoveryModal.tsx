@@ -14,13 +14,15 @@ import {
   ChevronRight,
   ArrowRight,
   BrainCircuit,
-  MessageCircle
+  MessageCircle,
+  RotateCcw
 } from 'lucide-react';
 import type { Topic } from '../../types/topic';
 import type {
   DiscoveryMessage,
   DiscoveryEvaluation,
-  DiscoverySolution
+  DiscoverySolution,
+  DiscoverySession
 } from '../../types/discovery';
 import { discoveryService } from '../../services/discoveryService';
 import { storageService } from '../../services/storageService';
@@ -31,6 +33,8 @@ interface GuidedDiscoveryModalProps {
   onClose: () => void;
 }
 
+const STORAGE_ACTIVE_KEY = (topicId: string) => `multipath_active_discovery_${topicId}`;
+
 export const GuidedDiscoveryModal: React.FC<GuidedDiscoveryModalProps> = ({
   topic,
   isOpen,
@@ -38,7 +42,9 @@ export const GuidedDiscoveryModal: React.FC<GuidedDiscoveryModalProps> = ({
 }) => {
   // Session State
   const [sessionId, setSessionId] = useState<string | null>(null);
+  const [activeSession, setActiveSession] = useState<DiscoverySession | null>(null);
   const [sessionActive, setSessionActive] = useState<boolean>(false);
+  const [hasSavedSession, setHasSavedSession] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorNotice, setErrorNotice] = useState<string | null>(null);
 
@@ -62,23 +68,62 @@ export const GuidedDiscoveryModal: React.FC<GuidedDiscoveryModalProps> = ({
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, solution, isLoading]);
 
-  // Check health on open
+  // Check health and check for resumable session on open
   useEffect(() => {
     if (isOpen) {
       discoveryService.checkHealth().then((health) => {
         setIsDemonstrationMode(!health.geminiConfigured);
         setModeNotice(
           health.geminiConfigured
-            ? 'Live Gemini 1.5 Flash AI'
+            ? (health.mode || 'Live Gemini AI')
             : 'Demonstration Mode (Simulated Socratic Guidance)'
         );
       });
+
+      // Check if a saved active session exists for this topic
+      queueMicrotask(() => {
+        try {
+          const rawSaved = localStorage.getItem(STORAGE_ACTIVE_KEY(topic.id));
+          if (rawSaved) {
+            const parsed: DiscoverySession = JSON.parse(rawSaved);
+            if (parsed && parsed.id && Array.isArray(parsed.history) && parsed.history.length > 0 && !parsed.isCompleted) {
+              setHasSavedSession(true);
+            } else {
+              setHasSavedSession(false);
+            }
+          } else {
+            setHasSavedSession(false);
+          }
+        } catch {
+          setHasSavedSession(false);
+        }
+      });
     }
-  }, [isOpen]);
+  }, [isOpen, topic.id]);
 
   if (!isOpen) return null;
 
-  // Initialize a Guided Discovery session
+  // Resume an existing active session from browser storage
+  const handleResumeSavedSession = () => {
+    try {
+      const rawSaved = localStorage.getItem(STORAGE_ACTIVE_KEY(topic.id));
+      if (!rawSaved) return;
+      const parsed: DiscoverySession = JSON.parse(rawSaved);
+      if (parsed && parsed.id && Array.isArray(parsed.history)) {
+        setSessionId(parsed.id);
+        setActiveSession(parsed);
+        setMessages(parsed.history);
+        setHintLevel(parsed.hintLevel || 0);
+        setSessionActive(true);
+        setHasSavedSession(false);
+        setErrorNotice(null);
+      }
+    } catch (e) {
+      console.warn('[GuidedDiscovery] Failed to resume session:', e);
+    }
+  };
+
+  // Initialize a new Guided Discovery session
   const handleStartSession = async (questionToUse?: string) => {
     const q = questionToUse || customQuestion || topic.coreQuestions[0] || 'Explain the core principles.';
     setIsLoading(true);
@@ -93,13 +138,18 @@ export const GuidedDiscoveryModal: React.FC<GuidedDiscoveryModalProps> = ({
       });
 
       setSessionId(res.sessionId);
+      setActiveSession(res.session);
       setSessionActive(true);
+      setHasSavedSession(false);
       setIsDemonstrationMode(res.isDemonstrationMode);
       setModeNotice(res.modeNotice);
       setMessages(res.session.history);
       setHintLevel(0);
       setSolution(null);
       setIsGoalReached(false);
+
+      // Persist active session locally
+      localStorage.setItem(STORAGE_ACTIVE_KEY(topic.id), JSON.stringify(res.session));
 
       storageService.recordActivity({
         type: 'discovery-session',
@@ -136,15 +186,20 @@ export const GuidedDiscoveryModal: React.FC<GuidedDiscoveryModalProps> = ({
     setMessages((prev) => [...prev, tempStudentMsg]);
 
     try {
-      const res = await discoveryService.submitResponse(sessionId, currentText);
+      const res = await discoveryService.submitResponse(sessionId, currentText, activeSession);
       setIsDemonstrationMode(res.isDemonstrationMode);
       setModeNotice(res.modeNotice);
       setMessages(res.history);
+      if (res.session) {
+        setActiveSession(res.session);
+        localStorage.setItem(STORAGE_ACTIVE_KEY(topic.id), JSON.stringify(res.session));
+      }
       if (res.isGoalReached) {
         setIsGoalReached(true);
       }
     } catch (err: unknown) {
-      setErrorNotice(err instanceof Error ? err.message : 'Error sending response to tutor.');
+      const message = err instanceof Error ? err.message : 'Error sending response to tutor.';
+      setErrorNotice(message);
     } finally {
       setIsLoading(false);
       setTimeout(() => textareaRef.current?.focus(), 100);
@@ -158,7 +213,7 @@ export const GuidedDiscoveryModal: React.FC<GuidedDiscoveryModalProps> = ({
     setErrorNotice(null);
 
     try {
-      const res = await discoveryService.requestHint(sessionId);
+      const res = await discoveryService.requestHint(sessionId, activeSession);
       setHintLevel(res.hintLevel);
       setIsDemonstrationMode(res.isDemonstrationMode);
 
@@ -171,6 +226,10 @@ export const GuidedDiscoveryModal: React.FC<GuidedDiscoveryModalProps> = ({
         timestamp: new Date().toISOString()
       };
       setMessages((prev) => [...prev, hintMsg]);
+      if (res.session) {
+        setActiveSession(res.session);
+        localStorage.setItem(STORAGE_ACTIVE_KEY(topic.id), JSON.stringify(res.session));
+      }
     } catch (err: unknown) {
       setErrorNotice(err instanceof Error ? err.message : 'Unable to retrieve hint.');
     } finally {
@@ -185,9 +244,13 @@ export const GuidedDiscoveryModal: React.FC<GuidedDiscoveryModalProps> = ({
     setErrorNotice(null);
 
     try {
-      const res = await discoveryService.requestSolution(sessionId);
+      const res = await discoveryService.requestSolution(sessionId, activeSession);
       setSolution(res.solution);
       setIsGoalReached(true);
+      if (res.session) {
+        setActiveSession(res.session);
+        localStorage.removeItem(STORAGE_ACTIVE_KEY(topic.id));
+      }
     } catch (err: unknown) {
       setErrorNotice(err instanceof Error ? err.message : 'Unable to load solution.');
     } finally {
@@ -197,12 +260,20 @@ export const GuidedDiscoveryModal: React.FC<GuidedDiscoveryModalProps> = ({
 
   // Reset to starter screen
   const handleReset = () => {
+    try {
+      localStorage.removeItem(STORAGE_ACTIVE_KEY(topic.id));
+    } catch {
+      // ignore
+    }
     setSessionActive(false);
     setSessionId(null);
+    setActiveSession(null);
+    setHasSavedSession(false);
     setMessages([]);
     setSolution(null);
     setIsGoalReached(false);
     setHintLevel(0);
+    setErrorNotice(null);
     setStudentInput('');
     setCustomQuestion('');
   };
@@ -287,7 +358,7 @@ export const GuidedDiscoveryModal: React.FC<GuidedDiscoveryModalProps> = ({
                   isDemonstrationMode ? 'bg-amber-500 animate-pulse' : 'bg-emerald-500'
                 }`}
               />
-              <span>{isDemonstrationMode ? 'Demonstration Mode' : 'Live Gemini 1.5'}</span>
+              <span>{isDemonstrationMode ? 'Demonstration Mode' : (modeNotice.includes('Gemini') ? modeNotice : 'Live Gemini AI')}</span>
             </div>
 
             {sessionActive && (
@@ -357,6 +428,28 @@ export const GuidedDiscoveryModal: React.FC<GuidedDiscoveryModalProps> = ({
                 In Guided Discovery, MULTIPATH asks you one question at a time. Each step checks your reasoning, provides graduated hints when needed, and guides you to deduce the core principles yourself.
               </p>
             </div>
+
+            {/* Resumable Session Card */}
+            {hasSavedSession && (
+              <div className="p-4 rounded-xl bg-amber-50 border border-amber-300 flex items-center justify-between gap-4">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-1.5 text-xs font-bold text-amber-800">
+                    <RotateCcw className="w-3.5 h-3.5 text-amber-600" />
+                    <span>Saved In-Progress Session Available</span>
+                  </div>
+                  <p className="text-xs text-amber-900/80">
+                    You have an active Socratic inquiry for this topic saved in your local storage.
+                  </p>
+                </div>
+                <button
+                  onClick={handleResumeSavedSession}
+                  className="px-3.5 py-2 rounded-lg bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs shadow-sm transition-all flex items-center gap-1.5 shrink-0"
+                >
+                  <span>Resume Session</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            )}
 
             {/* Starter Questions */}
             <div className="space-y-3">

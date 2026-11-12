@@ -7,7 +7,8 @@ import type {
   StartFeynmanResponse,
   FeynmanTurnResponse,
   FeynmanAssessmentResponse,
-  AdaptiveMediaPayload
+  AdaptiveMediaPayload,
+  FeynmanSession
 } from '../types/feynman';
 
 const BASE_URL = '/api/feynman';
@@ -34,31 +35,49 @@ export class FeynmanService {
     return res.json();
   }
 
-  async submitExplanation(sessionId: string, studentExplanation: string): Promise<FeynmanTurnResponse> {
+  async submitExplanation(
+    sessionId: string,
+    studentExplanation: string,
+    sessionContext?: FeynmanSession | null
+  ): Promise<FeynmanTurnResponse> {
     const res = await fetch(`${BASE_URL}/respond`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ sessionId, studentExplanation })
+      body: JSON.stringify({
+        sessionId,
+        studentExplanation,
+        session: sessionContext || undefined
+      })
     });
 
     if (!res.ok) {
       const err = await res.json().catch(() => ({ error: 'Failed to submit explanation' }));
-      throw new Error(err.error || `HTTP error ${res.status}`);
+      const error = new Error(err.error || `HTTP error ${res.status}`);
+      (error as Error & { code?: string }).code = err.code;
+      throw error;
     }
 
     return res.json();
   }
 
-  async requestAssessment(sessionId: string): Promise<FeynmanAssessmentResponse> {
+  async requestAssessment(
+    sessionId: string,
+    sessionContext?: FeynmanSession | null
+  ): Promise<FeynmanAssessmentResponse> {
     const res = await fetch(`${BASE_URL}/assess`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ sessionId })
+      body: JSON.stringify({
+        sessionId,
+        session: sessionContext || undefined
+      })
     });
 
     if (!res.ok) {
       const err = await res.json().catch(() => ({ error: 'Failed to generate assessment' }));
-      throw new Error(err.error || `HTTP error ${res.status}`);
+      const error = new Error(err.error || `HTTP error ${res.status}`);
+      (error as Error & { code?: string }).code = err.code;
+      throw error;
     }
 
     return res.json();
