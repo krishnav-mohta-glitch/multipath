@@ -1,0 +1,68 @@
+import type { LearningPathMeta, LearningPathId } from '../types/learningPath';
+
+export const LEARNING_PATHS: Record<LearningPathId, LearningPathMeta> = {
+  'structured-explanation': {
+    id: 'structured-explanation',
+    title: 'Structured Explanation',
+    shortTitle: 'Explanation',
+    tagline: 'Clear, systematic conceptual breakdown in organized logical sections.',
+    description: 'A disciplined, step-by-step exposition dividing the concept into its foundational principles, core mechanisms, key definitions, and synthesis.',
+    bestFor: 'Learners who want thorough conceptual clarity, structured reading, and logical organization.',
+    iconName: 'BookOpen',
+    colorScheme: {
+      accent: 'border-blue-600 text-blue-700 bg-blue-50',
+      border: 'border-blue-200',
+      bg: 'bg-blue-50/50',
+      pillBg: 'bg-blue-100',
+      pillText: 'text-blue-800',
+    },
+  },
+  'visual-learning': {
+    id: 'visual-learning',
+    title: 'Visual Learning',
+    shortTitle: 'Visual Learning',
+    tagline: 'See the architecture through diagrams, process flows, and spatial models.',
+    description: 'Transforming abstract theories into labeled component maps, dual-phase process flows, and structural diagrams that your brain can easily map and recall.',
+    bestFor: 'Learners who ask "what does this actually look like?" and absorb knowledge through diagrams.',
+    iconName: 'Eye',
+    colorScheme: {
+      accent: 'border-violet-600 text-violet-700 bg-violet-50',
+      border: 'border-violet-200',
+      bg: 'bg-violet-50/50',
+      pillBg: 'bg-violet-100',
+      pillText: 'text-violet-800',
+    },
+  },
+  'examples-applications': {
+    id: 'examples-applications',
+    title: 'Examples & Applications',
+    shortTitle: 'Examples & Applied',
+    tagline: 'Learn by doing: worked solutions, case studies, and real-world impact.',
+    description: 'Grounding theory in concrete reality through fully annotated, step-by-step worked problems followed by high-stakes industry and historical case studies.',
+    bestFor: 'Pragmatists who understand fastest when seeing concrete problems solved and asking "how is this used?"',
+    iconName: 'Wrench',
+    colorScheme: {
+      accent: 'border-emerald-600 text-emerald-700 bg-emerald-50',
+      border: 'border-emerald-200',
+      bg: 'bg-emerald-50/50',
+      pillBg: 'bg-emerald-100',
+      pillText: 'text-emerald-800',
+    },
+  },
+  'explore-experiment': {
+    id: 'explore-experiment',
+    title: 'Explore & Experiment',
+    shortTitle: 'Interactive Lab',
+    tagline: 'Hands-on simulation: adjust variables and observe relationships live.',
+    description: 'An interactive sandbox where you manipulate parameters with real-time sliders and controls, testing "what if?" hypotheses and seeing the dynamic consequences.',
+    bestFor: 'Explorers who learn best through active play, trial-and-error, and discovering rules independently.',
+    iconName: 'FlaskConical',
+    colorScheme: {
+      accent: 'border-amber-600 text-amber-700 bg-amber-50',
+      border: 'border-amber-200',
+      bg: 'bg-amber-50/50',
+      pillBg: 'bg-amber-100',
+      pillText: 'text-amber-900',
+    },
+  },
+};
