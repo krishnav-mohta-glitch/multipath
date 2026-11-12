@@ -13,36 +13,38 @@ export const StructuredExplanationView: React.FC<StructuredExplanationViewProps>
     <div className="space-y-8 animate-in fade-in duration-200">
       
       {/* Introduction Callout */}
-      <div className="p-6 rounded-2xl bg-blue-50/70 border border-blue-200/80 space-y-3">
+      <div className="p-6 sm:p-7 rounded-2xl bg-[#E8EAE1] border border-[#DFE2D7] space-y-3">
         <div className="flex items-center gap-2">
-          <BookOpen className="w-5 h-5 text-blue-600" />
-          <span className="text-xs font-bold uppercase tracking-wider text-blue-900">
-            Conceptual Introduction
+          <BookOpen className="w-4 h-4 text-[#111714]" />
+          <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#5E7A65]">
+            DEDUCTIVE FOUNDATION
           </span>
         </div>
 
-        <p className="text-base text-slate-800 leading-relaxed font-serif">
+        <p className="text-base sm:text-lg text-[#171C18] leading-relaxed font-sans font-medium">
           {content.introduction}
         </p>
       </div>
 
       {/* Table of Contents Pill Bar */}
       <div className="space-y-2">
-        <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
-          Section Navigation:
+        <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#5E7A65]">
+          SEQUENCE OUTLINE:
         </span>
         <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
           {content.sections.map((section, idx) => (
             <button
               key={section.id}
               onClick={() => setActiveSectionId(section.id)}
-              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
+              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl font-mono text-xs font-semibold whitespace-nowrap transition-all ${
                 activeSectionId === section.id
-                  ? 'bg-slate-900 text-white shadow-2xs'
-                  : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
+                  ? 'bg-[#111714] text-[#F3F4EC] shadow-2xs'
+                  : 'bg-[#E8EAE1] text-[#171C18] hover:bg-[#DFE2D7] border border-[#DFE2D7]'
               }`}
             >
-              <span className="w-4 h-4 rounded-full bg-slate-200/60 text-slate-700 font-mono text-[10px] flex items-center justify-center">
+              <span className={`w-4 h-4 rounded-full font-mono text-[10px] flex items-center justify-center ${
+                activeSectionId === section.id ? 'bg-[#C8F36B] text-[#111714]' : 'bg-[#DFE2D7] text-[#171C18]'
+              }`}>
                 {idx + 1}
               </span>
               <span>{section.title}</span>
@@ -59,25 +61,25 @@ export const StructuredExplanationView: React.FC<StructuredExplanationViewProps>
             <div
               key={section.id}
               id={section.id}
-              className={`bg-white rounded-2xl border p-6 sm:p-8 space-y-5 transition-all shadow-xs ${
+              className={`bg-[#E8EAE1] rounded-2xl border p-6 sm:p-8 space-y-5 transition-all shadow-xs ${
                 isHighlighted
-                  ? 'border-brand-500 ring-2 ring-brand-500/10'
-                  : 'border-slate-200'
+                  ? 'border-[#111714] ring-1 ring-[#111714]'
+                  : 'border-[#DFE2D7]'
               }`}
             >
               {/* Section Header */}
               <div className="flex items-start justify-between gap-4">
                 <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <span className="w-6 h-6 rounded-lg bg-brand-100 text-brand-800 font-bold text-xs flex items-center justify-center">
+                  <div className="flex items-center gap-2.5">
+                    <span className="w-6 h-6 rounded-lg bg-[#111714] text-[#C8F36B] font-mono font-bold text-xs flex items-center justify-center">
                       {idx + 1}
                     </span>
-                    <h3 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
+                    <h3 className="font-display text-lg sm:text-xl font-bold text-[#171C18] tracking-tight">
                       {section.title}
                     </h3>
                   </div>
                   {section.subtitle && (
-                    <p className="text-xs font-medium text-brand-700 ml-8">
+                    <p className="font-mono text-xs text-[#5E7A65] ml-8">
                       {section.subtitle}
                     </p>
                   )}
@@ -85,7 +87,7 @@ export const StructuredExplanationView: React.FC<StructuredExplanationViewProps>
               </div>
 
               {/* Paragraphs */}
-              <div className="space-y-4 text-sm sm:text-base text-slate-700 leading-relaxed font-sans">
+              <div className="space-y-4 text-sm sm:text-base text-[#171C18] leading-relaxed font-sans">
                 {section.paragraphs.map((p, pIdx) => (
                   <p key={pIdx}>{p}</p>
                 ))}
@@ -93,11 +95,11 @@ export const StructuredExplanationView: React.FC<StructuredExplanationViewProps>
 
               {/* Bullet points if present */}
               {section.bulletPoints && section.bulletPoints.length > 0 && (
-                <ul className="space-y-2 bg-slate-50/70 p-4 rounded-xl border border-slate-200/80">
+                <ul className="space-y-2 bg-[#F1F1E9] p-4 rounded-xl border border-[#DFE2D7]">
                   {section.bulletPoints.map((bp, bIdx) => (
-                    <li key={bIdx} className="flex items-start gap-2 text-xs sm:text-sm text-slate-800">
-                      <span className="w-1.5 h-1.5 rounded-full bg-brand-600 mt-2 shrink-0" />
-                      <span>{bp}</span>
+                    <li key={bIdx} className="flex items-start gap-2.5 text-xs sm:text-sm text-[#171C18]">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#111714] mt-2 shrink-0" />
+                      <span className="leading-relaxed">{bp}</span>
                     </li>
                   ))}
                 </ul>
@@ -106,20 +108,24 @@ export const StructuredExplanationView: React.FC<StructuredExplanationViewProps>
               {/* Callout box if present */}
               {section.callout && (
                 <div className={`p-4 rounded-xl border flex items-start gap-3 ${
-                  section.callout.type === 'axiom' ? 'bg-blue-50/80 border-blue-200 text-blue-950' :
-                  section.callout.type === 'insight' ? 'bg-amber-50/80 border-amber-200 text-amber-950' :
-                  section.callout.type === 'warning' ? 'bg-rose-50/80 border-rose-200 text-rose-950' :
-                  'bg-slate-50 border-slate-200 text-slate-900'
+                  section.callout.type === 'axiom' ? 'bg-[#111714] text-[#F3F4EC] border-white/10' :
+                  section.callout.type === 'insight' ? 'bg-[#F1F1E9] border-[#DFE2D7] text-[#171C18]' :
+                  section.callout.type === 'warning' ? 'bg-[#F1F1E9] border-rose-300 text-rose-950' :
+                  'bg-[#F1F1E9] border-[#DFE2D7] text-[#171C18]'
                 }`}>
-                  {section.callout.type === 'axiom' ? <Info className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" /> :
-                   section.callout.type === 'insight' ? <Lightbulb className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" /> :
-                   section.callout.type === 'warning' ? <AlertTriangle className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" /> :
-                   <Info className="w-5 h-5 text-slate-600 shrink-0 mt-0.5" />}
+                  {section.callout.type === 'axiom' ? <Info className="w-4 h-4 text-[#C8F36B] shrink-0 mt-0.5" /> :
+                   section.callout.type === 'insight' ? <Lightbulb className="w-4 h-4 text-[#111714] shrink-0 mt-0.5" /> :
+                   section.callout.type === 'warning' ? <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" /> :
+                   <Info className="w-4 h-4 text-[#5E7A65] shrink-0 mt-0.5" />}
                   <div className="space-y-1">
-                    <span className="text-xs font-bold uppercase tracking-wider">
+                    <span className={`font-mono text-xs font-bold uppercase tracking-wider ${
+                      section.callout.type === 'axiom' ? 'text-[#C8F36B]' : 'text-[#171C18]'
+                    }`}>
                       {section.callout.title}
                     </span>
-                    <p className="text-xs sm:text-sm leading-relaxed">
+                    <p className={`text-xs sm:text-sm leading-relaxed ${
+                      section.callout.type === 'axiom' ? 'text-[#8DA391]' : 'text-[#171C18]/80'
+                    }`}>
                       {section.callout.text}
                     </p>
                   </div>
@@ -131,19 +137,19 @@ export const StructuredExplanationView: React.FC<StructuredExplanationViewProps>
       </div>
 
       {/* Summary Takeaways Checklist */}
-      <div className="p-6 rounded-2xl bg-emerald-50/70 border border-emerald-200/80 space-y-4">
-        <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-emerald-900">
-          <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-          <span>Core Summary Takeaways</span>
+      <div className="p-6 sm:p-7 rounded-2xl bg-[#E8EAE1] border border-[#DFE2D7] space-y-4">
+        <div className="flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider text-[#5E7A65]">
+          <CheckCircle2 className="w-4 h-4 text-[#111714]" />
+          <span>INVARIANT SUMMARY TAKEAWAYS</span>
         </div>
 
         <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {content.summaryTakeaways.map((takeaway, i) => (
             <li
               key={i}
-              className="p-3 rounded-xl bg-white border border-emerald-200 text-xs sm:text-sm text-emerald-950 font-medium leading-relaxed flex items-start gap-2.5 shadow-2xs"
+              className="p-3.5 rounded-xl bg-[#F1F1E9] border border-[#DFE2D7] text-xs sm:text-sm text-[#171C18] font-medium leading-relaxed flex items-start gap-2.5 shadow-2xs"
             >
-              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+              <CheckCircle2 className="w-4 h-4 text-[#111714] shrink-0 mt-0.5" />
               <span>{takeaway}</span>
             </li>
           ))}
@@ -151,14 +157,16 @@ export const StructuredExplanationView: React.FC<StructuredExplanationViewProps>
       </div>
 
       {/* Metacognitive Reflection Prompt */}
-      <div className="p-5 rounded-xl bg-slate-50 border border-slate-200 flex items-start gap-3">
-        <HelpCircle className="w-5 h-5 text-brand-600 shrink-0 mt-0.5" />
+      <div className="p-5 sm:p-6 rounded-2xl bg-[#111714] text-[#F3F4EC] border border-white/10 flex items-start gap-3.5 shadow-sm">
+        <div className="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center shrink-0 mt-0.5">
+          <HelpCircle className="w-4 h-4 text-[#C8F36B]" />
+        </div>
         <div className="space-y-1">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-700">
-            Independent Reflection Prompt
+          <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-[#C8F36B]">
+            INDEPENDENT REFLECTION PROMPT
           </span>
-          <p className="text-xs sm:text-sm text-slate-800 leading-relaxed italic">
-            “{content.reflectionPrompt}”
+          <p className="text-xs sm:text-sm text-[#8DA391] leading-relaxed italic">
+            &ldquo;{content.reflectionPrompt}&rdquo;
           </p>
         </div>
       </div>

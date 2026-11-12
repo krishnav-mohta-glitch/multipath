@@ -13,51 +13,54 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({ topic }) => {
   const bookmarked = isBookmarked(topic.id);
 
   return (
-    <div className="bg-white border-b border-slate-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-4">
+    <div className="bg-[#F1F1E9] border-b border-[#DFE2D7] sticky top-16 z-30 transition-colors">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 space-y-4">
         
         {/* Navigation Breadcrumb & Actions */}
         <div className="flex items-center justify-between gap-4">
           <button
             onClick={backToLibrary}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-brand-600 transition-colors group"
+            className="inline-flex items-center gap-1.5 font-mono text-xs font-semibold text-[#171C18]/70 hover:text-[#171C18] transition-colors group"
           >
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-            <span>Back to Library</span>
+            <span>LIBRARY / {topic.subjectId.toUpperCase()}</span>
           </button>
 
           {/* Quick Actions: Bookmark */}
           <div className="flex items-center gap-2">
             <button
               onClick={() => toggleBookmark(topic.id)}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-mono text-xs font-semibold border transition-all ${
                 bookmarked
-                  ? 'bg-amber-50 border-amber-200 text-amber-700'
-                  : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+                  ? 'bg-[#111714] text-[#C8F36B] border-[#111714] shadow-xs'
+                  : 'bg-[#E8EAE1] border-[#DFE2D7] text-[#171C18] hover:bg-[#DFE2D7]'
               }`}
             >
-              <Bookmark className={`w-3.5 h-3.5 ${bookmarked ? 'fill-amber-500 text-amber-500' : ''}`} />
-              <span>{bookmarked ? 'Saved to My Learning' : 'Save Topic'}</span>
+              <Bookmark className={`w-3.5 h-3.5 ${bookmarked ? 'fill-[#C8F36B] text-[#C8F36B]' : ''}`} />
+              <span>{bookmarked ? 'SAVED TO MY LEARNING' : 'SAVE TOPIC'}</span>
             </button>
           </div>
         </div>
 
         {/* Title, Subject, & Metadata */}
         <div className="space-y-2">
-          <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex items-center gap-2.5 flex-wrap">
             <SubjectBadge subjectId={topic.subjectId} />
             <DifficultyBadge difficulty={topic.difficulty} />
-            <div className="inline-flex items-center gap-1 text-xs text-slate-500 ml-1">
+            <div className="inline-flex items-center gap-1 font-mono text-xs text-[#171C18]/60">
               <Clock className="w-3.5 h-3.5" />
-              <span>{topic.estimatedMinutes} mins estimated</span>
+              <span>{topic.estimatedMinutes} MINS ESTIMATED</span>
             </div>
+            <span className="font-mono text-[10px] text-[#171C18]/40 border-l border-[#DFE2D7] pl-2.5">
+              ID: {topic.id}
+            </span>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight">
+          <h1 className="font-display text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#171C18] tracking-tight">
             {topic.title}
           </h1>
 
-          <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-3xl">
+          <p className="text-sm sm:text-base text-[#171C18]/80 leading-relaxed max-w-3xl">
             {topic.subtitle}
           </p>
         </div>

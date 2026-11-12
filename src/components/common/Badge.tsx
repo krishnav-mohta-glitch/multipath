@@ -5,7 +5,7 @@ import { SUBJECTS } from '../../data/subjects';
 
 interface BadgeProps {
   children: React.ReactNode;
-  variant?: 'default' | 'neutral' | 'success' | 'warning' | 'info' | 'outline';
+  variant?: 'default' | 'neutral' | 'success' | 'warning' | 'info' | 'outline' | 'lime';
   size?: 'sm' | 'md';
   className?: string;
 }
@@ -16,19 +16,20 @@ export const Badge: React.FC<BadgeProps> = ({
   size = 'md',
   className = '',
 }) => {
-  const sizeClasses = size === 'sm' ? 'px-2 py-0.5 text-xs' : 'px-2.5 py-1 text-xs font-medium';
+  const sizeClasses = size === 'sm' ? 'px-2 py-0.5 text-[10px]' : 'px-2.5 py-0.5 text-xs';
 
   const variantClasses = {
-    default: 'bg-brand-50 text-brand-700 border border-brand-200',
-    neutral: 'bg-slate-100 text-slate-700 border border-slate-200',
-    success: 'bg-emerald-50 text-emerald-700 border border-emerald-200',
-    warning: 'bg-amber-50 text-amber-800 border border-amber-200',
-    info: 'bg-sky-50 text-sky-700 border border-sky-200',
-    outline: 'bg-transparent text-slate-600 border border-slate-300',
+    default: 'bg-[#19211C]/06 text-[#171C18] border border-[#19211C]/12',
+    neutral: 'bg-[#E8EAE1] text-[#19211C] border border-[#19211C]/15',
+    success: 'bg-[#C8F36B]/20 text-[#19211C] border border-[#C8F36B]/50 font-semibold',
+    warning: 'bg-[#faeac3]/50 text-[#854d0e] border border-[#faeac3]',
+    info: 'bg-[#CFDDD1] text-[#1D2A22] border border-[#8DA391]/40',
+    outline: 'bg-transparent text-[#19211C] border border-[#19211C]/20',
+    lime: 'bg-[#C8F36B] text-[#111714] font-bold shadow-xs',
   }[variant];
 
   return (
-    <span className={`inline-flex items-center gap-1 rounded-full ${sizeClasses} ${variantClasses} ${className}`}>
+    <span className={`inline-flex items-center gap-1 rounded-full font-mono font-medium ${sizeClasses} ${variantClasses} ${className}`}>
       {children}
     </span>
   );
@@ -42,16 +43,17 @@ export const DifficultyBadge: React.FC<{ difficulty: DifficultyLevel }> = ({ dif
   };
 
   const { variant, label } = map[difficulty];
-  return <Badge variant={variant}>{label}</Badge>;
+  return <Badge variant={variant} size="sm">{label}</Badge>;
 };
 
 export const SubjectBadge: React.FC<{ subjectId: SubjectId }> = ({ subjectId }) => {
   const subj = SUBJECTS.find((s) => s.id === subjectId);
-  if (!subj) return <Badge variant="neutral">{subjectId}</Badge>;
+  if (!subj) return <Badge variant="neutral" size="sm">{subjectId}</Badge>;
 
   return (
-    <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium ${subj.color.bg} ${subj.color.text} border ${subj.color.border}`}>
-      {subj.name}
+    <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-mono font-semibold bg-[#111714] text-[#F3F4EC] border border-[#19211C]">
+      <span className="w-1.5 h-1.5 rounded-full bg-[#C8F36B]" />
+      <span>{subj.name}</span>
     </span>
   );
 };

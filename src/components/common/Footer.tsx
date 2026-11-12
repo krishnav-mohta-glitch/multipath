@@ -1,47 +1,51 @@
 import React from 'react';
-import { Layers, ShieldCheck, ExternalLink } from 'lucide-react';
+import { ShieldCheck, ArrowUpRight, Cpu } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { SUBJECTS } from '../../data/subjects';
 
 export const Footer: React.FC = () => {
-  const { navigateTo, setSelectedSubjectId, openFeatureModal } = useApp();
+  const { navigateTo, setSelectedSubjectId, openFeatureModal, openTopic } = useApp();
 
   return (
-    <footer className="bg-slate-900 text-slate-300 border-t border-slate-800 transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
+    <footer className="bg-[#111714] text-[#F3F4EC] border-t border-[#19211C] transition-colors">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-12">
           
-          {/* Brand & Mission */}
+          {/* Brand & Manifesto */}
           <div className="lg:col-span-2 space-y-4">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-brand-500 flex items-center justify-center text-white">
-                <Layers className="w-5 h-5 text-white" />
+              <div className="w-8 h-8 rounded-lg bg-[#19211C] border border-[#2C3B32] flex items-center justify-center text-[#C8F36B]">
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                  <circle cx="12" cy="12" r="3" />
+                  <path d="M3 12h6m6 0h6" />
+                  <path d="M12 3v6m0 6v6" />
+                </svg>
               </div>
-              <span className="font-bold text-xl tracking-tight text-white">MULTIPATH</span>
+              <span className="font-display font-bold text-lg tracking-tight text-white">MULTIPATH</span>
             </div>
             
-            <p className="text-sm font-medium text-brand-300">
-              “Learn differently. Think independently.”
+            <p className="text-sm font-medium text-[#C8F36B] tracking-tight">
+              One concept. Multiple ways to understand it.
             </p>
 
-            <p className="text-sm text-slate-400 max-w-sm leading-relaxed">
-              An educational platform built on cognitive flexibility. By breaking down concepts across First Principles, Visual intuition, Real-World applications, and Historical breakthroughs, we help students master ideas and expose hidden gaps in their knowledge.
+            <p className="text-xs text-[#8DA391] max-w-sm leading-relaxed">
+              Engineered for cognitive flexibility and independent inquiry. Discover principles through structured reasoning, spatial intuition, empirical applications, and active Feynman teaching.
             </p>
 
             <div className="pt-2">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-xs text-slate-300">
-                <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                <span>Phase 1 Verified: Structural UI & Multi-Path Engine</span>
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#19211C] border border-[#2C3B32] text-[11px] text-[#C8F36B] font-mono">
+                <ShieldCheck className="w-3.5 h-3.5 text-[#C8F36B]" />
+                <span>Stateless Serverless Core • 8 Domains Active</span>
               </div>
             </div>
           </div>
 
           {/* Subjects Directory */}
           <div className="space-y-3">
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-200">
-              Subjects
+            <h4 className="font-mono text-[10px] uppercase tracking-widest text-[#8DA391]">
+              Knowledge Domains
             </h4>
-            <ul className="space-y-2 text-sm">
+            <ul className="space-y-2 text-xs">
               {SUBJECTS.slice(0, 5).map((s) => (
                 <li key={s.id}>
                   <button
@@ -49,7 +53,7 @@ export const Footer: React.FC = () => {
                       setSelectedSubjectId(s.id);
                       navigateTo('library');
                     }}
-                    className="text-slate-400 hover:text-white transition-colors text-left"
+                    className="text-[#D0D4C7] hover:text-[#C8F36B] transition-colors text-left"
                   >
                     {s.name}
                   </button>
@@ -61,33 +65,33 @@ export const Footer: React.FC = () => {
                     setSelectedSubjectId('all');
                     navigateTo('library');
                   }}
-                  className="text-brand-400 hover:text-brand-300 font-medium inline-flex items-center gap-1 text-xs"
+                  className="text-[#C8F36B] hover:text-white font-medium inline-flex items-center gap-1 text-[11px] pt-1"
                 >
-                  <span>View all 8 subjects</span>
-                  <ExternalLink className="w-3 h-3" />
+                  <span>Explore all 8 disciplines</span>
+                  <ArrowUpRight className="w-3 h-3" />
                 </button>
               </li>
             </ul>
           </div>
 
-          {/* Core Feature Modals */}
+          {/* Core Learning Engines */}
           <div className="space-y-3">
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-200">
-              Core Capabilities
+            <h4 className="font-mono text-[10px] uppercase tracking-widest text-[#8DA391]">
+              Learning Engines
             </h4>
-            <ul className="space-y-2 text-sm">
+            <ul className="space-y-2 text-xs">
               <li>
                 <button
                   onClick={() => openFeatureModal('multiple-paths')}
-                  className="text-slate-400 hover:text-white transition-colors text-left"
+                  className="text-[#D0D4C7] hover:text-[#C8F36B] transition-colors text-left"
                 >
-                  Multiple Learning Paths
+                  Four Convergent Paths
                 </button>
               </li>
               <li>
                 <button
                   onClick={() => openFeatureModal('guided-discovery')}
-                  className="text-slate-400 hover:text-white transition-colors text-left"
+                  className="text-[#D0D4C7] hover:text-[#C8F36B] transition-colors text-left"
                 >
                   Guided Discovery (Socratic)
                 </button>
@@ -95,50 +99,51 @@ export const Footer: React.FC = () => {
               <li>
                 <button
                   onClick={() => openFeatureModal('feynman-mode')}
-                  className="text-slate-400 hover:text-white transition-colors text-left"
+                  className="text-[#D0D4C7] hover:text-[#C8F36B] transition-colors text-left"
                 >
-                  Feynman Mode
+                  Feynman Mode Assessment
                 </button>
               </li>
               <li>
                 <button
-                  onClick={() => navigateTo('mylearning')}
-                  className="text-slate-400 hover:text-white transition-colors text-left"
+                  onClick={() => openTopic('math-linear-equations')}
+                  className="text-[#D0D4C7] hover:text-[#C8F36B] transition-colors text-left"
                 >
-                  Personalized Style Affinity
+                  Adaptive Media Remediator
                 </button>
               </li>
             </ul>
           </div>
 
-          {/* Phase Notice & Principles */}
+          {/* Technology & Reliability */}
           <div className="space-y-3">
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-200">
-              Architecture Scope
+            <h4 className="font-mono text-[10px] uppercase tracking-widest text-[#8DA391]">
+              System Architecture
             </h4>
-            <div className="p-3.5 rounded-xl bg-slate-800/80 border border-slate-700/80 text-xs text-slate-400 space-y-2 leading-relaxed">
-              <p className="font-semibold text-slate-200">
-                Phase 1 Product Foundation
-              </p>
-              <p>
-                Strictly UI and architectural scaffolding. No synthetic chatbots or premature AI mockups. Ready for Phase 2 API integrations.
+            <div className="p-3.5 rounded-xl bg-[#19211C] border border-[#2C3B32] text-xs text-[#8DA391] space-y-2 leading-relaxed">
+              <div className="flex items-center gap-2 text-white font-medium">
+                <Cpu className="w-3.5 h-3.5 text-[#C8F36B]" />
+                <span>Reliability Hardened</span>
+              </div>
+              <p className="text-[11px]">
+                Stateless client-owned sessions, transparent Gemini telemetry, and local-first browser persistence.
               </p>
             </div>
           </div>
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-12 pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
-          <p>© 2026 MULTIPATH. All rights reserved. Designed for cognitive depth.</p>
+        <div className="mt-12 pt-8 border-t border-[#19211C] flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-[#8DA391]">
+          <p>© 2026 MULTIPATH. One concept. Multiple ways to understand it.</p>
           <div className="flex items-center gap-6">
-            <button onClick={() => navigateTo('home')} className="hover:text-slate-300">
-              Home
+            <button onClick={() => navigateTo('home')} className="hover:text-white transition-colors">
+              Overview
             </button>
-            <button onClick={() => navigateTo('library')} className="hover:text-slate-300">
-              Explore Library
+            <button onClick={() => navigateTo('library')} className="hover:text-white transition-colors">
+              Explore
             </button>
-            <button onClick={() => navigateTo('mylearning')} className="hover:text-slate-300">
-              My Learning
+            <button onClick={() => navigateTo('mylearning')} className="hover:text-white transition-colors">
+              My Trajectory
             </button>
           </div>
         </div>

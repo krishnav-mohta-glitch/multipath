@@ -33,20 +33,20 @@ export const PathViewer: React.FC<PathViewerProps> = ({
   const nextMeta = LEARNING_PATHS[nextPathId];
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+    <div className="bg-[#E8EAE1] rounded-2xl border border-[#DFE2D7] shadow-xs overflow-hidden">
       
       {/* Path Header Banner */}
-      <div className="p-6 border-b border-slate-100 bg-slate-50/70 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="p-6 sm:p-7 border-b border-[#DFE2D7] bg-[#F1F1E9] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-xs uppercase font-bold tracking-wider text-brand-600">
-              Active Learning Approach
+            <span className="font-mono text-xs uppercase font-bold tracking-wider text-[#5E7A65]">
+              PERSPECTIVE VIEW
             </span>
           </div>
-          <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight mt-0.5">
+          <h2 className="font-display text-xl sm:text-2xl font-extrabold text-[#171C18] tracking-tight mt-0.5">
             {meta.title}
           </h2>
-          <p className="text-xs text-slate-600 mt-1 max-w-2xl">
+          <p className="text-xs sm:text-sm text-[#171C18]/80 mt-1 max-w-2xl leading-relaxed">
             {meta.description}
           </p>
         </div>
@@ -54,16 +54,16 @@ export const PathViewer: React.FC<PathViewerProps> = ({
         <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
           <button
             onClick={() => onSwitchPath(nextPathId)}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-slate-700 bg-white hover:bg-slate-100 border border-slate-200 rounded-xl transition-all shadow-2xs"
+            className="inline-flex items-center gap-2 px-4 py-2.5 font-mono text-xs font-semibold text-[#171C18] bg-[#E8EAE1] hover:bg-[#DFE2D7] border border-[#DFE2D7] rounded-xl transition-all shadow-2xs group"
           >
-            <span>Next Approach: {nextMeta.shortTitle}</span>
-            <ArrowRight className="w-3.5 h-3.5 text-brand-600" />
+            <span>NEXT: {nextMeta.shortTitle.toUpperCase()}</span>
+            <ArrowRight className="w-3.5 h-3.5 text-[#111714] group-hover:translate-x-0.5 transition-transform" />
           </button>
         </div>
       </div>
 
       {/* Main Path Content Area */}
-      <div className="p-6 sm:p-8">
+      <div className="p-6 sm:p-8 bg-[#F1F1E9]">
         {activePath === 'structured-explanation' && (
           <StructuredExplanationView content={topic.paths['structured-explanation']} />
         )}
@@ -79,31 +79,31 @@ export const PathViewer: React.FC<PathViewerProps> = ({
       </div>
 
       {/* Path Bottom Callout: Cross-Pollinate */}
-      <div className="p-6 bg-slate-50 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="p-6 bg-[#E8EAE1] border-t border-[#DFE2D7] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-brand-100 text-brand-700 flex items-center justify-center shrink-0">
+          <div className="w-8 h-8 rounded-lg bg-[#DFE2D7] text-[#111714] flex items-center justify-center shrink-0">
             <RotateCw className="w-4 h-4" />
           </div>
           <div>
-            <h4 className="text-xs font-bold text-slate-900">
-              Reinforce Across Multiple Approaches
+            <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-[#171C18]">
+              SYNTHESISE MULTIPLE MODES
             </h4>
-            <p className="text-[11px] text-slate-500">
-              Switching between different approaches helps consolidate mental models and exposes knowledge gaps.
+            <p className="text-[11px] text-[#5E7A65]">
+              Cross-comparing paths builds invariant representation in memory.
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-1.5 flex-wrap">
+        <div className="flex items-center gap-2 flex-wrap">
           {topic.availablePaths
             .filter((p) => p !== activePath)
             .map((p) => (
               <button
                 key={p}
                 onClick={() => onSwitchPath(p)}
-                className="px-2.5 py-1 text-xs font-medium bg-white hover:bg-slate-200/70 border border-slate-200 text-slate-700 rounded-lg transition-colors"
+                className="px-3 py-1.5 font-mono text-xs font-medium bg-[#F1F1E9] hover:bg-white border border-[#DFE2D7] text-[#171C18] rounded-lg transition-colors"
               >
-                {LEARNING_PATHS[p].shortTitle}
+                {LEARNING_PATHS[p].shortTitle.toUpperCase()}
               </button>
             ))}
         </div>

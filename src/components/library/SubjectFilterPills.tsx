@@ -39,19 +39,19 @@ export const SubjectFilterPills: React.FC<SubjectFilterPillsProps> = ({
 
   return (
     <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
-      {/* "All Subjects" pill */}
+      {/* "All Disciplines" pill */}
       <button
         onClick={() => onSelectSubject('all')}
-        className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
+        className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
           selectedSubjectId === 'all'
-            ? 'bg-slate-900 text-white shadow-xs'
-            : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
+            ? 'bg-[#111714] text-[#F3F4EC] shadow-xs'
+            : 'bg-[#E8EAE1] text-[#19211C] hover:bg-[#DFE2D7] border border-[#19211C]/10'
         }`}
       >
         <Grid className="w-3.5 h-3.5" />
-        <span>All Subjects</span>
-        <span className={`px-1.5 py-0.2 rounded-full text-[10px] ${
-          selectedSubjectId === 'all' ? 'bg-slate-800 text-slate-200' : 'bg-slate-100 text-slate-600'
+        <span>All Disciplines</span>
+        <span className={`px-1.5 py-0.2 rounded-full font-mono text-[10px] ${
+          selectedSubjectId === 'all' ? 'bg-[#C8F36B] text-[#111714] font-bold' : 'bg-[#19211C]/10 text-[#111714]'
         }`}>
           {totalTopicCount}
         </span>
@@ -67,16 +67,16 @@ export const SubjectFilterPills: React.FC<SubjectFilterPillsProps> = ({
           <button
             key={subject.id}
             onClick={() => onSelectSubject(subject.id)}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
               isSelected
-                ? 'bg-brand-600 text-white shadow-xs'
-                : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
+                ? 'bg-[#111714] text-[#F3F4EC] shadow-xs'
+                : 'bg-[#E8EAE1] text-[#19211C] hover:bg-[#DFE2D7] border border-[#19211C]/10'
             }`}
           >
-            <Icon className={`w-3.5 h-3.5 ${isSelected ? 'text-white' : 'text-slate-600'}`} />
+            <Icon className={`w-3.5 h-3.5 ${isSelected ? 'text-[#C8F36B]' : 'text-[#19211C]/60'}`} />
             <span>{subject.name}</span>
-            <span className={`px-1.5 py-0.2 rounded-full text-[10px] ${
-              isSelected ? 'bg-brand-700 text-brand-100' : 'bg-slate-100 text-slate-600'
+            <span className={`px-1.5 py-0.2 rounded-full font-mono text-[10px] ${
+              isSelected ? 'bg-[#C8F36B] text-[#111714] font-bold' : 'bg-[#19211C]/10 text-[#111714]'
             }`}>
               {count}
             </span>

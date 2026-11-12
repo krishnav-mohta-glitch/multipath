@@ -24,24 +24,25 @@ export const PathSelector: React.FC<PathSelectorProps> = ({
   const activeMeta = LEARNING_PATHS[activePath];
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-5">
+    <div className="bg-[#E8EAE1] rounded-2xl border border-[#DFE2D7] shadow-xs p-6 sm:p-7 space-y-5">
       
       {/* Top Banner: Prompt & Active Tagline */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
-        <div>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#DFE2D7]">
+        <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <Layers className="w-4 h-4 text-brand-600" />
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
-              Select Your Learning Path
+            <Layers className="w-4 h-4 text-[#111714]" />
+            <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#5E7A65]">
+              PARALLEL EPISTEMIC MODES
             </span>
           </div>
-          <p className="text-xs text-slate-500 mt-0.5">
-            Switch between genuinely different learning approaches without losing your place in this topic.
+          <p className="text-xs text-[#171C18]/80">
+            Switch perspective without losing continuity. Each path approaches the exact same core invariants.
           </p>
         </div>
 
-        <div className="text-xs text-slate-600 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 self-start sm:self-auto">
-          Active Approach: <strong className="text-slate-900">{activeMeta.title}</strong>
+        <div className="font-mono text-xs text-[#171C18] px-3 py-1.5 rounded-xl bg-[#F1F1E9] border border-[#DFE2D7] self-start sm:self-auto flex items-center gap-2">
+          <span className="text-[#5E7A65]">ACTIVE:</span>
+          <strong className="text-[#111714] font-bold">{activeMeta.title.toUpperCase()}</strong>
         </div>
       </div>
 
@@ -56,42 +57,43 @@ export const PathSelector: React.FC<PathSelectorProps> = ({
             <button
               key={pathId}
               onClick={() => onSelectPath(pathId)}
-              className={`p-4 rounded-xl border text-left transition-all relative flex flex-col justify-between gap-3 ${
+              className={`p-4 rounded-xl border text-left transition-all relative flex flex-col justify-between gap-3 group ${
                 isSelected
-                  ? 'bg-slate-900 text-white border-slate-900 shadow-md ring-2 ring-brand-500/20'
-                  : 'bg-slate-50/70 hover:bg-white border-slate-200 hover:border-slate-300 text-slate-700'
+                  ? 'bg-[#111714] text-[#F3F4EC] border-[#C8F36B] shadow-md ring-1 ring-[#C8F36B]/30'
+                  : 'bg-[#F1F1E9] hover:bg-white border-[#DFE2D7] hover:border-[#8DA391] text-[#171C18]'
               }`}
             >
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                    isSelected ? 'bg-brand-600 text-white' : 'bg-white border border-slate-200 text-slate-700'
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${
+                    isSelected ? 'bg-[#C8F36B] text-[#111714]' : 'bg-[#E8EAE1] text-[#171C18] group-hover:bg-[#DFE2D7]'
                   }`}>
                     <Icon className="w-4 h-4" />
                   </div>
                   {isSelected && (
-                    <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-brand-500 text-white">
-                      Active
+                    <span className="font-mono text-[9px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-[#C8F36B] text-[#111714] flex items-center gap-1">
+                      <span className="w-1 h-1 rounded-full bg-[#111714]" />
+                      ACTIVE
                     </span>
                   )}
                 </div>
 
-                <div className="space-y-0.5">
-                  <h4 className={`text-sm font-bold ${isSelected ? 'text-white' : 'text-slate-900'}`}>
+                <div className="space-y-1">
+                  <h4 className={`font-display text-sm font-bold tracking-tight ${isSelected ? 'text-[#F3F4EC]' : 'text-[#171C18]'}`}>
                     {meta.title}
                   </h4>
                   <p className={`text-[11px] leading-relaxed line-clamp-2 ${
-                    isSelected ? 'text-slate-300' : 'text-slate-500'
+                    isSelected ? 'text-[#8DA391]' : 'text-[#171C18]/70'
                   }`}>
                     {meta.tagline}
                   </p>
                 </div>
               </div>
 
-              <div className={`text-[10px] font-medium pt-2 border-t ${
-                isSelected ? 'border-slate-800 text-brand-300' : 'border-slate-200/80 text-slate-500'
+              <div className={`font-mono text-[10px] pt-2 border-t ${
+                isSelected ? 'border-white/10 text-[#C8F36B]' : 'border-[#DFE2D7] text-[#5E7A65]'
               }`}>
-                Best for: {meta.bestFor}
+                FOR: {meta.bestFor.toUpperCase()}
               </div>
             </button>
           );

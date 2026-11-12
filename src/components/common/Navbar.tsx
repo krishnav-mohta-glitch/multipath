@@ -6,9 +6,8 @@ import {
   Search,
   Menu,
   X,
-  Sparkles,
   ArrowRight,
-  Layers,
+  Command,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 
@@ -22,51 +21,59 @@ export const Navbar: React.FC = () => {
   };
 
   const navLinks = [
-    { id: 'home' as const, label: 'Home', icon: Compass },
-    { id: 'library' as const, label: 'Explore', icon: BookOpen },
+    { id: 'home' as const, label: 'Overview', icon: Compass },
+    { id: 'library' as const, label: 'Explore Knowledge', icon: BookOpen },
     {
       id: 'mylearning' as const,
-      label: 'My Learning',
+      label: 'My Trajectory',
       icon: Bookmark,
       badge: sessionState.savedTopicIds.length > 0 ? sessionState.savedTopicIds.length : undefined,
     },
   ];
 
   return (
-    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 transition-all">
+    <header className="sticky top-0 z-50 bg-[#F1F1E9]/85 backdrop-blur-xl border-b border-[#19211C]/10 transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 gap-4">
+        <div className="flex items-center justify-between h-16 sm:h-20 gap-4">
           
-          {/* Logo & Tagline */}
+          {/* Brand Mark */}
           <div className="flex items-center gap-3">
             <button
               onClick={() => {
                 navigateTo('home');
                 setMobileMenuOpen(false);
               }}
-              className="flex items-center gap-2.5 text-left group focus:outline-none"
+              className="flex items-center gap-3 text-left group focus:outline-none"
             >
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-600 to-indigo-700 flex items-center justify-center text-white shadow-sm shadow-brand-500/20 group-hover:shadow-md group-hover:scale-105 transition-all">
-                <Layers className="w-5 h-5 text-white stroke-[2.2]" />
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#111714] border border-[#19211C] flex items-center justify-center text-[#C8F36B] shadow-xs group-hover:scale-[1.02] transition-transform">
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="3" />
+                  <path d="M3 12h6m6 0h6" />
+                  <path d="M12 3v6m0 6v6" />
+                  <path d="m7.8 7.8 4.2 4.2 4.2-4.2" />
+                </svg>
               </div>
               <div className="flex flex-col">
-                <span className="font-bold text-lg tracking-tight text-slate-900 group-hover:text-brand-600 transition-colors">
-                  MULTIPATH
-                </span>
-                <span className="text-[10px] uppercase font-semibold tracking-wider text-slate-600">
-                  Adaptive Learning
+                <div className="flex items-center gap-2">
+                  <span className="font-display font-bold text-lg sm:text-xl tracking-tight text-[#111714]">
+                    MULTIPATH
+                  </span>
+                  <span className="hidden sm:inline-block w-1.5 h-1.5 rounded-full bg-[#C8F36B]" />
+                </div>
+                <span className="font-mono text-[9px] uppercase tracking-widest text-[#19211C]/60">
+                  Adaptive Learning Core
                 </span>
               </div>
             </button>
           </div>
 
           {/* Desktop Search Bar */}
-          <div className="hidden md:flex flex-1 max-w-xs lg:max-w-md mx-4">
+          <div className="hidden md:flex flex-1 max-w-xs lg:max-w-sm mx-4">
             <form onSubmit={handleSearchSubmit} className="relative w-full">
-              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-600" />
+              <Search className="w-3.5 h-3.5 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#19211C]/50" />
               <input
                 type="text"
-                placeholder="Search topics (e.g., Photosynthesis, Linear Equations)..."
+                placeholder="Search concepts or disciplines..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => {
@@ -74,43 +81,51 @@ export const Navbar: React.FC = () => {
                     navigateTo('library');
                   }
                 }}
-                className="w-full pl-9 pr-4 py-1.5 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all"
+                className="w-full pl-9 pr-8 py-2 text-xs bg-[#E8EAE1] hover:bg-[#E8EAE1]/90 focus:bg-white border border-[#19211C]/10 rounded-full text-[#111714] placeholder-[#19211C]/45 focus:outline-none focus:ring-2 focus:ring-[#111714]/15 focus:border-[#111714] transition-all"
               />
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 hidden lg:flex items-center gap-0.5 text-[10px] text-[#19211C]/40 font-mono">
+                <Command className="w-2.5 h-2.5" />
+                <span>K</span>
+              </div>
             </form>
           </div>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-1">
-            {navLinks.map((link) => {
-              const Icon = link.icon;
-              const isActive = currentTab === link.id;
-              return (
-                <button
-                  key={link.id}
-                  onClick={() => navigateTo(link.id)}
-                  className={`flex items-center gap-2 px-3.5 py-2 text-sm font-medium rounded-lg transition-all ${
-                    isActive
-                      ? 'bg-slate-100 text-brand-700 font-semibold'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
-                  }`}
-                >
-                  <Icon className={`w-4 h-4 ${isActive ? 'text-brand-600' : 'text-slate-600'}`} />
-                  <span>{link.label}</span>
-                  {link.badge !== undefined && (
-                    <span className="ml-1 px-1.5 py-0.2 text-[11px] font-semibold bg-brand-100 text-brand-700 rounded-full">
-                      {link.badge}
-                    </span>
-                  )}
-                </button>
-              );
-            })}
+          <nav className="hidden md:flex items-center gap-1.5">
+            <div className="flex items-center bg-[#E8EAE1]/80 p-1 rounded-full border border-[#19211C]/08">
+              {navLinks.map((link) => {
+                const Icon = link.icon;
+                const isActive = currentTab === link.id;
+                return (
+                  <button
+                    key={link.id}
+                    onClick={() => navigateTo(link.id)}
+                    className={`flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-medium rounded-full transition-all ${
+                      isActive
+                        ? 'bg-[#111714] text-[#F3F4EC] shadow-xs'
+                        : 'text-[#19211C]/70 hover:text-[#111714] hover:bg-black/5'
+                    }`}
+                  >
+                    <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-[#C8F36B]' : 'text-current opacity-70'}`} />
+                    <span>{link.label}</span>
+                    {link.badge !== undefined && (
+                      <span className={`ml-1 px-1.5 py-0.2 text-[10px] font-mono rounded-full ${
+                        isActive ? 'bg-[#C8F36B] text-[#111714]' : 'bg-[#19211C]/10 text-[#111714]'
+                      }`}>
+                        {link.badge}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
 
-            <div className="h-5 w-px bg-slate-200 mx-2" />
+            <div className="h-4 w-px bg-[#19211C]/10 mx-1.5" />
 
-            {/* Quick CTA */}
+            {/* Quick Action CTA */}
             <button
               onClick={() => navigateTo('library')}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700 active:scale-[0.98] rounded-lg shadow-sm shadow-brand-500/20 transition-all"
+              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-[#111714] bg-[#C8F36B] hover:bg-[#BCEB58] active:scale-[0.98] rounded-full transition-all shadow-xs"
             >
               <span>Explore Topics</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -121,10 +136,10 @@ export const Navbar: React.FC = () => {
           <div className="flex md:hidden items-center gap-2">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg focus:outline-none"
+              className="p-2 text-[#19211C] hover:bg-[#E8EAE1] rounded-xl focus:outline-none transition-colors"
               aria-label="Toggle navigation menu"
             >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
@@ -132,21 +147,19 @@ export const Navbar: React.FC = () => {
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-b border-slate-200 bg-white px-4 pt-2 pb-5 space-y-3 animate-in fade-in slide-in-from-top-2 duration-150">
-          {/* Mobile Search */}
+        <div className="md:hidden border-b border-[#19211C]/10 bg-[#F1F1E9] px-4 pt-2 pb-6 space-y-4 animate-in fade-in slide-in-from-top-2 duration-150">
           <form onSubmit={handleSearchSubmit} className="relative w-full">
-            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-600" />
+            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#19211C]/50" />
             <input
               type="text"
               placeholder="Search concepts and subjects..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-brand-500"
+              className="w-full pl-9 pr-4 py-2 text-xs bg-[#E8EAE1] border border-[#19211C]/10 rounded-full text-[#111714] placeholder-[#19211C]/50 focus:outline-none focus:ring-2 focus:ring-[#111714]"
             />
           </form>
 
-          {/* Mobile Links */}
-          <div className="flex flex-col gap-1 pt-1">
+          <div className="flex flex-col gap-1.5">
             {navLinks.map((link) => {
               const Icon = link.icon;
               const isActive = currentTab === link.id;
@@ -157,18 +170,18 @@ export const Navbar: React.FC = () => {
                     navigateTo(link.id);
                     setMobileMenuOpen(false);
                   }}
-                  className={`flex items-center justify-between px-3.5 py-2.5 text-base font-medium rounded-lg text-left transition-colors ${
+                  className={`flex items-center justify-between px-4 py-3 text-sm font-medium rounded-xl text-left transition-colors ${
                     isActive
-                      ? 'bg-brand-50 text-brand-700 font-semibold'
-                      : 'text-slate-700 hover:bg-slate-100'
+                      ? 'bg-[#111714] text-[#F3F4EC]'
+                      : 'text-[#171C18] hover:bg-[#E8EAE1]'
                   }`}
                 >
                   <div className="flex items-center gap-3">
-                    <Icon className={`w-5 h-5 ${isActive ? 'text-brand-600' : 'text-slate-600'}`} />
+                    <Icon className={`w-4 h-4 ${isActive ? 'text-[#C8F36B]' : 'text-[#19211C]/60'}`} />
                     <span>{link.label}</span>
                   </div>
                   {link.badge !== undefined && (
-                    <span className="px-2 py-0.5 text-xs font-semibold bg-brand-100 text-brand-700 rounded-full">
+                    <span className="px-2 py-0.5 text-[10px] font-mono font-semibold bg-[#C8F36B] text-[#111714] rounded-full">
                       {link.badge}
                     </span>
                   )}
@@ -181,10 +194,10 @@ export const Navbar: React.FC = () => {
                 navigateTo('library');
                 setMobileMenuOpen(false);
               }}
-              className="mt-2 w-full flex items-center justify-center gap-2 py-2.5 px-4 text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-lg shadow-sm"
+              className="mt-2 w-full flex items-center justify-center gap-2 py-3 px-4 text-xs font-bold text-[#111714] bg-[#C8F36B] hover:bg-[#BCEB58] rounded-xl shadow-xs"
             >
-              <Sparkles className="w-4 h-4" />
-              <span>Start Learning Now</span>
+              <span>Explore Knowledge Library</span>
+              <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>

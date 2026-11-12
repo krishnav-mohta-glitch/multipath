@@ -2,13 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --color-primary-dark: #111714;
+  --color-secondary-dark: #19211C;
+  --color-main-light: #F1F1E9;
+  --color-card-light: #E8EAE1;
+  --color-primary-text: #171C18;
+  --color-dark-text: #F3F4EC;
+  --color-accent-lime: #C8F36B;
+  --color-accent-sage: #8DA391;
+}
+
 @layer base {
   body {
-    @apply bg-slate-50 text-slate-800 antialiased selection:bg-brand-100 selection:text-brand-900;
+    @apply bg-[#F1F1E9] text-[#171C18] antialiased selection:bg-[#C8F36B] selection:text-[#111714];
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
-  /* Custom scrollbar for clean aesthetic */
+  h1, h2, h3, h4, .font-display {
+    font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+    letter-spacing: -0.025em;
+  }
+
+  /* Custom precision scrollbar */
   ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -17,8 +33,36 @@
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    @apply bg-slate-200 rounded-full hover:bg-slate-300 transition-colors;
+    @apply bg-[#19211C]/20 rounded-full hover:bg-[#19211C]/40 transition-colors;
   }
+}
+
+/* Restrained Scientific / Hardware Aesthetic Utilities */
+.tech-border {
+  border: 1px solid rgba(25, 33, 28, 0.08);
+}
+
+.tech-border-dark {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.tech-card {
+  background: #E8EAE1;
+  border: 1px solid rgba(25, 33, 28, 0.08);
+  box-shadow: 0 1px 3px rgba(17, 23, 20, 0.04);
+}
+
+.tech-card-dark {
+  background: #19211C;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.pill-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 /* Print and utility improvements */

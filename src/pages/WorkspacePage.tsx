@@ -15,7 +15,7 @@ export const WorkspacePage: React.FC = () => {
   const currentTopic = activeTopic || TOPICS[0];
 
   return (
-    <div className="min-h-screen bg-slate-50/60 pb-20 animate-in fade-in duration-200">
+    <div className="min-h-screen bg-[#F1F1E9] text-[#171C18] pb-20 animate-in fade-in duration-200">
       
       {/* Workspace Sticky Header */}
       <WorkspaceHeader topic={currentTopic} />
@@ -44,17 +44,17 @@ export const WorkspacePage: React.FC = () => {
         <FeatureBadges topic={currentTopic} />
 
         {/* Bottom Navigation */}
-        <div className="pt-6 border-t border-slate-200 flex items-center justify-between">
+        <div className="pt-6 border-t border-[#DFE2D7] flex items-center justify-between">
           <button
             onClick={backToLibrary}
-            className="inline-flex items-center gap-2 text-xs font-semibold text-slate-600 hover:text-brand-600 transition-colors"
+            className="inline-flex items-center gap-2 font-mono text-xs font-semibold text-[#171C18]/70 hover:text-[#171C18] transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span>Return to Learning Library</span>
+            <span>RETURN TO LEARNING LIBRARY</span>
           </button>
 
-          <div className="text-xs text-slate-500">
-            Topic ID: <code className="text-slate-700 bg-slate-100 px-1.5 py-0.5 rounded">{currentTopic.id}</code>
+          <div className="font-mono text-xs text-[#5E7A65]">
+            TOPIC ID: <code className="text-[#111714] bg-[#E8EAE1] px-2 py-0.5 rounded border border-[#DFE2D7]">{currentTopic.id}</code>
           </div>
         </div>
 

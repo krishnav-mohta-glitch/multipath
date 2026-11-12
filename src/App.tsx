@@ -12,7 +12,7 @@ const AppContent: React.FC = () => {
   const { currentTab } = useApp();
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-800 font-sans selection:bg-brand-100 selection:text-brand-900">
+    <div className="min-h-screen flex flex-col bg-[#F1F1E9] text-[#171C18] font-sans selection:bg-[#C8F36B] selection:text-[#111714]">
       {/* Universal Top Navigation */}
       <Navbar />
 

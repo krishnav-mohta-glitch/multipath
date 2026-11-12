@@ -144,27 +144,27 @@ export const AdaptiveMediaModal: React.FC<AdaptiveMediaModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/75 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 animate-in fade-in duration-200">
-      <div className="relative bg-white rounded-2xl max-w-4xl w-full shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[92vh]">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-[#111714]/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 animate-in fade-in duration-200">
+      <div className="relative bg-[#F1F1E9] text-[#171C18] rounded-2xl max-w-4xl w-full shadow-2xl border border-[#DFE2D7] overflow-hidden flex flex-col max-h-[92vh]">
         
         {/* ================================================================= */}
         {/* MODAL HEADER */}
         {/* ================================================================= */}
-        <div className="p-4 sm:p-5 border-b border-slate-200 bg-slate-50/80 flex items-center justify-between gap-4 shrink-0">
+        <div className="p-4 sm:p-5 border-b border-[#DFE2D7] bg-[#E8EAE1] flex items-center justify-between gap-4 shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold shadow-sm">
+            <div className="w-10 h-10 rounded-xl bg-[#111714] text-[#C8F36B] flex items-center justify-center font-bold shadow-sm">
               <Sparkles className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-[11px] uppercase font-bold tracking-wider text-indigo-900">
-                  Adaptive Media Engine
+                <span className="font-mono text-[11px] uppercase font-bold tracking-wider text-[#5E7A65]">
+                  MULTI-MODAL SYNTHESIS ENGINE
                 </span>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-200/80 text-slate-700 font-semibold capitalize">
+                <span className="font-mono text-[10px] px-2 py-0.5 rounded-full bg-[#DFE2D7] text-[#171C18] font-semibold capitalize">
                   {topic.subjectId}
                 </span>
               </div>
-              <h2 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight">
+              <h2 className="font-display text-base sm:text-lg font-bold text-[#171C18] tracking-tight">
                 {topic.title}
               </h2>
             </div>

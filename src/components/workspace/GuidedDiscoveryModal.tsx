@@ -317,27 +317,27 @@ export const GuidedDiscoveryModal: React.FC<GuidedDiscoveryModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 animate-in fade-in duration-200">
-      <div className="relative bg-white rounded-2xl max-w-4xl w-full shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[92vh]">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-[#111714]/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 animate-in fade-in duration-200">
+      <div className="relative bg-[#F1F1E9] text-[#171C18] rounded-2xl max-w-4xl w-full shadow-2xl border border-[#DFE2D7] overflow-hidden flex flex-col max-h-[92vh]">
         
         {/* ================================================================= */}
         {/* TOP HEADER */}
         {/* ================================================================= */}
-        <div className="p-4 sm:p-5 border-b border-slate-200 bg-slate-50/80 flex items-center justify-between gap-4 shrink-0">
+        <div className="p-4 sm:p-5 border-b border-[#DFE2D7] bg-[#E8EAE1] flex items-center justify-between gap-4 shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center font-bold shadow-sm">
+            <div className="w-10 h-10 rounded-xl bg-[#111714] text-[#C8F36B] flex items-center justify-center font-bold shadow-sm">
               <Sparkles className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-[11px] uppercase font-bold tracking-wider text-amber-900">
-                  Guided Discovery Engine
+                <span className="font-mono text-[11px] uppercase font-bold tracking-wider text-[#5E7A65]">
+                  SOCRATIC DISCOVERY ENGINE
                 </span>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-200/80 text-slate-700 font-semibold capitalize">
+                <span className="font-mono text-[10px] px-2 py-0.5 rounded-full bg-[#DFE2D7] text-[#171C18] font-semibold capitalize">
                   {topic.subjectId}
                 </span>
               </div>
-              <h2 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight">
+              <h2 className="font-display text-base sm:text-lg font-bold text-[#171C18] tracking-tight">
                 {topic.title}
               </h2>
             </div>
@@ -384,11 +384,11 @@ export const GuidedDiscoveryModal: React.FC<GuidedDiscoveryModalProps> = ({
 
         {/* Status notice banner when in Demonstration Mode */}
         {isDemonstrationMode && (
-          <div className="bg-amber-50/90 border-b border-amber-200/80 px-4 py-2 flex items-center justify-between text-xs text-amber-900">
+          <div className="bg-[#E8EAE1] border-b border-[#DFE2D7] px-4 py-2 flex items-center justify-between font-mono text-xs text-[#171C18]">
             <div className="flex items-center gap-2">
-              <Info className="w-4 h-4 text-amber-700 shrink-0" />
+              <Info className="w-4 h-4 text-[#5E7A65] shrink-0" />
               <span>
-                <strong>Demonstration Mode:</strong> Socratic questioning is driven by our deterministic domain evaluators. (Configure <code className="bg-amber-100 px-1 py-0.5 rounded text-[10px] font-mono">GEMINI_API_KEY</code> on server for live Gemini inference).
+                <strong>Demonstration Mode:</strong> Socratic questioning is driven by deterministic domain evaluators. (Configure <code className="bg-[#DFE2D7] px-1 py-0.5 rounded text-[10px] font-mono text-[#111714]">GEMINI_API_KEY</code> on server for live Gemini inference).
               </span>
             </div>
           </div>
@@ -755,17 +755,17 @@ export const GuidedDiscoveryModal: React.FC<GuidedDiscoveryModalProps> = ({
                     }}
                     placeholder="Type your answer, mathematical step, or reasoning..."
                     disabled={isLoading || Boolean(solution && isGoalReached)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-xs sm:text-sm resize-none disabled:bg-slate-100 disabled:cursor-not-allowed"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#DFE2D7] bg-[#F1F1E9] focus:outline-none focus:ring-1 focus:ring-[#111714] text-xs sm:text-sm resize-none disabled:bg-[#E8EAE1] disabled:cursor-not-allowed text-[#171C18]"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={!studentInput.trim() || isLoading || Boolean(solution && isGoalReached)}
-                  className="px-4 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs sm:text-sm transition-colors flex items-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed shrink-0 shadow-sm"
+                  className="px-5 py-3 rounded-xl bg-[#111714] hover:bg-[#19211C] text-[#C8F36B] font-mono font-bold text-xs sm:text-sm transition-all flex items-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed shrink-0 shadow-sm"
                 >
                   <Send className="w-4 h-4" />
-                  <span className="hidden sm:inline">Submit Step</span>
+                  <span className="hidden sm:inline">SUBMIT STEP</span>
                 </button>
               </form>
             </div>
