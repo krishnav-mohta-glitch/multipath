@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { FlaskConical, Sparkles, HelpCircle, Eye, CheckCircle2, Sliders } from 'lucide-react';
 import type { ExploreExperimentContent } from '../../../types/learningPath';
 import { LinearEquationsExperiment } from '../experiments/LinearEquationsExperiment';
 import { PhotosynthesisExperiment } from '../experiments/PhotosynthesisExperiment';
 import { FrenchRevolutionExperiment } from '../experiments/FrenchRevolutionExperiment';
 import { MetaphorWorkbenchExperiment } from '../experiments/MetaphorWorkbenchExperiment';
+
+const InteractiveModelScene = React.lazy(() => import('../../three/InteractiveModelScene'));
 
 interface ExploreExperimentViewProps {
   content: ExploreExperimentContent;
@@ -37,38 +39,53 @@ export const ExploreExperimentView: React.FC<ExploreExperimentViewProps> = ({ co
         </p>
       </div>
 
-      {/* Dynamic Experiment Simulator Container (Phase 10 Three.js Target) */}
+      {/* Dynamic Experiment Simulator Container (Phase 10 Three.js Host) */}
       <div 
         id="threejs-simulation-container" 
-        className="bg-[#E8EAE1] rounded-2xl border border-[#DFE2D7] p-6 sm:p-7 space-y-4 shadow-xs relative overflow-hidden"
+        className="space-y-4"
       >
-        <div className="flex items-center justify-between border-b border-[#DFE2D7] pb-3">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#111714]" />
-            <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#171C18]">
-              ACTIVE EXPERIMENT SANDBOX
-            </span>
-          </div>
-          <span className="font-mono text-[10px] text-[#5E7A65] uppercase">
-            MODEL: {content.experimentType}
-          </span>
-        </div>
+        {(() => {
+          const fallback2D = (
+            <div className="bg-[#E8EAE1] rounded-2xl border border-[#DFE2D7] p-6 sm:p-7 space-y-4 shadow-xs relative overflow-hidden">
+              <div className="flex items-center justify-between border-b border-[#DFE2D7] pb-3">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#111714]" />
+                  <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#171C18]">
+                    ACTIVE EXPERIMENT SANDBOX (2D SCHEMATIC)
+                  </span>
+                </div>
+                <span className="font-mono text-[10px] text-[#5E7A65] uppercase">
+                  MODEL: {content.experimentType}
+                </span>
+              </div>
 
-        <div className="pt-2">
-          {content.experimentType === 'linear-equations' && <LinearEquationsExperiment />}
-          {content.experimentType === 'photosynthesis' && <PhotosynthesisExperiment />}
-          {content.experimentType === 'french-revolution' && <FrenchRevolutionExperiment />}
-          {content.experimentType === 'metaphors' && <MetaphorWorkbenchExperiment />}
-          {content.experimentType === 'generic' && (
-            <div className="p-8 bg-[#F1F1E9] rounded-xl border border-[#DFE2D7] text-center space-y-3">
-              <Sliders className="w-8 h-8 text-[#5E7A65] mx-auto" />
-              <h4 className="font-display text-base font-bold text-[#171C18]">Variable Parameter Sandbox</h4>
-              <p className="text-xs text-[#5E7A65] max-w-md mx-auto">
-                Manipulate available system parameters below to observe real-time equilibrium shifts.
-              </p>
+              <div className="pt-2">
+                {content.experimentType === 'linear-equations' && <LinearEquationsExperiment />}
+                {content.experimentType === 'photosynthesis' && <PhotosynthesisExperiment />}
+                {content.experimentType === 'french-revolution' && <FrenchRevolutionExperiment />}
+                {content.experimentType === 'metaphors' && <MetaphorWorkbenchExperiment />}
+                {content.experimentType === 'generic' && (
+                  <div className="p-8 bg-[#F1F1E9] rounded-xl border border-[#DFE2D7] text-center space-y-3">
+                    <Sliders className="w-8 h-8 text-[#5E7A65] mx-auto" />
+                    <h4 className="font-display text-base font-bold text-[#171C18]">Variable Parameter Sandbox</h4>
+                    <p className="text-xs text-[#5E7A65] max-w-md mx-auto">
+                      Manipulate available system parameters below to observe real-time equilibrium shifts.
+                    </p>
+                  </div>
+                )}
+              </div>
             </div>
-          )}
-        </div>
+          );
+
+          return (
+            <Suspense fallback={fallback2D}>
+              <InteractiveModelScene
+                experimentType={content.experimentType}
+                fallback={fallback2D}
+              />
+            </Suspense>
+          );
+        })()}
       </div>
 
       {/* Guiding Questions to Investigate */}

@@ -12,9 +12,34 @@ import {
 } from './AppContextType';
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [currentTab, setCurrentTab] = useState<NavTab>('home');
-  const [selectedTopicId, setSelectedTopicId] = useState<string | null>(null);
-  const [activePath, setActivePathState] = useState<LearningPathId>('structured-explanation');
+  const [currentTab, setCurrentTab] = useState<NavTab>(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const tab = params.get('tab') as NavTab;
+      if (tab === 'home' || tab === 'library' || tab === 'workspace' || tab === 'mylearning') {
+        return tab;
+      }
+    }
+    return 'home';
+  });
+  const [selectedTopicId, setSelectedTopicId] = useState<string | null>(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const topic = params.get('topic');
+      if (topic && TOPICS.some((t) => t.id === topic)) {
+        return topic;
+      }
+    }
+    return null;
+  });
+  const [activePath, setActivePathState] = useState<LearningPathId>(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const path = params.get('path') as LearningPathId;
+      if (path) return path;
+    }
+    return 'structured-explanation';
+  });
   const [selectedSubjectId, setSelectedSubjectId] = useState<SubjectId | 'all'>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [sessionState, setSessionState] = useState<UserSessionState>(() => {

@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import { Eye, Network, Layers, Sparkles, Box } from 'lucide-react';
 import type { VisualLearningContent } from '../../../types/learningPath';
+
+const ConceptNetworkScene = React.lazy(() => import('../../three/ConceptNetworkScene'));
 
 interface VisualLearningViewProps {
   content: VisualLearningContent;
@@ -69,114 +71,126 @@ export const VisualLearningView: React.FC<VisualLearningViewProps> = ({ content 
         </div>
       )}
 
-      {/* Concept Network Visualization Container (Phase 10 Three.js Target) */}
-      <div 
-        id="threejs-concept-network" 
-        className="bg-[#111714] text-[#F3F4EC] rounded-2xl border border-white/10 p-6 sm:p-8 space-y-6 relative overflow-hidden shadow-lg"
-      >
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-[#C8F36B] animate-pulse" />
-              <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#C8F36B]">
-                TOPOLOGICAL CONCEPT NETWORK
-              </span>
-            </div>
-            <p className="text-xs text-[#8DA391] mt-0.5">
-              Interactive 2D spatial graph of invariants &bull; Ready for Phase 10 WebGL depth projection
-            </p>
-          </div>
-          <div className="font-mono text-[10px] px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[#8DA391] self-start sm:self-auto">
-            NODE COUNT: {content.components.length}
-          </div>
-        </div>
+      {/* Concept Network Visualization Container (Phase 10 Three.js Host) */}
+      <div id="threejs-concept-network">
+        {(() => {
+          const fallback2D = (
+            <div className="bg-[#111714] text-[#F3F4EC] rounded-2xl border border-white/10 p-6 sm:p-8 space-y-6 relative overflow-hidden shadow-lg">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-[#C8F36B] animate-pulse" />
+                    <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#C8F36B]">
+                      TOPOLOGICAL CONCEPT NETWORK (2D FALLBACK)
+                    </span>
+                  </div>
+                  <p className="text-xs text-[#8DA391] mt-0.5">
+                    Interactive spatial graph of invariants
+                  </p>
+                </div>
+                <div className="font-mono text-[10px] px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[#8DA391] self-start sm:self-auto">
+                  NODE COUNT: {content.components.length}
+                </div>
+              </div>
 
-        {/* 2D Interactive Concept Canvas / SVG */}
-        <div className="relative w-full h-64 sm:h-80 bg-[#19211C] rounded-xl border border-white/10 overflow-hidden flex items-center justify-center">
-          {/* Subtle grid background */}
-          <div 
-            className="absolute inset-0 opacity-[0.06] pointer-events-none"
-            style={{ backgroundImage: 'radial-gradient(#C8F36B 1px, transparent 1px)', backgroundSize: '24px 24px' }}
-          />
-
-          {/* SVG Connection Lines between components */}
-          <svg className="absolute inset-0 w-full h-full pointer-events-none">
-            {content.components.map((_, i) => {
-              if (i === 0) return null;
-              const anglePrev = ((i - 1) / content.components.length) * 2 * Math.PI;
-              const angleCurr = (i / content.components.length) * 2 * Math.PI;
-              const x1 = 50 + 35 * Math.cos(anglePrev);
-              const y1 = 50 + 35 * Math.sin(anglePrev);
-              const x2 = 50 + 35 * Math.cos(angleCurr);
-              const y2 = 50 + 35 * Math.sin(angleCurr);
-              return (
-                <line
-                  key={i}
-                  x1={`${x1}%`}
-                  y1={`${y1}%`}
-                  x2={`${x2}%`}
-                  y2={`${y2}%`}
-                  stroke="#5E7A65"
-                  strokeWidth="1.5"
-                  strokeDasharray="4 4"
-                  opacity="0.4"
+              {/* 2D Interactive Concept Canvas / SVG */}
+              <div className="relative w-full h-64 sm:h-80 bg-[#19211C] rounded-xl border border-white/10 overflow-hidden flex items-center justify-center">
+                <div 
+                  className="absolute inset-0 opacity-[0.06] pointer-events-none"
+                  style={{ backgroundImage: 'radial-gradient(#C8F36B 1px, transparent 1px)', backgroundSize: '24px 24px' }}
                 />
-              );
-            })}
-          </svg>
 
-          {/* Center Hub */}
-          <div className="absolute z-10 flex flex-col items-center justify-center w-20 h-20 rounded-full bg-[#111714] border-2 border-[#C8F36B] shadow-lg text-center p-2">
-            <span className="font-mono text-[9px] font-bold text-[#C8F36B] uppercase tracking-wider">CORE</span>
-            <span className="font-display text-[10px] font-bold text-[#F3F4EC] leading-tight line-clamp-1">{content.visualType}</span>
-          </div>
+                <svg className="absolute inset-0 w-full h-full pointer-events-none">
+                  {content.components.map((_, i) => {
+                    if (i === 0) return null;
+                    const anglePrev = ((i - 1) / content.components.length) * 2 * Math.PI;
+                    const angleCurr = (i / content.components.length) * 2 * Math.PI;
+                    const x1 = 50 + 35 * Math.cos(anglePrev);
+                    const y1 = 50 + 35 * Math.sin(anglePrev);
+                    const x2 = 50 + 35 * Math.cos(angleCurr);
+                    const y2 = 50 + 35 * Math.sin(angleCurr);
+                    return (
+                      <line
+                        key={i}
+                        x1={`${x1}%`}
+                        y1={`${y1}%`}
+                        x2={`${x2}%`}
+                        y2={`${y2}%`}
+                        stroke="#5E7A65"
+                        strokeWidth="1.5"
+                        strokeDasharray="4 4"
+                        opacity="0.4"
+                      />
+                    );
+                  })}
+                </svg>
 
-          {/* Orbiting Component Nodes */}
-          {content.components.map((comp, idx) => {
-            const angle = (idx / content.components.length) * 2 * Math.PI;
-            const left = 50 + 35 * Math.cos(angle);
-            const top = 50 + 35 * Math.sin(angle);
-            const isSelected = selectedComponentId === comp.id;
-            const isHighlighted = activeLayer?.highlightedComponentIds.includes(comp.id) ?? true;
+                <div className="absolute z-10 flex flex-col items-center justify-center w-20 h-20 rounded-full bg-[#111714] border-2 border-[#C8F36B] shadow-lg text-center p-2">
+                  <span className="font-mono text-[9px] font-bold text-[#C8F36B] uppercase tracking-wider">CORE</span>
+                  <span className="font-display text-[10px] font-bold text-[#F3F4EC] leading-tight line-clamp-1">{content.visualType}</span>
+                </div>
 
-            return (
-              <button
-                key={comp.id}
-                onClick={() => setSelectedComponentId(comp.id)}
-                style={{ left: `${left}%`, top: `${top}%`, transform: 'translate(-50%, -50%)' }}
-                className={`absolute z-20 transition-all p-2 rounded-xl flex items-center gap-2 border ${
-                  isSelected
-                    ? 'bg-[#C8F36B] text-[#111714] border-[#C8F36B] shadow-md scale-110'
-                    : isHighlighted
-                    ? 'bg-[#111714] text-[#F3F4EC] border-white/20 hover:border-[#C8F36B]'
-                    : 'opacity-40 bg-[#19211C] text-[#8DA391] border-white/5'
-                }`}
-              >
-                <div className={`w-2 h-2 rounded-full ${isSelected ? 'bg-[#111714]' : 'bg-[#C8F36B]'}`} />
-                <span className="font-mono text-[10px] font-bold whitespace-nowrap">{comp.name}</span>
-              </button>
-            );
-          })}
-        </div>
+                {content.components.map((comp, idx) => {
+                  const angle = (idx / content.components.length) * 2 * Math.PI;
+                  const left = 50 + 35 * Math.cos(angle);
+                  const top = 50 + 35 * Math.sin(angle);
+                  const isSelected = selectedComponentId === comp.id;
+                  const isHighlighted = activeLayer?.highlightedComponentIds.includes(comp.id) ?? true;
 
-        {/* Selected Component Micro-Inspector */}
-        {activeComponent && (
-          <div className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-1">
-            <div className="flex items-center justify-between">
-              <span className="font-mono text-xs font-bold text-[#C8F36B]">
-                INSPECTING: {activeComponent.name} &bull; {activeComponent.role}
-              </span>
-              {activeComponent.badge && (
-                <span className="font-mono text-[9px] px-2 py-0.5 rounded bg-white/10 text-[#8DA391]">
-                  {activeComponent.badge}
-                </span>
+                  return (
+                    <button
+                      key={comp.id}
+                      onClick={() => setSelectedComponentId(comp.id)}
+                      style={{ left: `${left}%`, top: `${top}%`, transform: 'translate(-50%, -50%)' }}
+                      className={`absolute z-20 transition-all p-2 rounded-xl flex items-center gap-2 border ${
+                        isSelected
+                          ? 'bg-[#C8F36B] text-[#111714] border-[#C8F36B] shadow-md scale-110'
+                          : isHighlighted
+                          ? 'bg-[#111714] text-[#F3F4EC] border-white/20 hover:border-[#C8F36B]'
+                          : 'opacity-40 bg-[#19211C] text-[#8DA391] border-white/5'
+                      }`}
+                    >
+                      <div className={`w-2 h-2 rounded-full ${isSelected ? 'bg-[#111714]' : 'bg-[#C8F36B]'}`} />
+                      <span className="font-mono text-[10px] font-bold whitespace-nowrap">{comp.name}</span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {activeComponent && (
+                <div className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono text-xs font-bold text-[#C8F36B]">
+                      INSPECTING: {activeComponent.name} &bull; {activeComponent.role}
+                    </span>
+                    {activeComponent.badge && (
+                      <span className="font-mono text-[9px] px-2 py-0.5 rounded bg-white/10 text-[#8DA391]">
+                        {activeComponent.badge}
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-xs text-[#8DA391] leading-relaxed">
+                    {activeComponent.description}
+                  </p>
+                </div>
               )}
             </div>
-            <p className="text-xs text-[#8DA391] leading-relaxed">
-              {activeComponent.description}
-            </p>
-          </div>
-        )}
+          );
+
+          return (
+            <Suspense fallback={fallback2D}>
+              <ConceptNetworkScene
+                components={content.components}
+                interactiveLayers={content.interactiveLayers}
+                selectedComponentId={selectedComponentId}
+                activeLayerId={activeLayerId}
+                onSelectComponent={setSelectedComponentId}
+                visualType={content.visualType}
+                fallback={fallback2D}
+              />
+            </Suspense>
+          );
+        })()}
       </div>
 
       {/* Component Cards Grid */}

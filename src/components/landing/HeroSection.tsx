@@ -1,6 +1,8 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, Suspense } from 'react';
 import { ArrowRight, Compass } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
+
+const LearningCoreScene = React.lazy(() => import('../three/LearningCoreScene'));
 
 export const HeroSection: React.FC = () => {
   const { navigateTo, openTopic } = useApp();
@@ -226,48 +228,61 @@ export const HeroSection: React.FC = () => {
           {/* Right Column: Distinctive 2D Convergence Canvas (Future Three.js Hook) */}
           <div className="lg:col-span-5 relative flex items-center justify-center">
             
-            {/* Visual Container (Container ready for Phase 10 Three.js) */}
+            {/* Visual Container (Phase 10 Three.js Host) */}
             <div 
               id="threejs-hero-container"
               className="relative w-full max-w-md sm:max-w-lg aspect-square rounded-3xl bg-[#111714] border border-[#19211C] shadow-2xl overflow-hidden p-4 flex flex-col justify-between"
             >
-              {/* Top Container Header */}
-              <div className="flex items-center justify-between z-10 px-2 pt-1 text-white">
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-[#C8F36B] animate-pulse" />
-                  <span className="font-mono text-[10px] uppercase tracking-widest text-[#8DA391]">
-                    Convergent Cognitive Core
-                  </span>
-                </div>
-                <span className="font-mono text-[9px] px-2 py-0.5 rounded-full bg-[#19211C] text-[#C8F36B] border border-[#2C3B32]">
-                  4 Paths → 1 Model
-                </span>
-              </div>
+              {/* 2D Fallback Component */}
+              {(() => {
+                const fallbackElement = (
+                  <div className="w-full h-full flex flex-col justify-between">
+                    <div className="flex items-center justify-between z-10 px-2 pt-1 text-white">
+                      <div className="flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-[#C8F36B] animate-pulse" />
+                        <span className="font-mono text-[10px] uppercase tracking-widest text-[#8DA391]">
+                          Convergent Cognitive Core
+                        </span>
+                      </div>
+                      <span className="font-mono text-[9px] px-2 py-0.5 rounded-full bg-[#19211C] text-[#C8F36B] border border-[#2C3B32]">
+                        4 Paths &rarr; 1 Model
+                      </span>
+                    </div>
 
-              {/* Procedural 2D Convergence Canvas */}
-              <canvas
-                ref={canvasRef}
-                className="w-full h-full absolute inset-0 block select-none pointer-events-none"
-              />
+                    <canvas
+                      ref={canvasRef}
+                      className="w-full h-full absolute inset-0 block select-none pointer-events-none"
+                    />
 
-              {/* Interactive Demo Launcher Footer */}
-              <div className="relative z-10 bg-[#19211C]/90 backdrop-blur-md rounded-2xl p-3 border border-white/08 flex items-center justify-between gap-3 mt-auto">
-                <div className="space-y-0.5">
-                  <span className="text-white text-xs font-semibold block">
-                    Interactive Demonstration
-                  </span>
-                  <span className="text-[10px] text-[#8DA391] block">
-                    Linear Equations: Conservation of Equality
-                  </span>
-                </div>
-                <button
-                  onClick={() => openTopic('math-linear-equations', 'structured-explanation')}
-                  className="px-3 py-1.5 rounded-xl bg-[#C8F36B] hover:bg-[#BCEB58] text-[#111714] font-bold text-xs flex items-center gap-1 transition-all shrink-0"
-                >
-                  <span>Launch</span>
-                  <ArrowRight className="w-3 h-3" />
-                </button>
-              </div>
+                    <div className="relative z-10 bg-[#19211C]/90 backdrop-blur-md rounded-2xl p-3 border border-white/10 flex items-center justify-between gap-3 mt-auto">
+                      <div className="space-y-0.5">
+                        <span className="text-white text-xs font-semibold block">
+                          Interactive Demonstration
+                        </span>
+                        <span className="text-[10px] text-[#8DA391] block">
+                          Linear Equations: Conservation of Equality
+                        </span>
+                      </div>
+                      <button
+                        onClick={() => openTopic('math-linear-equations', 'structured-explanation')}
+                        className="px-3 py-1.5 rounded-xl bg-[#C8F36B] hover:bg-[#BCEB58] text-[#111714] font-bold text-xs flex items-center gap-1 transition-all shrink-0"
+                      >
+                        <span>Launch</span>
+                        <ArrowRight className="w-3 h-3" />
+                      </button>
+                    </div>
+                  </div>
+                );
+
+                return (
+                  <Suspense fallback={fallbackElement}>
+                    <LearningCoreScene
+                      fallback={fallbackElement}
+                      onSelectPath={(pathId) => openTopic('math-linear-equations', pathId)}
+                    />
+                  </Suspense>
+                );
+              })()}
 
             </div>
 
