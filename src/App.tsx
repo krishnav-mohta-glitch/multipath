@@ -1,8 +1,11 @@
 import React from 'react';
 import { AppProvider, useApp } from './context/AppContext';
+import { AuthProvider } from './context/AuthContext';
 import { Navbar } from './components/common/Navbar';
 import { Footer } from './components/common/Footer';
 import { FeaturePreviewModal } from './components/common/FeaturePreviewModal';
+import { AuthModal } from './components/auth/AuthModal';
+import { GuestImportModal } from './components/auth/GuestImportModal';
 import { HomePage } from './pages/HomePage';
 import { LibraryPage } from './pages/LibraryPage';
 import { WorkspacePage } from './pages/WorkspacePage';
@@ -29,15 +32,23 @@ const AppContent: React.FC = () => {
 
       {/* Global Core Feature Presentation Modal */}
       <FeaturePreviewModal />
+
+      {/* Supabase Authentication & Profile Modal */}
+      <AuthModal />
+
+      {/* Guest-to-Account Migration Modal */}
+      <GuestImportModal />
     </div>
   );
 };
 
 export function App() {
   return (
-    <AppProvider>
-      <AppContent />
-    </AppProvider>
+    <AuthProvider>
+      <AppProvider>
+        <AppContent />
+      </AppProvider>
+    </AuthProvider>
   );
 }
 
