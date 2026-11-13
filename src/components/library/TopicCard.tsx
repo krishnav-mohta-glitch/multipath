@@ -8,19 +8,56 @@ import {
   Wrench,
   FlaskConical,
   HelpCircle,
+  CheckCircle2,
+  Box,
 } from 'lucide-react';
 import type { Topic } from '../../types/topic';
 import type { LearningPathId } from '../../types/learningPath';
+import type { CurriculumBoardCode, ClassLevel } from '../../types/curriculum';
 import { SubjectBadge, DifficultyBadge } from '../common/Badge';
 import { useApp } from '../../context/AppContext';
+import { useAuth } from '../../context/useAuth';
+import { getPrimaryMappingForTopic } from '../../data/curriculumMappings';
 
 interface TopicCardProps {
   topic: Topic;
+  selectedBoard?: CurriculumBoardCode | 'all';
+  selectedClass?: ClassLevel | 'all';
 }
 
-export const TopicCard: React.FC<TopicCardProps> = ({ topic }) => {
+export const TopicCard: React.FC<TopicCardProps> = ({
+  topic,
+  selectedBoard = 'all',
+  selectedClass = 'all',
+}) => {
   const { openTopic, toggleBookmark, isBookmarked } = useApp();
+  const { profile } = useAuth();
   const bookmarked = isBookmarked(topic.id);
+
+  const profileBoard: CurriculumBoardCode | undefined =
+    profile?.preferred_board === 'CBSE'
+      ? 'CBSE'
+      : profile?.preferred_board === 'ICSE/CISCE'
+      ? 'CISCE'
+      : undefined;
+
+  const profileGradeMatch = profile?.grade_level?.match(/Class\s*(\d+)/i);
+  const profileClass: ClassLevel | undefined = profileGradeMatch
+    ? (parseInt(profileGradeMatch[1], 10) as ClassLevel)
+    : undefined;
+
+  // Determine the primary relevant mapping for display
+  const targetBoard = selectedBoard !== 'all' ? selectedBoard : profileBoard;
+  const targetClass = selectedClass !== 'all' ? selectedClass : profileClass;
+  const curriculumMapping = getPrimaryMappingForTopic(topic.id, targetBoard, targetClass);
+
+  const has3DExperience =
+    topic.id === 'math-linear-equations' ||
+    topic.id === 'bio-photosynthesis' ||
+    topic.id === 'hist-french-revolution' ||
+    topic.id === 'eng-metaphors-allegory' ||
+    topic.id === 'phys-newtons-laws' ||
+    topic.id === 'chem-periodic-table';
 
   const pathIconMap: Record<LearningPathId, React.FC<{ className?: string }>> = {
     'structured-explanation': BookOpen,
@@ -31,7 +68,6 @@ export const TopicCard: React.FC<TopicCardProps> = ({ topic }) => {
 
   return (
     <div className="bg-[#E8EAE1] rounded-3xl border border-[#19211C]/12 hover:border-[#111714] hover:shadow-md transition-all flex flex-col justify-between overflow-hidden group text-left">
-      
       {/* Top Section */}
       <div className="p-6 space-y-4">
         {/* Badges & Bookmark */}
@@ -39,6 +75,12 @@ export const TopicCard: React.FC<TopicCardProps> = ({ topic }) => {
           <div className="flex items-center gap-2 flex-wrap">
             <SubjectBadge subjectId={topic.subjectId} />
             <DifficultyBadge difficulty={topic.difficulty} />
+            {has3DExperience && (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-mono text-[10px] font-semibold bg-[#111714] text-[#C8F36B] border border-[#111714]">
+                <Box className="w-3 h-3" />
+                <span>3D Canvas</span>
+              </span>
+            )}
           </div>
 
           <button
@@ -70,6 +112,29 @@ export const TopicCard: React.FC<TopicCardProps> = ({ topic }) => {
             {topic.subtitle}
           </p>
         </div>
+
+        {/* Curriculum Alignment Strip */}
+        {curriculumMapping && (
+          <div className="p-2.5 rounded-xl bg-white/70 border border-[#19211C]/08 flex items-center justify-between gap-2">
+            <div className="flex items-center gap-1.5 font-mono text-[11px] text-[#111714] min-w-0">
+              <span className="font-bold px-1.5 py-0.5 rounded-md bg-[#DFE2D7] text-[#111714]">
+                {curriculumMapping.boardCode} {curriculumMapping.classLevel}
+              </span>
+              <span className="text-xs text-[#5F6B62] truncate" title={curriculumMapping.unitName}>
+                {curriculumMapping.unitName}
+              </span>
+            </div>
+            {curriculumMapping.verificationStatus === 'verified_official' && (
+              <span
+                className="shrink-0 inline-flex items-center gap-1 font-mono text-[10px] text-[#2E6930] font-semibold"
+                title="Verified against official board syllabus document"
+              >
+                <CheckCircle2 className="w-3 h-3 text-[#2E6930]" />
+                <span>Verified</span>
+              </span>
+            )}
+          </div>
+        )}
 
         {/* Core Question Teaser */}
         <div className="p-3 rounded-2xl bg-[#F1F1E9] border border-[#19211C]/08 space-y-1">
@@ -124,7 +189,6 @@ export const TopicCard: React.FC<TopicCardProps> = ({ topic }) => {
           <ArrowRight className="w-3.5 h-3.5" />
         </button>
       </div>
-
     </div>
   );
 };

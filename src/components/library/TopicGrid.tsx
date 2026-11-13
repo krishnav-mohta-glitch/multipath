@@ -1,14 +1,22 @@
 import React from 'react';
 import { SearchX, RotateCcw } from 'lucide-react';
 import type { Topic } from '../../types/topic';
+import type { CurriculumBoardCode, ClassLevel } from '../../types/curriculum';
 import { TopicCard } from './TopicCard';
 
 interface TopicGridProps {
   topics: Topic[];
+  selectedBoard?: CurriculumBoardCode | 'all';
+  selectedClass?: ClassLevel | 'all';
   onResetFilters: () => void;
 }
 
-export const TopicGrid: React.FC<TopicGridProps> = ({ topics, onResetFilters }) => {
+export const TopicGrid: React.FC<TopicGridProps> = ({
+  topics,
+  selectedBoard = 'all',
+  selectedClass = 'all',
+  onResetFilters,
+}) => {
   if (topics.length === 0) {
     return (
       <div className="py-20 px-6 text-center bg-[#E8EAE1] rounded-3xl border border-[#19211C]/15 shadow-xs max-w-lg mx-auto space-y-4">
@@ -18,7 +26,7 @@ export const TopicGrid: React.FC<TopicGridProps> = ({ topics, onResetFilters }) 
         <div className="space-y-1">
           <h3 className="font-display text-lg font-bold text-[#111714]">No matching topics found</h3>
           <p className="text-xs text-[#5F6B62] max-w-sm mx-auto leading-relaxed">
-            Try adjusting your search query or discipline filter to discover relevant principles.
+            Try adjusting your search query, curriculum board, class level, or discipline filter.
           </p>
         </div>
         <button
@@ -35,7 +43,12 @@ export const TopicGrid: React.FC<TopicGridProps> = ({ topics, onResetFilters }) 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {topics.map((topic) => (
-        <TopicCard key={topic.id} topic={topic} />
+        <TopicCard
+          key={topic.id}
+          topic={topic}
+          selectedBoard={selectedBoard}
+          selectedClass={selectedClass}
+        />
       ))}
     </div>
   );
