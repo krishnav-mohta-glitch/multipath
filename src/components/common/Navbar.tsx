@@ -8,11 +8,14 @@ import {
   X,
   ArrowRight,
   Command,
+  User as UserIcon,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
+import { useAuth } from '../../context/AuthContext';
 
 export const Navbar: React.FC = () => {
   const { currentTab, navigateTo, searchQuery, setSearchQuery, sessionState } = useApp();
+  const { user, profile, isGuest, openAuthModal } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -130,6 +133,36 @@ export const Navbar: React.FC = () => {
               <span>Explore Topics</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
+
+            {/* Student Account / Profile Button */}
+            {user ? (
+              <button
+                onClick={() => openAuthModal('profile')}
+                className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#111714] text-[#F3F4EC] hover:bg-[#19211C] border border-white/10 text-xs font-medium transition-all shadow-xs"
+                title="Manage Learner Profile"
+              >
+                <div className="w-5 h-5 rounded-full bg-[#C8F36B] text-[#111714] font-bold text-[10px] flex items-center justify-center font-mono">
+                  {(profile?.display_name || user.email || 'S')[0].toUpperCase()}
+                </div>
+                <div className="flex flex-col text-left">
+                  <span className="font-bold text-[11px] leading-tight max-w-[100px] truncate">
+                    {profile?.display_name || user.email?.split('@')[0]}
+                  </span>
+                  <span className="font-mono text-[9px] text-[#8DA391] leading-none">
+                    {profile?.preferred_board ? profile.preferred_board.split('/')[0] : 'Learner'}
+                  </span>
+                </div>
+              </button>
+            ) : (
+              <button
+                onClick={() => openAuthModal('login')}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#E8EAE1] hover:bg-[#DFE2D7] text-[#111714] border border-[#19211C]/10 text-xs font-semibold transition-all"
+                title={isGuest ? 'Sign in to sync your trajectory' : 'Student Account'}
+              >
+                <UserIcon className="w-3.5 h-3.5 text-[#5E7A65]" />
+                <span>{isGuest ? 'Sign In' : 'Account'}</span>
+              </button>
+            )}
           </nav>
 
           {/* Mobile menu trigger */}
@@ -199,6 +232,41 @@ export const Navbar: React.FC = () => {
               <span>Explore Knowledge Library</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
+
+            {/* Mobile Account / Profile */}
+            <div className="pt-2 border-t border-[#19211C]/10">
+              {user ? (
+                <button
+                  onClick={() => {
+                    openAuthModal('profile');
+                    setMobileMenuOpen(false);
+                  }}
+                  className="flex items-center justify-between w-full px-4 py-3 rounded-xl bg-[#111714] text-[#F3F4EC] text-xs font-medium"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-7 h-7 rounded-full bg-[#C8F36B] text-[#111714] font-bold text-xs flex items-center justify-center font-mono">
+                      {(profile?.display_name || user.email || 'S')[0].toUpperCase()}
+                    </div>
+                    <div className="flex flex-col text-left">
+                      <span className="font-bold text-xs">{profile?.display_name || user.email}</span>
+                      <span className="text-[10px] text-[#8DA391]">{profile?.preferred_board} • {profile?.grade_level}</span>
+                    </div>
+                  </div>
+                  <span className="text-[11px] font-mono text-[#C8F36B]">Settings</span>
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    openAuthModal('login');
+                    setMobileMenuOpen(false);
+                  }}
+                  className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl bg-[#111714] text-[#F3F4EC] text-xs font-semibold"
+                >
+                  <UserIcon className="w-4 h-4 text-[#C8F36B]" />
+                  <span>Student Sign In / Register</span>
+                </button>
+              )}
+            </div>
           </div>
         </div>
       )}
