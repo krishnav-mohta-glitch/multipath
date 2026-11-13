@@ -17,6 +17,7 @@ import {
 import { storageService } from '../../services/storageService';
 import type { LearningActivityItem, TopicHistoryRecord } from '../../types/history';
 import { SubjectBadge } from '../common/Badge';
+import { useAuth } from '../../context/AuthContext';
 
 interface ProgressDashboardSectionProps {
   onNavigateToLibrary: () => void;
@@ -27,6 +28,7 @@ export const ProgressDashboardSection: React.FC<ProgressDashboardSectionProps> =
   onNavigateToLibrary,
   onOpenTopic
 }) => {
+  const { user, profile, openGuestImportModal } = useAuth();
   const [activities, setActivities] = useState<LearningActivityItem[]>([]);
   const [topicHistories, setTopicHistories] = useState<Record<string, TopicHistoryRecord>>({});
   const [storageStats, setStorageStats] = useState<{
@@ -112,7 +114,7 @@ export const ProgressDashboardSection: React.FC<ProgressDashboardSectionProps> =
   const handleExportData = async () => {
     setIsExporting(true);
     try {
-      const jsonString = await storageService.exportAllDataAsJSON();
+      const jsonString = await storageService.exportAllDataAsJSON(profile as Record<string, unknown> | null);
       const blob = new Blob([jsonString], { type: 'application/json;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
@@ -187,6 +189,32 @@ export const ProgressDashboardSection: React.FC<ProgressDashboardSectionProps> =
         </div>
       )}
 
+      {/* Guest Data Import Banner (when authenticated and guest records exist) */}
+      {user && storageService.hasGuestData() && (
+        <div className="p-4 rounded-2xl bg-[#E8EAE1] border border-[#DFE2D7] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-[#111714] text-[#C8F36B] flex items-center justify-center shrink-0">
+              <Sparkles className="w-4 h-4" />
+            </div>
+            <div>
+              <h4 className="font-display font-bold text-sm text-[#171C18]">
+                Guest Learning Stream Detected
+              </h4>
+              <p className="text-xs text-[#171C18]/70">
+                You have unimported bookmarks and activities saved locally on this browser.
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={openGuestImportModal}
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#111714] text-[#C8F36B] font-mono text-xs font-bold hover:bg-[#111714]/90 transition-colors cursor-pointer shrink-0"
+          >
+            <span>IMPORT TO ACCOUNT</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      )}
+
       {/* =================================================================== */}
       {/* 1. GROUNDED METRICS CARDS (No arbitrary streaks or XP)             */}
       {/* =================================================================== */}
@@ -201,7 +229,7 @@ export const ProgressDashboardSection: React.FC<ProgressDashboardSectionProps> =
             </p>
           </div>
           <div className="text-[11px] font-medium text-slate-500 bg-slate-100 px-2.5 py-1 rounded-md">
-            Local Browser Storage
+            {user ? 'Cloud Sync (PostgreSQL RLS)' : 'Local Browser Storage'}
           </div>
         </div>
 
@@ -347,7 +375,7 @@ export const ProgressDashboardSection: React.FC<ProgressDashboardSectionProps> =
             </h3>
           </div>
           <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
-            100% On-Device
+            {user ? 'PostgreSQL RLS Secured' : '100% On-Device'}
           </span>
         </div>
 

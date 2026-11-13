@@ -5,6 +5,8 @@ import type { LearningPathId } from '../types/learningPath';
 import { TOPICS } from '../data/topics';
 import { INITIAL_SESSION_STATE } from '../data/mockSession';
 import { storageService } from '../services/storageService';
+import { isSupabaseConfigured } from '../services/supabaseClient';
+import { useAuth } from './AuthContext';
 import {
   AppContext,
   type CoreFeatureType,
@@ -41,13 +43,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return 'structured-explanation';
   });
   const [selectedSubjectId, setSelectedSubjectId] = useState<SubjectId | 'all'>('all');
+  const { user } = useAuth();
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [sessionState, setSessionState] = useState<UserSessionState>(() => {
     // Hydrate bookmarks from persistent local storage on initial mount
     const savedBookmarks = storageService.getBookmarks();
     return {
       ...INITIAL_SESSION_STATE,
-      savedTopicIds: savedBookmarks.length > 0 ? savedBookmarks : INITIAL_SESSION_STATE.savedTopicIds
+      savedTopicIds: savedBookmarks
     };
   });
   const [featureModal, setFeatureModal] = useState<FeatureModalState>({
@@ -57,11 +60,18 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const activeTopic = TOPICS.find((t) => t.id === selectedTopicId) || null;
 
-  // Hydrate recent visits from actual persistent activity records on application startup
+  // Hydrate bookmarks and recent visits from actual persistent activity records whenever user context changes
   useEffect(() => {
-    storageService.getAllActivities().then((activities) => {
+    let isMounted = true;
+
+    const bookmarksPromise = (user && isSupabaseConfigured())
+      ? storageService.syncUserBookmarksFromCloud(user.id)
+      : Promise.resolve(storageService.getBookmarks());
+
+    Promise.all([storageService.getAllActivities(), bookmarksPromise]).then(([activities, currentBookmarks]) => {
+      if (!isMounted) return;
+      const visitMap = new Map<string, RecentTopicVisit>();
       if (activities && activities.length > 0) {
-        const visitMap = new Map<string, RecentTopicVisit>();
         for (const act of activities) {
           if (act.topicId && !visitMap.has(act.topicId)) {
             const timeAgo = new Date(act.timestamp).toLocaleDateString(undefined, {
@@ -75,15 +85,18 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             });
           }
         }
-        if (visitMap.size > 0) {
-          setSessionState((prev) => ({
-            ...prev,
-            recentVisits: Array.from(visitMap.values()).slice(0, 8)
-          }));
-        }
       }
+      setSessionState((prev) => ({
+        ...prev,
+        savedTopicIds: currentBookmarks,
+        recentVisits: Array.from(visitMap.values()).slice(0, 8)
+      }));
     }).catch((e) => console.warn('[AppProvider] Hydration error:', e));
-  }, []);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [user]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
