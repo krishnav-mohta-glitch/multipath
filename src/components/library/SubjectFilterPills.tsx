@@ -42,17 +42,21 @@ export const SubjectFilterPills: React.FC<SubjectFilterPillsProps> = ({
       {/* "All Disciplines" pill */}
       <button
         onClick={() => onSelectSubject('all')}
-        className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
+        className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all border ${
           selectedSubjectId === 'all'
-            ? 'bg-[#111714] text-[#F3F4EC] shadow-xs'
-            : 'bg-[#E8EAE1] text-[#19211C] hover:bg-[#DFE2D7] border border-[#19211C]/10'
+            ? 'bg-[#FAF9F5] text-slate-950 border-[#FAF9F5] shadow-md font-bold'
+            : 'bg-slate-900/80 text-slate-300 hover:text-white hover:bg-slate-800 border-slate-800'
         }`}
       >
         <Grid className="w-3.5 h-3.5" />
         <span>All Disciplines</span>
-        <span className={`px-1.5 py-0.2 rounded-full font-mono text-[10px] ${
-          selectedSubjectId === 'all' ? 'bg-[#C8F36B] text-[#111714] font-bold' : 'bg-[#19211C]/10 text-[#111714]'
-        }`}>
+        <span
+          className={`px-1.5 py-0.2 rounded-full font-mono text-[10px] ${
+            selectedSubjectId === 'all'
+              ? 'bg-slate-950 text-[#B8FF00] font-bold'
+              : 'bg-slate-800 text-slate-400'
+          }`}
+        >
           {totalTopicCount}
         </span>
       </button>
@@ -67,17 +71,25 @@ export const SubjectFilterPills: React.FC<SubjectFilterPillsProps> = ({
           <button
             key={subject.id}
             onClick={() => onSelectSubject(subject.id)}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all border ${
               isSelected
-                ? 'bg-[#111714] text-[#F3F4EC] shadow-xs'
-                : 'bg-[#E8EAE1] text-[#19211C] hover:bg-[#DFE2D7] border border-[#19211C]/10'
+                ? 'bg-[#FAF9F5] text-slate-950 border-[#FAF9F5] shadow-md font-bold'
+                : 'bg-slate-900/80 text-slate-300 hover:text-white hover:bg-slate-800 border-slate-800'
             }`}
           >
-            <Icon className={`w-3.5 h-3.5 ${isSelected ? 'text-[#C8F36B]' : 'text-[#19211C]/60'}`} />
+            <Icon
+              className={`w-3.5 h-3.5 ${
+                isSelected ? 'text-slate-950' : 'text-[#38BDF8]'
+              }`}
+            />
             <span>{subject.name}</span>
-            <span className={`px-1.5 py-0.2 rounded-full font-mono text-[10px] ${
-              isSelected ? 'bg-[#C8F36B] text-[#111714] font-bold' : 'bg-[#19211C]/10 text-[#111714]'
-            }`}>
+            <span
+              className={`px-1.5 py-0.2 rounded-full font-mono text-[10px] ${
+                isSelected
+                  ? 'bg-slate-950 text-[#B8FF00] font-bold'
+                  : 'bg-slate-800 text-slate-400'
+              }`}
+            >
               {count}
             </span>
           </button>

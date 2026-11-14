@@ -2,9 +2,15 @@ import React, { useState, useMemo } from 'react';
 import { useApp } from '../context/AppContext';
 import { useAuth } from '../context/useAuth';
 import { TOPICS } from '../data/topics';
-import { isTopicInCurriculum, getMappingsForTopic } from '../data/curriculumMappings';
 import type { DifficultyLevel } from '../types/topic';
 import type { CurriculumBoardCode, ClassLevel } from '../types/curriculum';
+import {
+  filterCurriculumTopics,
+  calculateDynamicSubjectCounts,
+  getCurriculumStats,
+  type CuratedCollectionId,
+  type TopicSortOption,
+} from '../utils/curriculumDiscovery';
 import { LibraryHeader } from '../components/library/LibraryHeader';
 import { CurriculumFilterBar } from '../components/library/CurriculumFilterBar';
 import { SubjectFilterPills } from '../components/library/SubjectFilterPills';
@@ -13,9 +19,12 @@ import { TopicGrid } from '../components/library/TopicGrid';
 export const LibraryPage: React.FC = () => {
   const { selectedSubjectId, setSelectedSubjectId, searchQuery, setSearchQuery } = useApp();
   const { profile } = useAuth();
-  const [selectedDifficulty, setSelectedDifficulty] = useState<DifficultyLevel | 'all'>('all');
 
-  // Curriculum board and class filters
+  const [selectedDifficulty, setSelectedDifficulty] = useState<DifficultyLevel | 'all'>('all');
+  const [selectedCollection, setSelectedCollection] = useState<CuratedCollectionId>('all');
+  const [selectedSort, setSelectedSort] = useState<TopicSortOption>('default');
+
+  // Curriculum board and class filters initialized from student profile if set
   const [selectedBoard, setSelectedBoard] = useState<CurriculumBoardCode | 'all'>(() => {
     if (profile?.preferred_board === 'CBSE') return 'CBSE';
     if (profile?.preferred_board === 'ICSE/CISCE') return 'CISCE';
@@ -33,66 +42,44 @@ export const LibraryPage: React.FC = () => {
     return 'all';
   });
 
-  // Compute subject topic counts
-  const subjectCounts = useMemo(() => {
-    const counts: Record<string, number> = {};
-    for (const topic of TOPICS) {
-      counts[topic.subjectId] = (counts[topic.subjectId] || 0) + 1;
-    }
-    return counts;
-  }, []);
+  // Dynamic subject topic counts based on active board & class
+  const dynamicSubjectCounts = useMemo(() => {
+    return calculateDynamicSubjectCounts(selectedBoard, selectedClass, TOPICS);
+  }, [selectedBoard, selectedClass]);
 
-  // Filter topics
+  // Multi-dimensional filtered & sorted topic set
   const filteredTopics = useMemo(() => {
-    return TOPICS.filter((topic) => {
-      // Curriculum filter (Board and Class Level)
-      if (!isTopicInCurriculum(topic.id, selectedBoard, selectedClass)) {
-        return false;
-      }
-
-      // Subject filter
-      if (selectedSubjectId !== 'all' && topic.subjectId !== selectedSubjectId) {
-        return false;
-      }
-
-      // Difficulty filter
-      if (selectedDifficulty !== 'all' && topic.difficulty !== selectedDifficulty) {
-        return false;
-      }
-
-      // Search query (matches topic metadata + curriculum mapping citations)
-      if (searchQuery.trim()) {
-        const q = searchQuery.toLowerCase().trim();
-        const titleMatch = topic.title.toLowerCase().includes(q);
-        const subMatch = topic.subtitle.toLowerCase().includes(q);
-        const overviewMatch = topic.overview.toLowerCase().includes(q);
-        const termMatch = topic.keyTerms.some((t) => t.term.toLowerCase().includes(q));
-        const questionMatch = topic.coreQuestions.some((qu) => qu.toLowerCase().includes(q));
-
-        // Also match against official syllabus units or chapters
-        const mappings = getMappingsForTopic(topic.id);
-        const mappingMatch = mappings.some(
-          (m) =>
-            m.unitName.toLowerCase().includes(q) ||
-            m.chapterOrTopic.toLowerCase().includes(q) ||
-            m.subjectName.toLowerCase().includes(q) ||
-            (m.pageOrSection && m.pageOrSection.toLowerCase().includes(q))
-        );
-
-        if (!titleMatch && !subMatch && !overviewMatch && !termMatch && !questionMatch && !mappingMatch) {
-          return false;
-        }
-      }
-
-      return true;
+    return filterCurriculumTopics(TOPICS, {
+      board: selectedBoard,
+      classLevel: selectedClass,
+      subjectId: selectedSubjectId,
+      difficulty: selectedDifficulty,
+      searchQuery,
+      collectionId: selectedCollection,
+      sortBy: selectedSort,
     });
-  }, [selectedBoard, selectedClass, selectedSubjectId, selectedDifficulty, searchQuery]);
+  }, [
+    selectedBoard,
+    selectedClass,
+    selectedSubjectId,
+    selectedDifficulty,
+    searchQuery,
+    selectedCollection,
+    selectedSort,
+  ]);
+
+  // Telemetry metrics
+  const stats = useMemo(() => {
+    return getCurriculumStats(filteredTopics, selectedBoard, selectedClass);
+  }, [filteredTopics, selectedBoard, selectedClass]);
 
   const handleResetFilters = () => {
     setSelectedBoard('all');
     setSelectedClass('all');
     setSelectedSubjectId('all');
     setSelectedDifficulty('all');
+    setSelectedCollection('all');
+    setSelectedSort('default');
     setSearchQuery('');
   };
 
@@ -102,44 +89,53 @@ export const LibraryPage: React.FC = () => {
   };
 
   return (
-    <div className="py-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 animate-in fade-in duration-200">
-      {/* Header with Title and Search/Difficulty */}
-      <LibraryHeader
-        searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
-        selectedDifficulty={selectedDifficulty}
-        onDifficultyChange={setSelectedDifficulty}
-        totalFilteredCount={filteredTopics.length}
-      />
+    <div className="min-h-screen bg-[#080A0E] text-slate-100 py-10 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in duration-200">
+        {/* Header with Title, Telemetry HUD, Search, Difficulty, Collection & Sort */}
+        <LibraryHeader
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          selectedDifficulty={selectedDifficulty}
+          onDifficultyChange={setSelectedDifficulty}
+          selectedCollection={selectedCollection}
+          onCollectionChange={setSelectedCollection}
+          selectedSort={selectedSort}
+          onSortChange={setSelectedSort}
+          totalFilteredCount={filteredTopics.length}
+          totalTopicsCount={TOPICS.length}
+          interactiveCount={stats.interactiveCount}
+          verifiedCount={stats.officialVerifiedCount}
+        />
 
-      {/* Curriculum Filter Bar (ICSE/CISCE & CBSE for Classes 6-10) */}
-      <CurriculumFilterBar
-        selectedBoard={selectedBoard}
-        onSelectBoard={setSelectedBoard}
-        selectedClass={selectedClass}
-        onSelectClass={setSelectedClass}
-        filteredCount={filteredTopics.length}
-        totalCount={TOPICS.length}
-        onReset={handleResetCurriculum}
-      />
+        {/* Curriculum Filter Bar (CBSE & CISCE for Classes 6–10) */}
+        <CurriculumFilterBar
+          selectedBoard={selectedBoard}
+          onSelectBoard={setSelectedBoard}
+          selectedClass={selectedClass}
+          onSelectClass={setSelectedClass}
+          filteredCount={filteredTopics.length}
+          totalCount={TOPICS.length}
+          onReset={handleResetCurriculum}
+        />
 
-      {/* Subject Filter Pills */}
-      <div className="pt-2">
-        <SubjectFilterPills
-          selectedSubjectId={selectedSubjectId}
-          onSelectSubject={setSelectedSubjectId}
-          totalTopicCount={TOPICS.length}
-          subjectCounts={subjectCounts}
+        {/* Subject Filter Pills (Dynamic Counts matching Board/Class) */}
+        <div className="pt-1">
+          <SubjectFilterPills
+            selectedSubjectId={selectedSubjectId}
+            onSelectSubject={setSelectedSubjectId}
+            totalTopicCount={filteredTopics.length}
+            subjectCounts={dynamicSubjectCounts}
+          />
+        </div>
+
+        {/* Results Grid */}
+        <TopicGrid
+          topics={filteredTopics}
+          selectedBoard={selectedBoard}
+          selectedClass={selectedClass}
+          onResetFilters={handleResetFilters}
         />
       </div>
-
-      {/* Results Grid */}
-      <TopicGrid
-        topics={filteredTopics}
-        selectedBoard={selectedBoard}
-        selectedClass={selectedClass}
-        onResetFilters={handleResetFilters}
-      />
     </div>
   );
 };
