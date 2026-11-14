@@ -6,7 +6,7 @@ import { VisualLearningView } from './paths/VisualLearningView';
 import { ExamplesApplicationsView } from './paths/ExamplesApplicationsView';
 import { ExploreExperimentView } from './paths/ExploreExperimentView';
 import { LEARNING_PATHS } from '../../data/learningPaths';
-import { ArrowRight, RotateCw } from 'lucide-react';
+import { ArrowRight, RotateCw, Compass } from 'lucide-react';
 
 interface PathViewerProps {
   topic: Topic;
@@ -33,20 +33,21 @@ export const PathViewer: React.FC<PathViewerProps> = ({
   const nextMeta = LEARNING_PATHS[nextPathId];
 
   return (
-    <div className="bg-[#E8EAE1] rounded-2xl border border-[#DFE2D7] shadow-xs overflow-hidden">
+    <div className="bg-[#0D1117] rounded-2xl border border-white/10 shadow-2xl overflow-hidden corner-reticle">
       
       {/* Path Header Banner */}
-      <div className="p-6 sm:p-7 border-b border-[#DFE2D7] bg-[#F1F1E9] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="p-6 sm:p-7 border-b border-white/10 bg-[#080A0E] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="font-mono text-xs uppercase font-bold tracking-wider text-[#5E7A65]">
-              PERSPECTIVE VIEW
+            <Compass className="w-3.5 h-3.5 text-[#B8FF00]" />
+            <span className="font-mono text-xs uppercase font-bold tracking-wider text-[#B8FF00]">
+              EPISTEMIC PERSPECTIVE VIEW
             </span>
           </div>
-          <h2 className="font-display text-xl sm:text-2xl font-extrabold text-[#171C18] tracking-tight mt-0.5">
+          <h2 className="font-display text-xl sm:text-2xl font-extrabold text-white tracking-tight mt-0.5">
             {meta.title}
           </h2>
-          <p className="text-xs sm:text-sm text-[#171C18]/80 mt-1 max-w-2xl leading-relaxed">
+          <p className="text-xs sm:text-sm text-[#8DA391] mt-1 max-w-2xl leading-relaxed">
             {meta.description}
           </p>
         </div>
@@ -54,16 +55,16 @@ export const PathViewer: React.FC<PathViewerProps> = ({
         <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
           <button
             onClick={() => onSwitchPath(nextPathId)}
-            className="inline-flex items-center gap-2 px-4 py-2.5 font-mono text-xs font-semibold text-[#171C18] bg-[#E8EAE1] hover:bg-[#DFE2D7] border border-[#DFE2D7] rounded-xl transition-all shadow-2xs group"
+            className="inline-flex items-center gap-2 px-4 py-2.5 font-mono text-xs font-semibold text-white bg-white/5 hover:bg-[#B8FF00] hover:text-[#080A0E] border border-white/10 hover:border-[#B8FF00] rounded-xl transition-all shadow-sm group"
           >
             <span>NEXT: {nextMeta.shortTitle.toUpperCase()}</span>
-            <ArrowRight className="w-3.5 h-3.5 text-[#111714] group-hover:translate-x-0.5 transition-transform" />
+            <ArrowRight className="w-3.5 h-3.5 text-[#B8FF00] group-hover:text-[#080A0E] group-hover:translate-x-0.5 transition-transform" />
           </button>
         </div>
       </div>
 
       {/* Main Path Content Area */}
-      <div className="p-6 sm:p-8 bg-[#F1F1E9]">
+      <div className="p-6 sm:p-8 bg-[#0D1117]">
         {activePath === 'structured-explanation' && (
           <StructuredExplanationView content={topic.paths['structured-explanation']} />
         )}
@@ -79,17 +80,17 @@ export const PathViewer: React.FC<PathViewerProps> = ({
       </div>
 
       {/* Path Bottom Callout: Cross-Pollinate */}
-      <div className="p-6 bg-[#E8EAE1] border-t border-[#DFE2D7] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="p-6 bg-[#080A0E] border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-[#DFE2D7] text-[#111714] flex items-center justify-center shrink-0">
+          <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 text-[#B8FF00] flex items-center justify-center shrink-0">
             <RotateCw className="w-4 h-4" />
           </div>
           <div>
-            <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-[#171C18]">
-              SYNTHESISE MULTIPLE MODES
+            <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-white">
+              SYNTHESISE PARALLEL PATHS
             </h4>
-            <p className="text-[11px] text-[#5E7A65]">
-              Cross-comparing paths builds invariant representation in memory.
+            <p className="text-[11px] text-[#8DA391]">
+              Cross-comparing perspectives builds invariant representations in cognitive memory.
             </p>
           </div>
         </div>
@@ -101,7 +102,7 @@ export const PathViewer: React.FC<PathViewerProps> = ({
               <button
                 key={p}
                 onClick={() => onSwitchPath(p)}
-                className="px-3 py-1.5 font-mono text-xs font-medium bg-[#F1F1E9] hover:bg-white border border-[#DFE2D7] text-[#171C18] rounded-lg transition-colors"
+                className="px-3 py-1.5 font-mono text-xs font-semibold bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#B8FF00]/40 text-[#8DA391] hover:text-[#B8FF00] rounded-lg transition-colors"
               >
                 {LEARNING_PATHS[p].shortTitle.toUpperCase()}
               </button>

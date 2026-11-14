@@ -22,20 +22,20 @@ export const VisualLearningView: React.FC<VisualLearningViewProps> = ({ content 
   return (
     <div className="space-y-8 animate-in fade-in duration-200">
       
-      {/* Visual Header */}
-      <div className="p-6 sm:p-7 rounded-2xl bg-[#E8EAE1] border border-[#DFE2D7] space-y-3">
+      {/* Visual Header (Warm Ivory Editorial Surface) */}
+      <div className="p-6 sm:p-7 rounded-2xl bg-[#FAF9F5] border border-[#E5E4DC] text-[#171C18] space-y-3 shadow-sm">
         <div className="flex items-center gap-2">
-          <Eye className="w-4 h-4 text-[#111714]" />
+          <Eye className="w-4 h-4 text-[#080A0E]" />
           <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#5E7A65]">
-            SPATIAL ARCHITECTURE &bull; {content.visualType.toUpperCase()}
+            SPATIAL TOPOLOGY &bull; {content.visualType.toUpperCase()}
           </span>
         </div>
 
-        <h3 className="font-display text-xl sm:text-2xl font-bold text-[#171C18] tracking-tight">
+        <h3 className="font-display text-xl sm:text-2xl font-bold text-[#080A0E] tracking-tight">
           {content.headline}
         </h3>
 
-        <p className="text-sm sm:text-base text-[#171C18]/80 leading-relaxed max-w-3xl">
+        <p className="text-sm sm:text-base text-[#171C18]/85 leading-relaxed max-w-3xl">
           {content.caption}
         </p>
       </div>
@@ -43,7 +43,7 @@ export const VisualLearningView: React.FC<VisualLearningViewProps> = ({ content 
       {/* Layer Switcher if available */}
       {content.interactiveLayers && content.interactiveLayers.length > 0 && (
         <div className="space-y-2">
-          <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#5E7A65]">
+          <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#8DA391]">
             STRUCTURAL STRATA:
           </span>
           <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
@@ -53,8 +53,8 @@ export const VisualLearningView: React.FC<VisualLearningViewProps> = ({ content 
                 onClick={() => setActiveLayerId(layer.layerId)}
                 className={`flex items-center gap-2 px-3.5 py-2 rounded-xl font-mono text-xs font-semibold whitespace-nowrap transition-all ${
                   activeLayerId === layer.layerId
-                    ? 'bg-[#111714] text-[#C8F36B] shadow-xs'
-                    : 'bg-[#E8EAE1] text-[#171C18] hover:bg-[#DFE2D7] border border-[#DFE2D7]'
+                    ? 'bg-[#B8FF00] text-[#080A0E] shadow-sm font-bold'
+                    : 'bg-white/5 text-[#8DA391] hover:text-white hover:bg-white/10 border border-white/10'
                 }`}
               >
                 <Layers className="w-3.5 h-3.5" />
@@ -64,7 +64,7 @@ export const VisualLearningView: React.FC<VisualLearningViewProps> = ({ content 
           </div>
 
           {activeLayer && (
-            <p className="text-xs text-[#171C18] bg-[#E8EAE1] p-3.5 rounded-xl border border-[#DFE2D7] italic">
+            <p className="text-xs text-[#171C18] bg-[#FAF9F5] p-3.5 rounded-xl border border-[#E5E4DC] italic">
               {activeLayer.description}
             </p>
           )}
@@ -75,17 +75,17 @@ export const VisualLearningView: React.FC<VisualLearningViewProps> = ({ content 
       <div id="threejs-concept-network">
         {(() => {
           const fallback2D = (
-            <div className="bg-[#111714] text-[#F3F4EC] rounded-2xl border border-white/10 p-6 sm:p-8 space-y-6 relative overflow-hidden shadow-lg">
+            <div className="bg-[#080A0E] text-[#F3F4EC] rounded-2xl border border-white/10 p-6 sm:p-8 space-y-6 relative overflow-hidden shadow-2xl corner-reticle">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-[#C8F36B] animate-pulse" />
-                    <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#C8F36B]">
-                      TOPOLOGICAL CONCEPT NETWORK (2D FALLBACK)
+                    <span className="w-2 h-2 rounded-full bg-[#B8FF00] animate-pulse" />
+                    <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#B8FF00]">
+                      TOPOLOGICAL CONCEPT NETWORK (2D SCHEMATIC)
                     </span>
                   </div>
                   <p className="text-xs text-[#8DA391] mt-0.5">
-                    Interactive spatial graph of invariants
+                    Interactive spatial graph of invariants &amp; dependency relations
                   </p>
                 </div>
                 <div className="font-mono text-[10px] px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[#8DA391] self-start sm:self-auto">
@@ -94,10 +94,10 @@ export const VisualLearningView: React.FC<VisualLearningViewProps> = ({ content 
               </div>
 
               {/* 2D Interactive Concept Canvas / SVG */}
-              <div className="relative w-full h-64 sm:h-80 bg-[#19211C] rounded-xl border border-white/10 overflow-hidden flex items-center justify-center">
+              <div className="relative w-full h-64 sm:h-80 bg-[#05070A] rounded-xl border border-white/10 overflow-hidden flex items-center justify-center">
                 <div 
                   className="absolute inset-0 opacity-[0.06] pointer-events-none"
-                  style={{ backgroundImage: 'radial-gradient(#C8F36B 1px, transparent 1px)', backgroundSize: '24px 24px' }}
+                  style={{ backgroundImage: 'radial-gradient(rgba(56, 189, 248, 0.4) 1px, transparent 1px)', backgroundSize: '24px 24px' }}
                 />
 
                 <svg className="absolute inset-0 w-full h-full pointer-events-none">
@@ -116,18 +116,18 @@ export const VisualLearningView: React.FC<VisualLearningViewProps> = ({ content 
                         y1={`${y1}%`}
                         x2={`${x2}%`}
                         y2={`${y2}%`}
-                        stroke="#5E7A65"
+                        stroke="#38BDF8"
                         strokeWidth="1.5"
                         strokeDasharray="4 4"
-                        opacity="0.4"
+                        opacity="0.5"
                       />
                     );
                   })}
                 </svg>
 
-                <div className="absolute z-10 flex flex-col items-center justify-center w-20 h-20 rounded-full bg-[#111714] border-2 border-[#C8F36B] shadow-lg text-center p-2">
-                  <span className="font-mono text-[9px] font-bold text-[#C8F36B] uppercase tracking-wider">CORE</span>
-                  <span className="font-display text-[10px] font-bold text-[#F3F4EC] leading-tight line-clamp-1">{content.visualType}</span>
+                <div className="absolute z-10 flex flex-col items-center justify-center w-20 h-20 rounded-full bg-[#080A0E] border-2 border-[#B8FF00] shadow-lg text-center p-2">
+                  <span className="font-mono text-[9px] font-bold text-[#B8FF00] uppercase tracking-wider">CORE</span>
+                  <span className="font-display text-[10px] font-bold text-white leading-tight line-clamp-1">{content.visualType}</span>
                 </div>
 
                 {content.components.map((comp, idx) => {
@@ -144,13 +144,13 @@ export const VisualLearningView: React.FC<VisualLearningViewProps> = ({ content 
                       style={{ left: `${left}%`, top: `${top}%`, transform: 'translate(-50%, -50%)' }}
                       className={`absolute z-20 transition-all p-2 rounded-xl flex items-center gap-2 border ${
                         isSelected
-                          ? 'bg-[#C8F36B] text-[#111714] border-[#C8F36B] shadow-md scale-110'
+                          ? 'bg-[#B8FF00] text-[#080A0E] border-[#B8FF00] shadow-md scale-110 font-bold'
                           : isHighlighted
-                          ? 'bg-[#111714] text-[#F3F4EC] border-white/20 hover:border-[#C8F36B]'
-                          : 'opacity-40 bg-[#19211C] text-[#8DA391] border-white/5'
+                          ? 'bg-[#0D1117] text-[#F3F4EC] border-white/20 hover:border-[#B8FF00]'
+                          : 'opacity-40 bg-[#080A0E] text-[#8DA391] border-white/5'
                       }`}
                     >
-                      <div className={`w-2 h-2 rounded-full ${isSelected ? 'bg-[#111714]' : 'bg-[#C8F36B]'}`} />
+                      <div className={`w-2 h-2 rounded-full ${isSelected ? 'bg-[#080A0E]' : 'bg-[#B8FF00]'}`} />
                       <span className="font-mono text-[10px] font-bold whitespace-nowrap">{comp.name}</span>
                     </button>
                   );
@@ -160,7 +160,7 @@ export const VisualLearningView: React.FC<VisualLearningViewProps> = ({ content 
               {activeComponent && (
                 <div className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-1">
                   <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs font-bold text-[#C8F36B]">
+                    <span className="font-mono text-xs font-bold text-[#B8FF00]">
                       INSPECTING: {activeComponent.name} &bull; {activeComponent.role}
                     </span>
                     {activeComponent.badge && (
@@ -194,12 +194,12 @@ export const VisualLearningView: React.FC<VisualLearningViewProps> = ({ content 
       </div>
 
       {/* Component Cards Grid */}
-      <div className="bg-[#E8EAE1] rounded-2xl border border-[#DFE2D7] shadow-xs overflow-hidden">
-        <div className="p-5 border-b border-[#DFE2D7] bg-[#F1F1E9] flex items-center justify-between">
+      <div className="bg-[#FAF9F5] text-[#171C18] rounded-2xl border border-[#E5E4DC] shadow-sm overflow-hidden">
+        <div className="p-5 border-b border-[#E5E4DC] bg-[#F3F2EB] flex items-center justify-between">
           <div>
             <div className="flex items-center gap-2">
-              <Network className="w-4 h-4 text-[#111714]" />
-              <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#171C18]">
+              <Network className="w-4 h-4 text-[#080A0E]" />
+              <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#080A0E]">
                 {content.diagramTitle}
               </span>
             </div>
@@ -225,24 +225,24 @@ export const VisualLearningView: React.FC<VisualLearningViewProps> = ({ content 
                   onClick={() => setSelectedComponentId(comp.id)}
                   className={`p-4 rounded-xl border text-left cursor-pointer transition-all ${
                     isSelected
-                      ? 'bg-[#111714] text-[#F3F4EC] border-[#111714] shadow-sm'
+                      ? 'bg-[#080A0E] text-white border-[#B8FF00] shadow-md ring-1 ring-[#B8FF00]/40'
                       : isHighlightedByLayer
-                      ? 'bg-[#F1F1E9] hover:bg-white border-[#DFE2D7] hover:border-[#8DA391] text-[#171C18]'
-                      : 'opacity-40 bg-[#F1F1E9] border-[#DFE2D7] text-[#171C18]'
+                      ? 'bg-[#F3F2EB] hover:bg-white border-[#E5E4DC] hover:border-[#8DA391] text-[#171C18]'
+                      : 'opacity-40 bg-[#F3F2EB] border-[#E5E4DC] text-[#171C18]'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-2">
-                    <span className={`font-mono text-xs font-bold ${isSelected ? 'text-[#C8F36B]' : 'text-[#171C18]'}`}>
+                    <span className={`font-mono text-xs font-bold ${isSelected ? 'text-[#B8FF00]' : 'text-[#080A0E]'}`}>
                       {comp.name}
                     </span>
-                    <Box className={`w-4 h-4 ${isSelected ? 'text-[#C8F36B]' : 'text-[#5E7A65]'}`} />
+                    <Box className={`w-4 h-4 ${isSelected ? 'text-[#B8FF00]' : 'text-[#5E7A65]'}`} />
                   </div>
-                  <div className={`text-xs font-semibold ${isSelected ? 'text-[#F3F4EC]' : 'text-[#171C18]'}`}>
+                  <div className={`text-xs font-semibold ${isSelected ? 'text-white' : 'text-[#171C18]'}`}>
                     {comp.role}
                   </div>
                   {comp.badge && (
                     <span className={`inline-block mt-2 font-mono text-[10px] px-2 py-0.5 rounded ${
-                      isSelected ? 'bg-white/10 text-[#C8F36B]' : 'bg-[#DFE2D7] text-[#171C18]'
+                      isSelected ? 'bg-white/10 text-[#B8FF00]' : 'bg-[#E5E4DC] text-[#171C18]'
                     }`}>
                       {comp.badge}
                     </span>
@@ -256,10 +256,10 @@ export const VisualLearningView: React.FC<VisualLearningViewProps> = ({ content 
 
       {/* Process Flow if available */}
       {content.processFlow && content.processFlow.length > 0 && (
-        <div className="bg-[#E8EAE1] rounded-2xl border border-[#DFE2D7] shadow-xs p-6 sm:p-7 space-y-5">
+        <div className="bg-[#FAF9F5] text-[#171C18] rounded-2xl border border-[#E5E4DC] shadow-sm p-6 sm:p-7 space-y-5">
           <div className="flex items-center gap-2">
-            <Network className="w-4 h-4 text-[#111714]" />
-            <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-[#171C18]">
+            <Network className="w-4 h-4 text-[#080A0E]" />
+            <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-[#080A0E]">
               STEPWISE PROCESS DYNAMICS
             </h4>
           </div>
@@ -268,13 +268,13 @@ export const VisualLearningView: React.FC<VisualLearningViewProps> = ({ content 
             {content.processFlow.map((step) => (
               <div
                 key={step.step}
-                className="p-4 rounded-xl bg-[#F1F1E9] border border-[#DFE2D7] space-y-2 relative"
+                className="p-4 rounded-xl bg-[#F3F2EB] border border-[#E5E4DC] space-y-2 relative"
               >
                 <div className="flex items-center gap-2">
-                  <span className="w-6 h-6 rounded-lg bg-[#111714] text-[#C8F36B] font-mono font-bold text-xs flex items-center justify-center">
+                  <span className="w-6 h-6 rounded-lg bg-[#080A0E] text-[#B8FF00] font-mono font-bold text-xs flex items-center justify-center">
                     {step.step}
                   </span>
-                  <h5 className="font-display text-sm font-bold text-[#171C18]">
+                  <h5 className="font-display text-sm font-bold text-[#080A0E]">
                     {step.label}
                   </h5>
                 </div>
@@ -295,20 +295,20 @@ export const VisualLearningView: React.FC<VisualLearningViewProps> = ({ content 
       {/* Spatial Analogy & Visual Summary */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {content.spatialAnalogy && (
-          <div className="p-5 rounded-xl bg-[#E8EAE1] border border-[#DFE2D7] shadow-xs space-y-2">
+          <div className="p-5 sm:p-6 rounded-2xl bg-[#FAF9F5] border border-[#E5E4DC] text-[#171C18] shadow-sm space-y-2">
             <div className="flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider text-[#5E7A65]">
-              <Sparkles className="w-4 h-4 text-[#111714]" />
+              <Sparkles className="w-4 h-4 text-[#080A0E]" />
               <span>SPATIAL ANALOGY: {content.spatialAnalogy.metaphor.toUpperCase()}</span>
             </div>
-            <p className="text-xs sm:text-sm text-[#171C18]/80 leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#171C18]/85 leading-relaxed">
               {content.spatialAnalogy.explanation}
             </p>
           </div>
         )}
 
-        <div className="p-5 rounded-xl bg-[#111714] text-[#F3F4EC] border border-white/10 space-y-2">
-          <div className="flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider text-[#C8F36B]">
-            <Layers className="w-4 h-4 text-[#C8F36B]" />
+        <div className="p-5 sm:p-6 rounded-2xl bg-[#080A0E] text-[#F3F4EC] border border-white/10 space-y-2 shadow-lg relative corner-reticle">
+          <div className="flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider text-[#B8FF00]">
+            <Layers className="w-4 h-4 text-[#B8FF00]" />
             <span>VISUAL SYNTHESIS</span>
           </div>
           <p className="text-xs sm:text-sm text-[#8DA391] font-medium leading-relaxed">

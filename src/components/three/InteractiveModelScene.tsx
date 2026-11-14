@@ -4,6 +4,17 @@ import { useFrame } from '@react-three/fiber';
 import { SceneCanvas } from './SceneCanvas';
 import { ThreeSceneBoundary } from './ThreeSceneBoundary';
 import { Sliders, RotateCcw, CheckCircle2, AlertTriangle, Eye } from 'lucide-react';
+import {
+  calculateLinearEquations,
+  LINEAR_EQUATIONS_MODEL,
+  calculatePhotosynthesis,
+  PHOTOSYNTHESIS_MODEL,
+} from '../../utils/scientificEngines';
+import type {
+  LinearEquationsState,
+  PhotosynthesisState,
+  WavelengthType,
+} from '../../types/scientificModel';
 
 interface InteractiveModelSceneProps {
   experimentType: 'linear-equations' | 'photosynthesis' | 'french-revolution' | 'metaphors' | 'generic';
@@ -305,34 +316,30 @@ export const InteractiveModelScene: React.FC<InteractiveModelSceneProps> = ({
   const [viewMode, setViewMode] = useState<'3d' | '2d'>('3d');
 
   // Linear Equations interactive state
-  const [slope, setSlope] = useState<number>(2);
-  const [intercept, setIntercept] = useState<number>(1);
-  const [xVal, setXVal] = useState<number>(3);
-  const computedY = slope * xVal + intercept;
-  const [targetY, setTargetY] = useState<number>(computedY);
+  const [linearState, setLinearState] = useState<LinearEquationsState>(
+    LINEAR_EQUATIONS_MODEL.initialState
+  );
 
   // Photosynthesis interactive state
-  const [wavelength, setWavelength] = useState<'red' | 'blue' | 'green' | 'white'>('white');
-  const [lightIntensity, setLightIntensity] = useState<number>(75);
-  const [co2, setCo2] = useState<number>(450);
+  const [photoState, setPhotoState] = useState<PhotosynthesisState>(
+    PHOTOSYNTHESIS_MODEL.initialState
+  );
 
-  // Photosynthesis biological calculation
-  const absorptionMap = { red: 0.95, blue: 0.9, green: 0.05, white: 0.8 };
-  const effectiveLight = (lightIntensity / 100) * absorptionMap[wavelength];
-  const co2Factor = co2 / (co2 + 250);
-  const bubbleRate = Math.round(Math.min(effectiveLight * 1.2, co2Factor * 1.1) * 80);
+  // Computed deterministic outputs
+  const linearOutputs = calculateLinearEquations(linearState);
+  const photoOutputs = calculatePhotosynthesis(photoState);
 
   // Check if this topic has a dedicated 3D educational model
   const has3DModel = experimentType === 'linear-equations' || experimentType === 'photosynthesis';
 
   if (!has3DModel || viewMode === '2d') {
     return (
-      <div className="space-y-3">
+      <div className="space-y-4">
         {has3DModel && (
           <div className="flex justify-end">
             <button
               onClick={() => setViewMode('3d')}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-mono text-xs font-semibold bg-[#111714] text-[#C8F36B] hover:bg-[#19211C] transition-all"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl font-mono text-xs font-semibold bg-[#0D1117] text-[#B8FF00] hover:bg-[#161B22] border border-[#B8FF00]/30 transition-all shadow-sm"
             >
               <Eye className="w-3.5 h-3.5" />
               <span>SWITCH TO 3D PHYSICAL LAB</span>
@@ -346,14 +353,14 @@ export const InteractiveModelScene: React.FC<InteractiveModelSceneProps> = ({
 
   return (
     <ThreeSceneBoundary fallback={fallback} sceneName="Interactive Educational Model">
-      <div className="bg-[#111714] text-[#F3F4EC] rounded-2xl border border-white/10 p-5 sm:p-7 space-y-5 relative overflow-hidden shadow-xl">
+      <div className="bg-[#080A0E] text-[#F3F4EC] rounded-2xl border border-white/10 p-5 sm:p-7 space-y-5 relative overflow-hidden shadow-2xl corner-reticle">
         
         {/* Top Header & Mode Toggle */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
-          <div className="space-y-0.5">
+          <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-[#C8F36B] animate-pulse" />
-              <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#C8F36B]">
+              <span className="w-2 h-2 rounded-full bg-[#B8FF00] animate-pulse" />
+              <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#B8FF00]">
                 {experimentType === 'linear-equations'
                   ? '3D PHYSICAL BALANCE & EQUALITY CONSERVATION'
                   : '3D PHOTOCHEMICAL CHLOROPLAST & PHOTON CHAMBER'}
@@ -361,28 +368,28 @@ export const InteractiveModelScene: React.FC<InteractiveModelSceneProps> = ({
             </div>
             <p className="text-xs text-[#8DA391]">
               {experimentType === 'linear-equations'
-                ? 'Equilibrium balance physically tilts when the left expression (mx + b) does not equal target y'
-                : 'Photon wavelength stream & photosynthetic oxygen bubble emission governed by Liebig’s Law'}
+                ? 'Equilibrium balance physically tilts when the left expression (mx + c) does not equal target y'
+                : 'Photon wavelength stream & photosynthetic oxygen bubble emission governed by Blackman’s Law'}
             </p>
           </div>
 
           <div className="flex items-center gap-2 self-start sm:self-auto">
             <button
               onClick={() => setViewMode('2d')}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-mono text-xs font-medium bg-white/5 hover:bg-white/10 text-[#8DA391] border border-white/10 transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-mono text-xs font-medium bg-white/5 hover:bg-white/10 text-[#8DA391] hover:text-white border border-white/10 transition-colors"
             >
               <Sliders className="w-3.5 h-3.5" />
               <span>2D SCHEMATIC MODE</span>
             </button>
 
-            <span className="font-mono text-[10px] px-2.5 py-1 rounded-full bg-[#19211C] text-[#C8F36B] border border-white/10">
+            <span className="font-mono text-[10px] px-2.5 py-1 rounded-full bg-[#B8FF00]/10 text-[#B8FF00] border border-[#B8FF00]/30">
               3D ACTIVE
             </span>
           </div>
         </div>
 
         {/* 3D Canvas Stage */}
-        <div className="relative w-full h-80 sm:h-96 bg-[#19211C] rounded-xl border border-white/10 overflow-hidden flex items-center justify-center">
+        <div className="relative w-full h-80 sm:h-96 bg-[#05070A] rounded-xl border border-white/10 overflow-hidden flex items-center justify-center">
           <SceneCanvas
             fallback={fallback}
             camera={{ position: [0, 0, 4.8], fov: 45 }}
@@ -390,169 +397,190 @@ export const InteractiveModelScene: React.FC<InteractiveModelSceneProps> = ({
           >
             {experimentType === 'linear-equations' && (
               <BalanceScale3D
-                slope={slope}
-                intercept={intercept}
-                xVal={xVal}
-                targetY={targetY}
+                slope={linearState.slope}
+                intercept={linearState.intercept}
+                xVal={linearState.xVal}
+                targetY={linearState.targetY}
               />
             )}
             {experimentType === 'photosynthesis' && (
               <PhotosynthesisChamber3D
-                wavelength={wavelength}
-                lightIntensity={lightIntensity}
-                bubbleRate={bubbleRate}
+                wavelength={photoState.wavelength}
+                lightIntensity={photoState.lightIntensity}
+                bubbleRate={photoOutputs.bubbleRate}
               />
             )}
           </SceneCanvas>
 
           {/* Real-Time Mathematical / Biological HUD Readout */}
-          <div className="absolute top-3 left-3 z-10 font-mono text-xs p-3 rounded-xl bg-[#111714]/85 backdrop-blur-md border border-white/10 space-y-1">
+          <div className="absolute top-3 left-3 z-10 font-mono text-xs p-3.5 rounded-xl bg-[#080A0E]/90 backdrop-blur-md border border-white/10 space-y-1.5 shadow-lg max-w-xs">
             {experimentType === 'linear-equations' ? (
               <>
-                <div className="text-[#8DA391] text-[10px] uppercase">Equation Equilibrium:</div>
-                <div className="font-bold text-white">
-                  Left Pan: <span className="text-[#F59E0B]">{slope}x + {intercept}</span> = <span className="text-[#F59E0B]">{computedY} kg</span>
+                <div className="text-[#8DA391] text-[10px] uppercase font-bold tracking-wider">Equation Equilibrium HUD:</div>
+                <div className="font-bold text-white text-xs">
+                  Left Pan: <span className="text-[#B8FF00]">{linearState.slope}x + ({linearState.intercept})</span> = <span className="text-[#B8FF00]">{linearOutputs.leftLoad} kg</span>
                 </div>
-                <div className="font-bold text-white">
-                  Right Pan: <span className="text-[#34D399]">Target y</span> = <span className="text-[#34D399]">{targetY} kg</span>
+                <div className="font-bold text-white text-xs">
+                  Right Pan: <span className="text-[#38BDF8]">Target y</span> = <span className="text-[#38BDF8]">{linearOutputs.rightLoad} kg</span>
                 </div>
-                <div className={`text-[10px] pt-1 flex items-center gap-1 ${
-                  computedY === targetY ? 'text-[#C8F36B]' : 'text-[#EF4444]'
+                <div className={`text-[10px] pt-1 flex items-center gap-1 font-bold ${
+                  linearOutputs.isBalanced ? 'text-[#B8FF00]' : 'text-[#EF4444]'
                 }`}>
-                  {computedY === targetY ? (
+                  {linearOutputs.isBalanced ? (
                     <>
-                      <CheckCircle2 className="w-3 h-3" />
-                      <span>EQUILIBRIUM CONSERVED (0&deg; TILT)</span>
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                      <span>EQUILIBRIUM CONSERVED (0° TILT)</span>
                     </>
                   ) : (
                     <>
-                      <AlertTriangle className="w-3 h-3" />
-                      <span>TORQUE IMBALANCE ({Math.abs(computedY - targetY)} kg delta)</span>
+                      <AlertTriangle className="w-3.5 h-3.5" />
+                      <span>TORQUE IMBALANCE (Δ = {linearOutputs.imbalance} kg)</span>
                     </>
                   )}
                 </div>
               </>
             ) : (
               <>
-                <div className="text-[#8DA391] text-[10px] uppercase">Photochemical Kinetics:</div>
-                <div className="font-bold text-white">
-                  Photon Flux: <span className="text-[#C8F36B]">{lightIntensity}%</span> ({wavelength.toUpperCase()} &bull; {wavelength === 'green' ? '5% absorbed' : '80-95% absorbed'})
+                <div className="text-[#8DA391] text-[10px] uppercase font-bold tracking-wider">Photochemical Kinetics HUD:</div>
+                <div className="font-bold text-white text-xs">
+                  Photon Flux: <span className="text-[#B8FF00]">{photoState.lightIntensity}%</span> ({photoState.wavelength.toUpperCase()} &bull; {(photoOutputs.quantumEfficiency * 100).toFixed(0)}% eff)
                 </div>
-                <div className="font-bold text-white">
-                  Oxygen Bubble Rate: <span className="text-[#38BDF8]">{bubbleRate} bubbles/min</span>
+                <div className="font-bold text-white text-xs">
+                  Oxygen Bubble Rate: <span className="text-[#38BDF8]">{photoOutputs.bubbleRate} bubbles/min</span>
                 </div>
-                <div className="text-[10px] text-[#8DA391] pt-1">
-                  CO2 Saturation: {co2} ppm
+                <div className="text-[10px] text-[#8DA391] pt-0.5">
+                  CO₂ Saturation: <span className="text-white font-bold">{photoState.co2Concentration} ppm</span> &bull; Temp: <span className="text-white font-bold">{photoState.temperature}°C</span>
                 </div>
               </>
             )}
           </div>
         </div>
 
-        {/* 3D Model Interactive Parameter Sliders */}
+        {/* 3D Model Interactive Parameter Sliders & Presets */}
         <div className="p-4 sm:p-5 rounded-xl bg-white/5 border border-white/10 space-y-4">
           <div className="flex items-center justify-between">
-            <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#5E7A65]">
+            <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#B8FF00]">
               MANIPULATE PARAMETRIC INVARIANTS
             </span>
             <button
               onClick={() => {
                 if (experimentType === 'linear-equations') {
-                  setSlope(2);
-                  setIntercept(1);
-                  setXVal(3);
-                  setTargetY(7);
+                  setLinearState(LINEAR_EQUATIONS_MODEL.initialState);
                 } else {
-                  setWavelength('white');
-                  setLightIntensity(75);
-                  setCo2(450);
+                  setPhotoState(PHOTOSYNTHESIS_MODEL.initialState);
                 }
               }}
-              className="font-mono text-[10px] text-[#8DA391] hover:text-[#F3F4EC] flex items-center gap-1"
+              className="font-mono text-[10px] text-[#8DA391] hover:text-white flex items-center gap-1 transition-colors"
             >
               <RotateCcw className="w-3 h-3" />
-              <span>RESET</span>
+              <span>RESET DEFAULTS</span>
             </button>
           </div>
 
           {experimentType === 'linear-equations' ? (
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs font-mono">
+            <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 text-xs font-mono">
               <div className="space-y-1">
                 <div className="flex justify-between text-[#8DA391]">
                   <span>Slope (m):</span>
-                  <span className="text-white font-bold">{slope}</span>
+                  <span className="text-[#B8FF00] font-bold">{linearState.slope}</span>
                 </div>
                 <input
                   type="range"
-                  min="-4"
+                  min="-5"
                   max="5"
-                  step="1"
-                  value={slope}
-                  onChange={(e) => {
-                    const newSlope = parseInt(e.target.value, 10);
-                    setSlope(newSlope);
-                    setTargetY(newSlope * xVal + intercept);
-                  }}
-                  className="w-full accent-[#C8F36B]"
+                  step="0.5"
+                  value={linearState.slope}
+                  onChange={(e) =>
+                    setLinearState((prev) => ({
+                      ...prev,
+                      slope: parseFloat(e.target.value) || 0,
+                    }))
+                  }
+                  className="w-full accent-[#B8FF00] cursor-pointer"
                 />
               </div>
 
               <div className="space-y-1">
                 <div className="flex justify-between text-[#8DA391]">
-                  <span>Y-Intercept (b):</span>
-                  <span className="text-white font-bold">{intercept}</span>
+                  <span>Y-Intercept (c):</span>
+                  <span className="text-[#F59E0B] font-bold">{linearState.intercept}</span>
+                </div>
+                <input
+                  type="range"
+                  min="-8"
+                  max="8"
+                  step="1"
+                  value={linearState.intercept}
+                  onChange={(e) =>
+                    setLinearState((prev) => ({
+                      ...prev,
+                      intercept: parseInt(e.target.value, 10) || 0,
+                    }))
+                  }
+                  className="w-full accent-[#F59E0B] cursor-pointer"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <div className="flex justify-between text-[#8DA391]">
+                  <span>Input Load (x):</span>
+                  <span className="text-white font-bold">{linearState.xVal}</span>
                 </div>
                 <input
                   type="range"
                   min="-5"
                   max="8"
                   step="1"
-                  value={intercept}
-                  onChange={(e) => {
-                    const newB = parseInt(e.target.value, 10);
-                    setIntercept(newB);
-                    setTargetY(slope * xVal + newB);
-                  }}
-                  className="w-full accent-[#C8F36B]"
+                  value={linearState.xVal}
+                  onChange={(e) =>
+                    setLinearState((prev) => ({
+                      ...prev,
+                      xVal: parseInt(e.target.value, 10) || 0,
+                    }))
+                  }
+                  className="w-full accent-white cursor-pointer"
                 />
               </div>
 
               <div className="space-y-1">
                 <div className="flex justify-between text-[#8DA391]">
-                  <span>Test Input (x):</span>
-                  <span className="text-white font-bold">{xVal}</span>
+                  <span>Target Load (y):</span>
+                  <span className="text-[#38BDF8] font-bold">{linearState.targetY}</span>
                 </div>
                 <input
                   type="range"
-                  min="-4"
-                  max="6"
+                  min="-10"
+                  max="20"
                   step="1"
-                  value={xVal}
-                  onChange={(e) => {
-                    const newX = parseInt(e.target.value, 10);
-                    setXVal(newX);
-                    setTargetY(slope * newX + intercept);
-                  }}
-                  className="w-full accent-[#C8F36B]"
+                  value={linearState.targetY}
+                  onChange={(e) =>
+                    setLinearState((prev) => ({
+                      ...prev,
+                      targetY: parseInt(e.target.value, 10) || 0,
+                    }))
+                  }
+                  className="w-full accent-[#38BDF8] cursor-pointer"
                 />
               </div>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs font-mono">
+            <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 text-xs font-mono">
               <div className="space-y-1">
-                <div className="text-[#8DA391]">Light Spectrum:</div>
-                <div className="flex gap-1.5">
-                  {(['white', 'blue', 'red', 'green'] as const).map((w) => (
+                <div className="text-[#8DA391]">Wavelength (λ):</div>
+                <div className="flex gap-1">
+                  {(['red', 'blue', 'green', 'white'] as const).map((w) => (
                     <button
                       key={w}
-                      onClick={() => setWavelength(w)}
+                      onClick={() =>
+                        setPhotoState((prev) => ({ ...prev, wavelength: w as WavelengthType }))
+                      }
                       className={`flex-1 py-1 rounded text-[10px] uppercase font-bold transition-all ${
-                        wavelength === w
-                          ? 'bg-[#C8F36B] text-[#111714]'
+                        photoState.wavelength === w
+                          ? 'bg-[#B8FF00] text-[#080A0E]'
                           : 'bg-white/10 text-[#8DA391] hover:bg-white/20'
                       }`}
                     >
-                      {w}
+                      {w === 'red' ? '660' : w === 'blue' ? '430' : w === 'green' ? '520' : 'Wht'}
                     </button>
                   ))}
                 </div>
@@ -560,32 +588,64 @@ export const InteractiveModelScene: React.FC<InteractiveModelSceneProps> = ({
 
               <div className="space-y-1">
                 <div className="flex justify-between text-[#8DA391]">
-                  <span>Light Intensity:</span>
-                  <span className="text-white font-bold">{lightIntensity}%</span>
+                  <span>Light (I):</span>
+                  <span className="text-amber-400 font-bold">{photoState.lightIntensity}%</span>
                 </div>
                 <input
                   type="range"
                   min="0"
                   max="100"
-                  value={lightIntensity}
-                  onChange={(e) => setLightIntensity(parseInt(e.target.value, 10))}
-                  className="w-full accent-[#C8F36B]"
+                  step="5"
+                  value={photoState.lightIntensity}
+                  onChange={(e) =>
+                    setPhotoState((prev) => ({
+                      ...prev,
+                      lightIntensity: parseInt(e.target.value, 10) || 0,
+                    }))
+                  }
+                  className="w-full accent-amber-400 cursor-pointer"
                 />
               </div>
 
               <div className="space-y-1">
                 <div className="flex justify-between text-[#8DA391]">
-                  <span>CO2 Concentration:</span>
-                  <span className="text-white font-bold">{co2} ppm</span>
+                  <span>CO₂ Conc:</span>
+                  <span className="text-[#38BDF8] font-bold">{photoState.co2Concentration} ppm</span>
                 </div>
                 <input
                   type="range"
-                  min="100"
-                  max="1000"
+                  min="200"
+                  max="1200"
                   step="50"
-                  value={co2}
-                  onChange={(e) => setCo2(parseInt(e.target.value, 10))}
-                  className="w-full accent-[#C8F36B]"
+                  value={photoState.co2Concentration}
+                  onChange={(e) =>
+                    setPhotoState((prev) => ({
+                      ...prev,
+                      co2Concentration: parseInt(e.target.value, 10) || 200,
+                    }))
+                  }
+                  className="w-full accent-[#38BDF8] cursor-pointer"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <div className="flex justify-between text-[#8DA391]">
+                  <span>Temp (T):</span>
+                  <span className="text-rose-400 font-bold">{photoState.temperature}°C</span>
+                </div>
+                <input
+                  type="range"
+                  min="10"
+                  max="45"
+                  step="1"
+                  value={photoState.temperature}
+                  onChange={(e) =>
+                    setPhotoState((prev) => ({
+                      ...prev,
+                      temperature: parseInt(e.target.value, 10) || 10,
+                    }))
+                  }
+                  className="w-full accent-rose-400 cursor-pointer"
                 />
               </div>
             </div>
