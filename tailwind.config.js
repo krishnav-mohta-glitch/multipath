@@ -42,6 +42,23 @@ export default {
           700: '#26332C',
           600: '#32423A',
         },
+        observatory: {
+          950: '#080A0E', // Cosmic void canvas
+          900: '#0D1117', // Deep observatory slate
+          850: '#11161D', // Primary container dark
+          800: '#161D26', // Graphite surface
+          750: '#1C2430', // Elevated card surface
+          700: '#243040', // Highlighted telemetry borders
+          600: '#334155', // Muted dividers
+        },
+        ivory: {
+          50: '#FAF9F5',  // Pure reading ivory
+          100: '#F3F2EB', // Reading paper
+          200: '#E8E7DF', // Sub-card paper
+          300: '#DAD9CF', // Border paper
+          400: '#B8B7AB',
+          900: '#111613', // Deep ink on ivory
+        },
         alabaster: {
           50: '#FBFBF7',
           100: '#F1F1E9',
@@ -52,10 +69,17 @@ export default {
         },
         lime: {
           DEFAULT: '#C8F36B',
-          hover: '#BCEB58',
+          scientific: '#B8FF00',
+          hover: '#A3E635',
+          bright: '#D4FF5E',
           dim: '#9EC44D',
-          glow: 'rgba(200, 243, 107, 0.25)',
+          glow: 'rgba(184, 255, 0, 0.20)',
           muted: '#283618',
+        },
+        quantum: {
+          cyan: '#38BDF8',
+          deep: '#0369A1',
+          glow: 'rgba(56, 189, 248, 0.20)',
         },
         moss: {
           100: '#E7EDE8',

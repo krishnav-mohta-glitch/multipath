@@ -5,6 +5,7 @@ import type { LearningPathId } from '../types/learningPath';
 import type { Topic } from '../types/topic';
 
 export type CoreFeatureType = 'multiple-paths' | 'guided-discovery' | 'feynman-mode';
+export type DashboardSubTab = 'progress' | 'resources' | 'reassessment' | 'bookmarks';
 
 export interface FeatureModalState {
   isOpen: boolean;
@@ -20,9 +21,11 @@ export interface AppContextValue {
   searchQuery: string;
   sessionState: UserSessionState;
   featureModal: FeatureModalState;
+  dashboardSubTab: DashboardSubTab;
   
   // Navigation actions
-  navigateTo: (tab: NavTab, topicId?: string, pathId?: LearningPathId) => void;
+  navigateTo: (tab: NavTab, topicId?: string, pathId?: LearningPathId, subTab?: DashboardSubTab) => void;
+  setDashboardSubTab: (tab: DashboardSubTab) => void;
   openTopic: (topicId: string, pathId?: LearningPathId) => void;
   backToLibrary: () => void;
   

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, Suspense } from 'react';
-import { ArrowRight, Compass } from 'lucide-react';
+import { ArrowRight, Compass, ShieldCheck } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 
 const LearningCoreScene = React.lazy(() => import('../three/LearningCoreScene'));
@@ -8,7 +8,7 @@ export const HeroSection: React.FC = () => {
   const { navigateTo, openTopic } = useApp();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  // Performant procedural 2D convergence animation (prepared for future Three.js replacement)
+  // Performant procedural 2D convergence animation (fallback & reduced motion)
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -26,15 +26,14 @@ export const HeroSection: React.FC = () => {
     };
     window.addEventListener('resize', handleResize);
 
-    // Reduced motion check
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     let time = 0;
     const paths = [
-      { name: 'Structured', color: '#8DA391', angle: -Math.PI * 0.75, offset: 0 },
-      { name: 'Visual', color: '#C8F36B', angle: -Math.PI * 0.25, offset: 1.5 },
-      { name: 'Applied', color: '#E8EAE1', angle: Math.PI * 0.75, offset: 3 },
-      { name: 'Experimental', color: '#5E7A65', angle: Math.PI * 0.25, offset: 4.5 },
+      { name: 'Structured', color: '#60A5FA', angle: -Math.PI * 0.75, offset: 0 },
+      { name: 'Visual', color: '#B8FF00', angle: -Math.PI * 0.25, offset: 1.5 },
+      { name: 'Applied', color: '#34D399', angle: Math.PI * 0.75, offset: 3 },
+      { name: 'Experimental', color: '#A78BFA', angle: Math.PI * 0.25, offset: 4.5 },
     ];
 
     const render = () => {
@@ -46,14 +45,14 @@ export const HeroSection: React.FC = () => {
       const radius = Math.min(width, height) * 0.38;
 
       // Draw subtle orbital guide tracks
-      ctx.strokeStyle = 'rgba(25, 33, 28, 0.08)';
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
       ctx.lineWidth = 1;
       ctx.beginPath();
       ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
       ctx.stroke();
 
       ctx.beginPath();
-      ctx.arc(centerX, centerY, radius * 0.55, 0, Math.PI * 2);
+      ctx.arc(centerX, centerY, radius * 0.58, 0, Math.PI * 2);
       ctx.stroke();
 
       // Central core (Single Concept)
@@ -62,21 +61,21 @@ export const HeroSection: React.FC = () => {
 
       // Core glow
       const glowGrad = ctx.createRadialGradient(centerX, centerY, 4, centerX, centerY, 60);
-      glowGrad.addColorStop(0, 'rgba(200, 243, 107, 0.35)');
-      glowGrad.addColorStop(0.5, 'rgba(200, 243, 107, 0.08)');
-      glowGrad.addColorStop(1, 'rgba(200, 243, 107, 0)');
+      glowGrad.addColorStop(0, 'rgba(184, 255, 0, 0.35)');
+      glowGrad.addColorStop(0.5, 'rgba(184, 255, 0, 0.08)');
+      glowGrad.addColorStop(1, 'rgba(184, 255, 0, 0)');
       ctx.fillStyle = glowGrad;
       ctx.beginPath();
       ctx.arc(centerX, centerY, 60, 0, Math.PI * 2);
       ctx.fill();
 
       // Core disk
-      ctx.fillStyle = '#111714';
+      ctx.fillStyle = '#080A0E';
       ctx.beginPath();
       ctx.arc(centerX, centerY, coreRadius, 0, Math.PI * 2);
       ctx.fill();
 
-      ctx.strokeStyle = '#C8F36B';
+      ctx.strokeStyle = '#B8FF00';
       ctx.lineWidth = 2;
       ctx.stroke();
 
@@ -85,7 +84,6 @@ export const HeroSection: React.FC = () => {
         const startX = centerX + Math.cos(path.angle + Math.sin(time + path.offset) * 0.1) * radius;
         const startY = centerY + Math.sin(path.angle + Math.sin(time + path.offset) * 0.1) * radius;
 
-        // Curved convergence bezier line
         const cpX = centerX + Math.cos(path.angle + 0.5) * (radius * 0.4);
         const cpY = centerY + Math.sin(path.angle + 0.5) * (radius * 0.4);
 
@@ -99,7 +97,6 @@ export const HeroSection: React.FC = () => {
         // Traveling impulse pulse along the curve
         const progress = ((time + i * 0.25) % 1);
         const t = progress;
-        // Bezier formula B(t) = (1-t)^2*P0 + 2(1-t)t*P1 + t^2*P2
         const pulseX = Math.pow(1 - t, 2) * startX + 2 * (1 - t) * t * cpX + Math.pow(t, 2) * centerX;
         const pulseY = Math.pow(1 - t, 2) * startY + 2 * (1 - t) * t * cpY + Math.pow(t, 2) * centerY;
 
@@ -109,7 +106,7 @@ export const HeroSection: React.FC = () => {
         ctx.fill();
 
         // Outer source node disk
-        ctx.fillStyle = '#19211C';
+        ctx.fillStyle = '#141A22';
         ctx.beginPath();
         ctx.arc(startX, startY, 7, 0, Math.PI * 2);
         ctx.fill();
@@ -118,9 +115,9 @@ export const HeroSection: React.FC = () => {
         ctx.stroke();
       });
 
-      // Core icon / center label
-      ctx.fillStyle = '#C8F36B';
-      ctx.font = '600 10px "JetBrains Mono", monospace';
+      // Core label
+      ctx.fillStyle = '#B8FF00';
+      ctx.font = '700 10px "JetBrains Mono", monospace';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText('CORE', centerX, centerY);
@@ -139,56 +136,62 @@ export const HeroSection: React.FC = () => {
   }, []);
 
   return (
-    <section className="relative overflow-hidden pt-12 pb-20 lg:pt-20 lg:pb-32 border-b border-[#19211C]/10 bg-[#F1F1E9]">
+    <section className="relative overflow-hidden pt-10 pb-16 lg:pt-16 lg:pb-28 border-b border-white/10 bg-[#080A0E] text-[#F3F4EC]">
       
-      {/* Precision grid backdrop */}
-      <div 
-        className="absolute inset-0 opacity-[0.04] pointer-events-none"
-        style={{
-          backgroundImage: `radial-gradient(#111714 1px, transparent 1px)`,
-          backgroundSize: '32px 32px',
-        }}
-      />
+      {/* Precision coordinate grid backdrop */}
+      <div className="absolute inset-0 cosmic-grid opacity-35 pointer-events-none" />
+
+      {/* Subtle atmospheric ambient glow */}
+      <div className="absolute -top-40 left-1/4 w-96 h-96 bg-[#B8FF00]/05 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-1/2 right-10 w-80 h-80 bg-[#38BDF8]/05 rounded-full blur-3xl pointer-events-none" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 items-center">
           
-          {/* Left Column: Asymmetrical Editorial Copy */}
-          <div className="lg:col-span-7 space-y-8 text-left">
+          {/* Left Column: Scientific Editorial Copy & Telemetry */}
+          <div className="lg:col-span-7 space-y-7 text-left">
             
-            {/* Small introductory label */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#19211C]/05 border border-[#19211C]/10">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#111714]" />
-              <span className="font-mono text-[10px] uppercase tracking-widest text-[#19211C] font-semibold">
-                A DIFFERENT WAY TO LEARN
+            {/* Scientific Telemetry Status Pill */}
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#141A22] border border-white/15 shadow-sm">
+              <span className="w-2 h-2 rounded-full bg-[#B8FF00] animate-pulse" />
+              <span className="font-mono text-[10px] uppercase tracking-widest text-[#B8FF00] font-bold">
+                SCIENTIFIC OBSERVATORY V3 • 4 PATHS
               </span>
             </div>
 
             {/* Main Headline */}
             <div className="space-y-4">
-              <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-[#111714] tracking-tight leading-[1.08]">
+              <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.06]">
                 One concept. <br />
-                <span className="text-[#19211C]/60">Multiple ways to</span> <br />
-                <span className="relative inline-block">
+                <span className="text-[#8B9DAE]">Multiple ways to</span> <br />
+                <span className="relative inline-block text-white">
                   understand it.
-                  <span className="absolute bottom-1.5 left-0 w-full h-[3px] bg-[#C8F36B] -z-0" />
+                  <span className="absolute bottom-1 left-0 w-full h-[3px] bg-[#B8FF00] -z-0" />
                 </span>
               </h1>
 
               {/* Supporting Text */}
-              <p className="text-base sm:text-lg text-[#171C18]/80 max-w-xl font-normal leading-relaxed pt-2">
-                Learn through different perspectives. Explore ideas, question assumptions and build your own understanding.
+              <p className="text-base sm:text-lg text-[#D0D4C7] max-w-xl font-normal leading-relaxed pt-1">
+                An interactive learning observatory engineered for deep mastery. Deconstruct any concept through first-principles derivations, spatial geometry, real-world engineering cases, and active Feynman inquiry.
               </p>
             </div>
 
+            {/* Sovereign Guest-First Guarantee */}
+            <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-[#141A22]/80 border border-white/08 max-w-md">
+              <ShieldCheck className="w-4 h-4 text-[#B8FF00] shrink-0" />
+              <span className="font-mono text-xs text-[#E5E7EB]">
+                <strong className="text-white font-semibold">100% Guest-First:</strong> Immediate access without mandatory registration. Progress persists locally.
+              </span>
+            </div>
+
             {/* Action CTAs */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-2">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-1">
               <button
                 onClick={() => navigateTo('library')}
-                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-semibold text-[#111714] bg-[#C8F36B] hover:bg-[#BCEB58] active:scale-[0.98] rounded-full shadow-xs transition-all"
+                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 text-xs sm:text-sm font-bold text-[#080A0E] bg-[#B8FF00] hover:bg-[#A3E635] active:scale-[0.98] rounded-full shadow-lg shadow-[#B8FF00]/10 transition-all cursor-pointer"
               >
-                <span>Start exploring</span>
-                <ArrowRight className="w-4 h-4 stroke-[2.2]" />
+                <span>Launch Knowledge Library</span>
+                <ArrowRight className="w-4 h-4 stroke-[2.4]" />
               </button>
 
               <button
@@ -196,55 +199,54 @@ export const HeroSection: React.FC = () => {
                   const el = document.getElementById('four-paths-section');
                   el?.scrollIntoView({ behavior: 'smooth' });
                 }}
-                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-medium text-[#111714] bg-[#E8EAE1] hover:bg-[#DFE2D7] border border-[#19211C]/10 rounded-full transition-all"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 text-xs sm:text-sm font-semibold text-white bg-[#141A22] hover:bg-[#1C2430] border border-white/15 rounded-full transition-all cursor-pointer"
               >
-                <Compass className="w-4 h-4 text-[#19211C]/70" />
-                <span>Discover how it works</span>
+                <Compass className="w-4 h-4 text-[#8B9DAE]" />
+                <span>Explore the 4 Paths</span>
               </button>
             </div>
 
-            {/* Architecture Invariants Telemetry Pills */}
-            <div className="pt-6 border-t border-[#19211C]/08 grid grid-cols-2 sm:grid-cols-4 gap-3">
-              <div className="p-3 rounded-xl bg-[#E8EAE1]/60 border border-[#19211C]/08">
-                <span className="font-mono text-[9px] uppercase tracking-wider text-[#19211C]/60 block mb-0.5">Perspectives</span>
-                <span className="font-display font-bold text-sm text-[#111714]">4 Convergent Paths</span>
+            {/* Architecture Telemetry Metrics Grid */}
+            <div className="pt-6 border-t border-white/10 grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div className="p-3 rounded-xl bg-[#141A22]/70 border border-white/08">
+                <span className="font-mono text-[9px] uppercase tracking-wider text-[#8B9DAE] block mb-0.5">Perspectives</span>
+                <span className="font-display font-bold text-sm text-white">4 Convergent Paths</span>
               </div>
-              <div className="p-3 rounded-xl bg-[#E8EAE1]/60 border border-[#19211C]/08">
-                <span className="font-mono text-[9px] uppercase tracking-wider text-[#19211C]/60 block mb-0.5">Coverage</span>
-                <span className="font-display font-bold text-sm text-[#111714]">8 Core Disciplines</span>
+              <div className="p-3 rounded-xl bg-[#141A22]/70 border border-white/08">
+                <span className="font-mono text-[9px] uppercase tracking-wider text-[#8B9DAE] block mb-0.5">Coverage</span>
+                <span className="font-display font-bold text-sm text-white">64 Verified Topics</span>
               </div>
-              <div className="p-3 rounded-xl bg-[#E8EAE1]/60 border border-[#19211C]/08">
-                <span className="font-mono text-[9px] uppercase tracking-wider text-[#19211C]/60 block mb-0.5">Inquiry</span>
-                <span className="font-display font-bold text-sm text-[#111714]">Guided Discovery</span>
+              <div className="p-3 rounded-xl bg-[#141A22]/70 border border-white/08">
+                <span className="font-mono text-[9px] uppercase tracking-wider text-[#8B9DAE] block mb-0.5">Curriculum</span>
+                <span className="font-display font-bold text-sm text-white">CBSE &amp; ICSE 6–10</span>
               </div>
-              <div className="p-3 rounded-xl bg-[#E8EAE1]/60 border border-[#19211C]/08">
-                <span className="font-mono text-[9px] uppercase tracking-wider text-[#19211C]/60 block mb-0.5">Diagnostic</span>
-                <span className="font-display font-bold text-sm text-[#111714]">Feynman Rubric</span>
+              <div className="p-3 rounded-xl bg-[#141A22]/70 border border-white/08">
+                <span className="font-mono text-[9px] uppercase tracking-wider text-[#8B9DAE] block mb-0.5">Diagnostic</span>
+                <span className="font-display font-bold text-sm text-white">Feynman Engine</span>
               </div>
             </div>
 
           </div>
 
-          {/* Right Column: Distinctive 2D Convergence Canvas (Future Three.js Hook) */}
+          {/* Right Column: 3D Epistemic Core with Precision Scientific Framing */}
           <div className="lg:col-span-5 relative flex items-center justify-center">
             
-            {/* Visual Container (Phase 10 Three.js Host) */}
+            {/* Visual Container with Reticle Corner Accents */}
             <div 
               id="threejs-hero-container"
-              className="relative w-full max-w-md sm:max-w-lg aspect-square rounded-3xl bg-[#111714] border border-[#19211C] shadow-2xl overflow-hidden p-4 flex flex-col justify-between"
+              className="corner-reticle relative w-full max-w-md sm:max-w-lg aspect-square rounded-3xl bg-[#0D1117] border border-white/15 shadow-2xl overflow-hidden p-4 flex flex-col justify-between"
             >
-              {/* 2D Fallback Component */}
               {(() => {
                 const fallbackElement = (
                   <div className="w-full h-full flex flex-col justify-between">
                     <div className="flex items-center justify-between z-10 px-2 pt-1 text-white">
                       <div className="flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-[#C8F36B] animate-pulse" />
-                        <span className="font-mono text-[10px] uppercase tracking-widest text-[#8DA391]">
+                        <span className="w-2 h-2 rounded-full bg-[#B8FF00] animate-pulse" />
+                        <span className="font-mono text-[10px] uppercase tracking-widest text-[#8B9DAE]">
                           Convergent Cognitive Core
                         </span>
                       </div>
-                      <span className="font-mono text-[9px] px-2 py-0.5 rounded-full bg-[#19211C] text-[#C8F36B] border border-[#2C3B32]">
+                      <span className="font-mono text-[9px] px-2 py-0.5 rounded-full bg-[#141A22] text-[#B8FF00] border border-white/10 font-bold">
                         4 Paths &rarr; 1 Model
                       </span>
                     </div>
@@ -254,21 +256,21 @@ export const HeroSection: React.FC = () => {
                       className="w-full h-full absolute inset-0 block select-none pointer-events-none"
                     />
 
-                    <div className="relative z-10 bg-[#19211C]/90 backdrop-blur-md rounded-2xl p-3 border border-white/10 flex items-center justify-between gap-3 mt-auto">
-                      <div className="space-y-0.5">
+                    <div className="relative z-10 bg-[#141A22]/90 backdrop-blur-md rounded-2xl p-3 border border-white/10 flex items-center justify-between gap-3 mt-auto">
+                      <div className="space-y-0.5 text-left">
                         <span className="text-white text-xs font-semibold block">
-                          Interactive Demonstration
+                          Flagship Model Sandbox
                         </span>
-                        <span className="text-[10px] text-[#8DA391] block">
+                        <span className="text-[10px] text-[#8B9DAE] block font-mono">
                           Linear Equations: Conservation of Equality
                         </span>
                       </div>
                       <button
                         onClick={() => openTopic('math-linear-equations', 'structured-explanation')}
-                        className="px-3 py-1.5 rounded-xl bg-[#C8F36B] hover:bg-[#BCEB58] text-[#111714] font-bold text-xs flex items-center gap-1 transition-all shrink-0"
+                        className="px-3 py-1.5 rounded-xl bg-[#B8FF00] hover:bg-[#A3E635] text-[#080A0E] font-bold text-xs flex items-center gap-1 transition-all shrink-0 cursor-pointer"
                       >
                         <span>Launch</span>
-                        <ArrowRight className="w-3 h-3" />
+                        <ArrowRight className="w-3 h-3 stroke-[2.4]" />
                       </button>
                     </div>
                   </div>

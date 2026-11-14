@@ -21,10 +21,14 @@ import { storageService } from '../../services/storageService';
 export type DashboardTab = 'progress' | 'resources' | 'reassessment' | 'bookmarks';
 
 export const LearningDashboard: React.FC = () => {
-  const { sessionState, openTopic, toggleBookmark, navigateTo } = useApp();
-  const [activeTab, setActiveTab] = useState<DashboardTab>('progress');
+  const { sessionState, openTopic, toggleBookmark, navigateTo, dashboardSubTab, setDashboardSubTab } = useApp();
+  const activeTab: DashboardTab = dashboardSubTab || 'progress';
   const [resourceCount, setResourceCount] = useState<number>(0);
   const [assessedTopicsCount, setAssessedTopicsCount] = useState<number>(0);
+
+  const setActiveTab = (tab: DashboardTab) => {
+    setDashboardSubTab(tab);
+  };
 
   useEffect(() => {
     const loadCounts = async () => {

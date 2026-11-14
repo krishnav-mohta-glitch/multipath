@@ -11,9 +11,11 @@ import {
   AppContext,
   type CoreFeatureType,
   type FeatureModalState,
+  type DashboardSubTab,
 } from './AppContextType';
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [dashboardSubTab, setDashboardSubTab] = useState<DashboardSubTab>('progress');
   const [currentTab, setCurrentTab] = useState<NavTab>(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
@@ -102,13 +104,21 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [currentTab, selectedTopicId]);
 
-  const navigateTo = (tab: NavTab, topicId?: string, pathId?: LearningPathId) => {
+  const navigateTo = (
+    tab: NavTab,
+    topicId?: string,
+    pathId?: LearningPathId,
+    subTab?: DashboardSubTab
+  ) => {
     setCurrentTab(tab);
     if (topicId) {
       setSelectedTopicId(topicId);
     }
     if (pathId) {
       setActivePathState(pathId);
+    }
+    if (subTab) {
+      setDashboardSubTab(subTab);
     }
   };
 
@@ -213,7 +223,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         searchQuery,
         sessionState,
         featureModal,
+        dashboardSubTab,
         navigateTo,
+        setDashboardSubTab,
         openTopic,
         backToLibrary,
         setActivePath,
