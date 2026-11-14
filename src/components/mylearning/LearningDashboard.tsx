@@ -6,87 +6,224 @@ import {
   Trash2,
   BarChart3,
   FolderArchive,
-  RotateCcw
+  RotateCcw,
+  Sparkles,
+  Download,
+  ShieldCheck,
+  CheckCircle2,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
+import { useAuth } from '../../context/AuthContext';
 import { TOPICS } from '../../data/topics';
-import { LEARNING_PATHS } from '../../data/learningPaths';
-import { SubjectBadge } from '../common/Badge';
+import { SubjectBadge, DifficultyBadge } from '../common/Badge';
 import { StyleAffinityCard } from './StyleAffinityCard';
 import { ResourceLibrarySection } from './ResourceLibrarySection';
 import { ReassessmentHistorySection } from './ReassessmentHistorySection';
-import { ProgressDashboardSection } from './ProgressDashboardSection';
 import { storageService } from '../../services/storageService';
+import type { LearningActivityItem, TopicHistoryRecord } from '../../types/history';
+import type { CurriculumBoardCode, ClassLevel } from '../../types/curriculum';
+import type { SubjectId } from '../../types/subject';
+import { TrajectoryOverview } from '../trajectory/TrajectoryOverview';
+import { TrajectoryTimeline } from '../trajectory/TrajectoryTimeline';
+import { SubjectProgressMatrix } from '../trajectory/SubjectProgressMatrix';
+import { TopicResumptionDeck } from '../trajectory/TopicResumptionDeck';
 
-export type DashboardTab = 'progress' | 'resources' | 'reassessment' | 'bookmarks';
+export type DashboardTab = 'progress' | 'resources' | 'reassessment' | 'bookmarks' | 'affinities';
 
 export const LearningDashboard: React.FC = () => {
-  const { sessionState, openTopic, toggleBookmark, navigateTo, dashboardSubTab, setDashboardSubTab } = useApp();
-  const activeTab: DashboardTab = dashboardSubTab || 'progress';
-  const [resourceCount, setResourceCount] = useState<number>(0);
-  const [assessedTopicsCount, setAssessedTopicsCount] = useState<number>(0);
+  const {
+    sessionState,
+    openTopic,
+    toggleBookmark,
+    navigateTo,
+    dashboardSubTab,
+    setDashboardSubTab,
+    setSelectedSubjectId,
+  } = useApp();
+  const { user, profile, isGuest, openGuestImportModal } = useAuth();
 
-  const setActiveTab = (tab: DashboardTab) => {
-    setDashboardSubTab(tab);
+  const activeTab: DashboardTab = (dashboardSubTab as DashboardTab) || 'progress';
+
+  const [activities, setActivities] = useState<LearningActivityItem[]>([]);
+  const [topicHistories, setTopicHistories] = useState<Record<string, TopicHistoryRecord>>({});
+  const [resourceCount, setResourceCount] = useState<number>(0);
+  const [isExporting, setIsExporting] = useState(false);
+  const [isClearing, setIsClearing] = useState(false);
+  const [feedbackNotice, setFeedbackNotice] = useState<string | null>(null);
+
+  const loadData = async () => {
+    const actList = await storageService.getAllActivities();
+    const thMap = storageService.getAllTopicHistory();
+    const resources = await storageService.getAllMediaResources();
+
+    setActivities(actList);
+    setTopicHistories(thMap);
+    setResourceCount(resources.length);
   };
 
   useEffect(() => {
-    const loadCounts = async () => {
+    let isMounted = true;
+    void (async () => {
+      const actList = await storageService.getAllActivities();
+      const thMap = storageService.getAllTopicHistory();
       const resources = await storageService.getAllMediaResources();
-      setResourceCount(resources.length);
-
-      const historyMap = storageService.getAllTopicHistory();
-      const assessed = Object.values(historyMap).filter(
-        (h) => h.feynmanAssessments && h.feynmanAssessments.length > 0
-      );
-      setAssessedTopicsCount(assessed.length);
+      if (isMounted) {
+        setActivities(actList);
+        setTopicHistories(thMap);
+        setResourceCount(resources.length);
+      }
+    })();
+    return () => {
+      isMounted = false;
     };
-
-    loadCounts();
   }, [activeTab]);
 
+  const setActiveTab = (tab: DashboardTab) => {
+    setDashboardSubTab(tab as any);
+  };
+
+  const handleExportData = async () => {
+    setIsExporting(true);
+    try {
+      const jsonString = await storageService.exportAllDataAsJSON(profile as Record<string, unknown> | null);
+      const blob = new Blob([jsonString], { type: 'application/json;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `multipath-trajectory-${new Date().toISOString().slice(0, 10)}.json`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      setFeedbackNotice('Data successfully exported to sovereign JSON vault.');
+      setTimeout(() => setFeedbackNotice(null), 4000);
+    } catch (e) {
+      console.error(e);
+      setFeedbackNotice('Export failed. Please check browser permissions.');
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
+  const handleClearData = async () => {
+    if (window.confirm('Are you sure you want to delete all local learning records, Socratic logs, Feynman assessments, and generated media? This cannot be undone.')) {
+      setIsClearing(true);
+      try {
+        await storageService.clearAllLearningData();
+        await loadData();
+        setFeedbackNotice('All local learning records have been cleared.');
+        setTimeout(() => setFeedbackNotice(null), 4000);
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setIsClearing(false);
+      }
+    }
+  };
+
+  const handleSelectSubjectToExplore = (subjectId: SubjectId) => {
+    setSelectedSubjectId(subjectId);
+    navigateTo('library');
+  };
+
+  // Derive ground-truth counts
+  const topicsExploredCount = Object.keys(topicHistories).length;
+  const pathsExploredSet = new Set<string>();
+  activities.forEach((act) => {
+    if (act.pathId) pathsExploredSet.add(act.pathId);
+  });
+  const pathsExploredCount = Math.max(pathsExploredSet.size, topicsExploredCount > 0 ? 1 : 0);
+
+  const completedTopicsCount = Object.values(topicHistories).filter(
+    (th) => th.feynmanAssessments && th.feynmanAssessments.length > 0
+  ).length;
+
+  const preferredBoard: CurriculumBoardCode | null =
+    profile?.preferred_board === 'CBSE'
+      ? 'CBSE'
+      : profile?.preferred_board === 'ICSE/CISCE'
+      ? 'CISCE'
+      : null;
+
+  const profileGradeMatch = profile?.grade_level?.match(/Class\s*(\d+)/i);
+  const preferredClass: ClassLevel | null = profileGradeMatch
+    ? (parseInt(profileGradeMatch[1], 10) as ClassLevel)
+    : null;
+
   const savedTopics = TOPICS.filter((t) => sessionState.savedTopicIds.includes(t.id));
-  const recentVisitsWithTopics = sessionState.recentVisits
-    .map((v) => ({
-      visit: v,
-      topic: TOPICS.find((t) => t.id === v.topicId),
-    }))
-    .filter((item): item is { visit: typeof item.visit; topic: (typeof TOPICS)[0] } => Boolean(item.topic));
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-200">
-      
+    <div className="space-y-8 animate-in fade-in duration-200 text-left">
+      {/* Feedback Toast */}
+      {feedbackNotice && (
+        <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-semibold flex items-center justify-between animate-in slide-in-from-top-2">
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+            <span>{feedbackNotice}</span>
+          </div>
+          <button onClick={() => setFeedbackNotice(null)} className="text-emerald-400 hover:text-white">
+            Dismiss
+          </button>
+        </div>
+      )}
+
+      {/* Guest Data Import Banner (when authenticated and guest records exist) */}
+      {user && storageService.hasGuestData() && (
+        <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-lg">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-slate-800 text-[#B8FF00] border border-slate-700 flex items-center justify-center shrink-0">
+              <Sparkles className="w-4 h-4" />
+            </div>
+            <div>
+              <h4 className="font-display font-bold text-sm text-[#FAF9F5]">Unsynchronized Guest Data Detected</h4>
+              <p className="text-xs text-slate-400">
+                You have learning history, Feynman assessments, or media generated as a guest. Synchronize them into your authenticated account.
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={openGuestImportModal}
+            className="px-4 py-2 rounded-xl bg-[#B8FF00] text-slate-950 font-bold text-xs hover:bg-[#a6e600] transition-colors shrink-0 shadow-sm"
+          >
+            Import to Account
+          </button>
+        </div>
+      )}
+
       {/* =================================================================== */}
       {/* DASHBOARD TABS NAVIGATION                                           */}
       {/* =================================================================== */}
-      <div className="flex flex-wrap items-center gap-2 p-1.5 bg-[#E8EAE1] rounded-2xl border border-[#DFE2D7]">
-        
+      <div className="flex items-center gap-2 p-1.5 bg-slate-900/80 rounded-2xl border border-slate-800 overflow-x-auto scrollbar-none">
         <button
           onClick={() => setActiveTab('progress')}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-mono text-xs font-bold transition-all cursor-pointer ${
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-mono text-xs font-bold transition-all cursor-pointer whitespace-nowrap border ${
             activeTab === 'progress'
-              ? 'bg-[#111714] text-[#C8F36B] shadow-xs'
-              : 'text-[#171C18] hover:bg-[#DFE2D7]'
+              ? 'bg-[#B8FF00] text-slate-950 border-[#B8FF00] shadow-sm font-bold'
+              : 'bg-transparent text-slate-300 hover:text-white hover:bg-slate-800 border-transparent'
           }`}
         >
           <BarChart3 className="w-4 h-4" />
-          <span>PROGRESS &amp; EVIDENCE</span>
+          <span>PROGRESS &amp; TRAJECTORY</span>
         </button>
 
         <button
           onClick={() => setActiveTab('resources')}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-mono text-xs font-bold transition-all cursor-pointer ${
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-mono text-xs font-bold transition-all cursor-pointer whitespace-nowrap border ${
             activeTab === 'resources'
-              ? 'bg-[#111714] text-[#C8F36B] shadow-xs'
-              : 'text-[#171C18] hover:bg-[#DFE2D7]'
+              ? 'bg-[#B8FF00] text-slate-950 border-[#B8FF00] shadow-sm font-bold'
+              : 'bg-transparent text-slate-300 hover:text-white hover:bg-slate-800 border-transparent'
           }`}
         >
           <FolderArchive className="w-4 h-4" />
           <span>RESOURCE VAULT</span>
           {resourceCount > 0 && (
-            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-extrabold ${
-              activeTab === 'resources' ? 'bg-[#C8F36B] text-[#111714]' : 'bg-[#DFE2D7] text-[#171C18]'
-            }`}>
+            <span
+              className={`px-1.5 py-0.2 rounded-full font-mono text-[10px] ${
+                activeTab === 'resources'
+                  ? 'bg-slate-950 text-[#B8FF00]'
+                  : 'bg-slate-800 text-slate-300'
+              }`}
+            >
               {resourceCount}
             </span>
           )}
@@ -94,213 +231,207 @@ export const LearningDashboard: React.FC = () => {
 
         <button
           onClick={() => setActiveTab('reassessment')}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-mono text-xs font-bold transition-all cursor-pointer ${
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-mono text-xs font-bold transition-all cursor-pointer whitespace-nowrap border ${
             activeTab === 'reassessment'
-              ? 'bg-[#111714] text-[#C8F36B] shadow-xs'
-              : 'text-[#171C18] hover:bg-[#DFE2D7]'
+              ? 'bg-[#B8FF00] text-slate-950 border-[#B8FF00] shadow-sm font-bold'
+              : 'bg-transparent text-slate-300 hover:text-white hover:bg-slate-800 border-transparent'
           }`}
         >
           <RotateCcw className="w-4 h-4" />
-          <span>REASSESSMENT &amp; GAPS</span>
-          {assessedTopicsCount > 0 && (
-            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-extrabold ${
-              activeTab === 'reassessment' ? 'bg-[#C8F36B] text-[#111714]' : 'bg-[#DFE2D7] text-[#171C18]'
-            }`}>
-              {assessedTopicsCount}
+          <span>REASSESSMENT MATRIX</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('bookmarks')}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-mono text-xs font-bold transition-all cursor-pointer whitespace-nowrap border ${
+            activeTab === 'bookmarks'
+              ? 'bg-[#B8FF00] text-slate-950 border-[#B8FF00] shadow-sm font-bold'
+              : 'bg-transparent text-slate-300 hover:text-white hover:bg-slate-800 border-transparent'
+          }`}
+        >
+          <Bookmark className="w-4 h-4" />
+          <span>SAVED TOPICS</span>
+          {sessionState.savedTopicIds.length > 0 && (
+            <span
+              className={`px-1.5 py-0.2 rounded-full font-mono text-[10px] ${
+                activeTab === 'bookmarks'
+                  ? 'bg-slate-950 text-[#B8FF00]'
+                  : 'bg-slate-800 text-slate-300'
+              }`}
+            >
+              {sessionState.savedTopicIds.length}
             </span>
           )}
         </button>
 
         <button
-          onClick={() => setActiveTab('bookmarks')}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-mono text-xs font-bold transition-all cursor-pointer ${
-            activeTab === 'bookmarks'
-              ? 'bg-[#111714] text-[#C8F36B] shadow-xs'
-              : 'text-[#171C18] hover:bg-[#DFE2D7]'
+          onClick={() => setActiveTab('affinities')}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-mono text-xs font-bold transition-all cursor-pointer whitespace-nowrap border ${
+            activeTab === 'affinities'
+              ? 'bg-[#B8FF00] text-slate-950 border-[#B8FF00] shadow-sm font-bold'
+              : 'bg-transparent text-slate-300 hover:text-white hover:bg-slate-800 border-transparent'
           }`}
         >
-          <Bookmark className="w-4 h-4" />
-          <span>SAVED TOPICS</span>
-          {savedTopics.length > 0 && (
-            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-extrabold ${
-              activeTab === 'bookmarks' ? 'bg-[#C8F36B] text-[#111714]' : 'bg-[#DFE2D7] text-[#171C18]'
-            }`}>
-              {savedTopics.length}
-            </span>
-          )}
+          <Sparkles className="w-4 h-4" />
+          <span>COGNITIVE PROFILE</span>
         </button>
-
       </div>
 
       {/* =================================================================== */}
-      {/* TAB 1: PROGRESS & HISTORY                                           */}
+      {/* TAB CONTENT RENDERING                                               */}
       {/* =================================================================== */}
+
+      {/* 1. PROGRESS & TRAJECTORY VIEW */}
       {activeTab === 'progress' && (
         <div className="space-y-8 animate-in fade-in duration-200">
-          
-          {/* Grounded Evidence-Based Metrics, Timeline & Privacy Notice */}
-          <ProgressDashboardSection
-            onNavigateToLibrary={() => navigateTo('library')}
-            onOpenTopic={(id) => openTopic(id)}
+          <TrajectoryOverview
+            topicsExploredCount={topicsExploredCount}
+            totalTopicsCount={TOPICS.length}
+            pathsExploredCount={pathsExploredCount}
+            completedTopicsCount={completedTopicsCount}
+            bookmarksCount={sessionState.savedTopicIds.length}
+            resourcesCount={resourceCount}
+            isGuest={isGuest}
+            preferredBoard={preferredBoard}
+            preferredClass={preferredClass}
+            onExploreClick={() => navigateTo('library')}
           />
 
-          {/* Cognitive Profile Section */}
-          <StyleAffinityCard preferences={sessionState.preferences} />
+          <TopicResumptionDeck
+            recentVisits={sessionState.recentVisits}
+            onOpenTopic={openTopic}
+            onExploreLibrary={() => navigateTo('library')}
+          />
 
-          {/* Quick Resumption of Recent Explorations */}
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
+          <SubjectProgressMatrix
+            topicHistories={topicHistories}
+            onSelectSubjectToExplore={handleSelectSubjectToExplore}
+          />
+
+          <TrajectoryTimeline
+            activities={activities}
+            onOpenTopic={openTopic}
+            onNavigateToLibrary={() => navigateTo('library')}
+          />
+
+          {/* Sovereign Data Vault Controls */}
+          <div className="p-5 sm:p-6 rounded-2xl bg-slate-900/70 border border-slate-800 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="space-y-1">
               <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4 text-[#111714]" />
-                <h3 className="font-display text-lg font-bold text-[#171C18] tracking-tight">
-                  Recently Explored Topics
-                </h3>
+                <ShieldCheck className="w-4 h-4 text-[#B8FF00]" />
+                <h4 className="font-display text-sm font-bold text-[#FAF9F5]">
+                  Sovereign Data Portability &amp; Vault Controls
+                </h4>
               </div>
-              <span className="font-mono text-xs text-[#5E7A65]">
-                RESUME SESSION
-              </span>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Your learning trajectory, Feynman assessments, and generated artifacts belong exclusively to you. Export your complete encrypted JSON record at any time.
+              </p>
             </div>
 
-            {recentVisitsWithTopics.length === 0 ? (
-              <div className="p-8 text-center bg-[#E8EAE1] rounded-2xl border border-[#DFE2D7] text-xs text-[#5E7A65]">
-                No recent topic history yet. Open any topic from the library to begin.
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {recentVisitsWithTopics.map(({ visit, topic }) => (
-                  <div
-                    key={topic.id}
-                    onClick={() => openTopic(topic.id, visit.lastPathUsed)}
-                    className="p-5 rounded-2xl bg-[#E8EAE1] border border-[#DFE2D7] hover:border-[#8DA391] hover:shadow-xs transition-all cursor-pointer flex flex-col justify-between space-y-3 group"
-                  >
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between text-xs text-[#5E7A65]">
-                        <SubjectBadge subjectId={topic.subjectId} />
-                        <span className="font-mono text-[10px]">{visit.lastVisited}</span>
-                      </div>
-                      <h4 className="font-display text-base font-bold text-[#171C18] group-hover:text-[#5E7A65] transition-colors">
-                        {topic.title}
-                      </h4>
-                      <p className="text-xs text-[#171C18]/70 line-clamp-2">
-                        {topic.subtitle}
-                      </p>
-                    </div>
+            <div className="flex items-center gap-2 flex-wrap shrink-0">
+              <button
+                onClick={handleExportData}
+                disabled={isExporting}
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold transition-all shadow-sm"
+              >
+                <Download className="w-3.5 h-3.5 text-[#38BDF8]" />
+                <span>{isExporting ? 'Exporting...' : 'Export JSON Vault'}</span>
+              </button>
 
-                    <div className="pt-2 border-t border-[#DFE2D7] flex items-center justify-between text-xs text-[#171C18]">
-                      <span className="font-mono text-[10px] text-[#5E7A65]">
-                        PATH: <strong className="text-[#171C18] font-bold">{LEARNING_PATHS[visit.lastPathUsed].shortTitle.toUpperCase()}</strong>
-                      </span>
-                      <ArrowRight className="w-3.5 h-3.5 text-[#111714] group-hover:translate-x-1 transition-transform" />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
+              <button
+                onClick={handleClearData}
+                disabled={isClearing}
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-950 hover:bg-rose-950/40 text-slate-400 hover:text-rose-400 border border-slate-800 hover:border-rose-900/50 text-xs font-semibold transition-all"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                <span>Clear Records</span>
+              </button>
+            </div>
           </div>
-
         </div>
       )}
 
-      {/* =================================================================== */}
-      {/* TAB 2: RESOURCE LIBRARY                                             */}
-      {/* =================================================================== */}
+      {/* 2. RESOURCE VAULT VIEW */}
       {activeTab === 'resources' && (
-        <ResourceLibrarySection
-          onNavigateToLibrary={() => navigateTo('library')}
-        />
+        <ResourceLibrarySection onNavigateToLibrary={() => navigateTo('library')} />
       )}
 
-      {/* =================================================================== */}
-      {/* TAB 3: REASSESSMENT & GAPS                                          */}
-      {/* =================================================================== */}
+      {/* 3. REASSESSMENT MATRIX VIEW */}
       {activeTab === 'reassessment' && (
-        <ReassessmentHistorySection
-          onOpenTopic={(id) => openTopic(id)}
-        />
+        <ReassessmentHistorySection onOpenTopic={openTopic} />
       )}
 
-      {/* =================================================================== */}
-      {/* TAB 4: SAVED BOOKMARKS                                              */}
-      {/* =================================================================== */}
+      {/* 4. SAVED BOOKMARKS VIEW */}
       {activeTab === 'bookmarks' && (
         <div className="space-y-6 animate-in fade-in duration-200">
-          <div className="flex items-center justify-between">
+          <div className="p-5 sm:p-6 rounded-2xl bg-slate-900/70 border border-slate-800 shadow-xl space-y-2">
             <div className="flex items-center gap-2">
-              <Bookmark className="w-5 h-5 text-[#111714]" />
-              <h3 className="font-display text-xl font-bold text-[#171C18] tracking-tight">
-                Bookmarked Topics ({savedTopics.length})
-              </h3>
+              <Bookmark className="w-4 h-4 text-[#B8FF00]" />
+              <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#B8FF00]">
+                TRAJECTORY QUEUE
+              </span>
             </div>
-
-            <button
-              onClick={() => navigateTo('library')}
-              className="font-mono text-xs font-semibold text-[#171C18] hover:text-[#5E7A65] hover:underline cursor-pointer"
-            >
-              BROWSE LIBRARY &rarr;
-            </button>
+            <h3 className="font-display text-base sm:text-lg font-bold text-[#FAF9F5] tracking-tight">
+              Pinned Curriculum Topics ({savedTopics.length})
+            </h3>
+            <p className="text-xs text-slate-400">
+              Curriculum topics saved for later investigation. Launch directly into any topic workspace.
+            </p>
           </div>
 
           {savedTopics.length === 0 ? (
-            <div className="p-12 text-center bg-[#E8EAE1] rounded-2xl border border-[#DFE2D7] space-y-3">
-              <Bookmark className="w-8 h-8 text-[#5E7A65] mx-auto" />
-              <p className="text-xs text-[#5E7A65]">
-                You haven&apos;t bookmarked any topics yet. Click the bookmark icon on any topic card to save it here.
+            <div className="p-12 text-center bg-slate-900/60 rounded-2xl border border-slate-800 space-y-3">
+              <Bookmark className="w-8 h-8 text-slate-500 mx-auto" />
+              <h4 className="font-display text-sm font-bold text-[#FAF9F5]">No Pinned Topics Yet</h4>
+              <p className="text-xs text-slate-400 max-w-sm mx-auto">
+                Click the bookmark ribbon on any topic card in the Curriculum Explorer to save it here for later.
               </p>
-              <button
-                onClick={() => navigateTo('library')}
-                className="inline-flex items-center gap-2 px-4 py-2 font-mono text-xs font-semibold text-[#111714] bg-[#C8F36B] hover:bg-[#d6f78a] rounded-xl transition-colors cursor-pointer"
-              >
-                <span>EXPLORE LIBRARY</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {savedTopics.map((topic) => (
                 <div
                   key={topic.id}
-                  className="p-6 rounded-2xl bg-[#E8EAE1] border border-[#DFE2D7] shadow-xs flex flex-col justify-between space-y-4"
+                  onClick={() => openTopic(topic.id)}
+                  className="p-5 rounded-2xl bg-slate-950/70 hover:bg-slate-950 border border-slate-800/90 hover:border-slate-700 transition-all cursor-pointer flex flex-col justify-between space-y-4 group shadow-md"
                 >
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <SubjectBadge subjectId={topic.subjectId} />
+                      <div className="flex items-center gap-2">
+                        <SubjectBadge subjectId={topic.subjectId} />
+                        <DifficultyBadge difficulty={topic.difficulty} />
+                      </div>
                       <button
-                        onClick={() => toggleBookmark(topic.id)}
-                        className="p-1 text-[#5E7A65] hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleBookmark(topic.id);
+                        }}
+                        className="p-1.5 rounded-lg bg-slate-900 border border-slate-800 text-[#B8FF00] hover:bg-slate-800 transition-colors"
                         title="Remove bookmark"
                       >
-                        <Trash2 className="w-4 h-4" />
+                        <Trash2 className="w-3.5 h-3.5" />
                       </button>
                     </div>
 
                     <div>
-                      <h4
-                        onClick={() => openTopic(topic.id)}
-                        className="font-display text-base font-bold text-[#171C18] hover:text-[#5E7A65] transition-colors cursor-pointer"
-                      >
+                      <h4 className="font-display text-sm font-bold text-[#FAF9F5] group-hover:text-[#B8FF00] transition-colors">
                         {topic.title}
                       </h4>
-                      <p className="text-xs text-[#171C18]/70 line-clamp-2 mt-1">
+                      <p className="text-xs text-slate-400 line-clamp-2 mt-1">
                         {topic.subtitle}
                       </p>
                     </div>
-
-                    {sessionState.notes[topic.id] && (
-                      <div className="p-3 rounded-lg bg-[#F1F1E9] border border-[#DFE2D7] text-xs text-[#171C18] font-serif italic">
-                        &ldquo;{sessionState.notes[topic.id]}&rdquo;
-                      </div>
-                    )}
                   </div>
 
-                  <div className="pt-3 border-t border-[#DFE2D7] flex items-center justify-between text-xs">
-                    <span className="font-mono text-[10px] text-[#5E7A65]">{topic.estimatedMinutes} MINS</span>
-                    <button
-                      onClick={() => openTopic(topic.id)}
-                      className="inline-flex items-center gap-1 font-mono text-xs font-bold text-[#111714] hover:text-[#5E7A65] cursor-pointer"
-                    >
-                      <span>OPEN WORKSPACE</span>
+                  <div className="pt-3 border-t border-slate-800/70 flex items-center justify-between text-xs font-semibold text-[#B8FF00]">
+                    <div className="flex items-center gap-1 font-mono text-[11px] text-slate-500">
+                      <Clock className="w-3.5 h-3.5" />
+                      <span>{topic.estimatedMinutes}m</span>
+                    </div>
+                    <span className="inline-flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
+                      <span>Open Workspace</span>
                       <ArrowRight className="w-3.5 h-3.5" />
-                    </button>
+                    </span>
                   </div>
                 </div>
               ))}
@@ -309,6 +440,10 @@ export const LearningDashboard: React.FC = () => {
         </div>
       )}
 
+      {/* 5. COGNITIVE AFFINITIES VIEW */}
+      {activeTab === 'affinities' && (
+        <StyleAffinityCard preferences={sessionState.preferences} />
+      )}
     </div>
   );
 };

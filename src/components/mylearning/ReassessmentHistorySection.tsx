@@ -5,7 +5,7 @@ import {
   AlertTriangle,
   BookOpen,
   TrendingUp,
-  History
+  History,
 } from 'lucide-react';
 import { storageService } from '../../services/storageService';
 import type { TopicHistoryRecord, ReassessmentComparison } from '../../types/history';
@@ -17,7 +17,7 @@ interface ReassessmentHistorySectionProps {
 }
 
 export const ReassessmentHistorySection: React.FC<ReassessmentHistorySectionProps> = ({
-  onOpenTopic
+  onOpenTopic,
 }) => {
   const [topicHistories] = useState<TopicHistoryRecord[]>(() =>
     Object.values(storageService.getAllTopicHistory())
@@ -47,42 +47,40 @@ export const ReassessmentHistorySection: React.FC<ReassessmentHistorySectionProp
   }
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-200">
-      
+    <div className="space-y-6 text-left animate-in fade-in duration-200">
       {/* Section Header */}
-      <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-2">
+      <div className="p-5 sm:p-6 rounded-2xl bg-slate-900/70 border border-slate-800 shadow-xl space-y-2">
         <div className="flex items-center gap-2">
-          <History className="w-4 h-4 text-emerald-600" />
-          <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-800">
-            Reassessment & Evidence-Based Progress
+          <History className="w-4 h-4 text-emerald-400" />
+          <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-emerald-400">
+            FEYNMAN DIAGNOSTIC OBSERVATORY
           </span>
         </div>
-        <h3 className="text-lg font-bold text-slate-900 tracking-tight">
-          Track Concept Mastery Across Repeated Teaching Sessions
+        <h3 className="font-display text-base sm:text-lg font-bold text-[#FAF9F5] tracking-tight">
+          Concept Mastery &amp; Verbatim Evidence Across Repeated Sessions
         </h3>
-        <p className="text-xs text-slate-600 leading-relaxed max-w-3xl">
-          Review how your understanding evolved between teaching sessions. Compare your previous explanations against your latest evidence quotes—grounded strictly in observed understanding with <strong>zero arbitrary percentage scores</strong>.
+        <p className="text-xs text-slate-400 leading-relaxed max-w-3xl">
+          Track how your mental models evolved across multiple teaching sessions. Compare previous explanations against latest evidence quotes—grounded strictly in observed understanding with <strong className="text-slate-200">zero arbitrary percentage scores</strong>.
         </p>
       </div>
 
       {topicHistories.length === 0 ? (
-        <div className="p-12 text-center bg-white rounded-2xl border border-slate-200 space-y-3">
-          <History className="w-8 h-8 text-slate-400 mx-auto" />
-          <h4 className="text-sm font-bold text-slate-800">No Assessment History Recorded Yet</h4>
-          <p className="text-xs text-slate-500 max-w-sm mx-auto">
+        <div className="p-12 text-center bg-slate-900/60 rounded-2xl border border-slate-800 space-y-3">
+          <History className="w-8 h-8 text-slate-500 mx-auto" />
+          <h4 className="font-display text-sm font-bold text-[#FAF9F5]">No Assessment History Recorded Yet</h4>
+          <p className="text-xs text-slate-400 max-w-sm mx-auto">
             Complete a Feynman Mode teaching session on any topic to track your concept mastery and compare future reassessments.
           </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          
           {/* Topic Selector Sidebar */}
           <div className="lg:col-span-1 space-y-2">
-            <label className="text-xs font-bold uppercase tracking-wider text-slate-500 block">
-              Topics Studied ({topicHistories.length}):
+            <label className="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-400 block">
+              Evaluated Topics ({topicHistories.length}):
             </label>
 
-            <div className="space-y-2">
+            <div className="space-y-2 max-h-[600px] overflow-y-auto pr-1">
               {topicHistories.map((rec) => {
                 const isSelected = rec.topicId === selectedTopicId;
                 const hasAssessments = rec.feynmanAssessments.length > 0;
@@ -93,25 +91,25 @@ export const ReassessmentHistorySection: React.FC<ReassessmentHistorySectionProp
                     onClick={() => setSelectedTopicId(rec.topicId)}
                     className={`p-3.5 rounded-xl border cursor-pointer transition-all ${
                       isSelected
-                        ? 'bg-white border-brand-500 shadow-xs ring-2 ring-brand-500/20'
-                        : 'bg-white/70 border-slate-200 hover:border-slate-300 hover:bg-white'
+                        ? 'bg-slate-900 border-[#B8FF00] shadow-md ring-1 ring-[#B8FF00]/30'
+                        : 'bg-slate-950/70 border-slate-800 hover:border-slate-700 hover:bg-slate-900/60'
                     }`}
                   >
-                    <div className="flex items-center justify-between mb-1">
+                    <div className="flex items-center justify-between mb-1.5">
                       <SubjectBadge subjectId={rec.subjectId as any} />
-                      <span className="text-[10px] text-slate-400 font-mono">
+                      <span className="text-[10px] text-slate-500 font-mono">
                         {rec.visitCount} visits
                       </span>
                     </div>
 
-                    <h4 className="text-xs font-bold text-slate-900 truncate">
+                    <h4 className="text-xs font-bold text-[#FAF9F5] truncate">
                       {rec.topicTitle}
                     </h4>
 
-                    <div className="flex items-center justify-between text-[10px] text-slate-500 mt-2 pt-2 border-t border-slate-100">
+                    <div className="flex items-center justify-between text-[10px] text-slate-400 mt-2 pt-2 border-t border-slate-800/80">
                       <span>{rec.feynmanAssessments.length} assessment(s)</span>
                       {hasAssessments && (
-                        <span className="text-emerald-600 font-bold flex items-center gap-0.5">
+                        <span className="text-emerald-400 font-bold flex items-center gap-0.5">
                           <CheckCircle2 className="w-3 h-3" />
                           <span>Tested</span>
                         </span>
@@ -127,22 +125,21 @@ export const ReassessmentHistorySection: React.FC<ReassessmentHistorySectionProp
           <div className="lg:col-span-3 space-y-6">
             {activeRecord && matchingTopic ? (
               <div className="space-y-6">
-                
                 {/* Active Topic Banner with Reassessment Quick Actions */}
-                <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-4">
+                <div className="p-5 rounded-2xl bg-slate-900/70 border border-slate-800 shadow-xl space-y-4">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div>
                       <div className="flex items-center gap-2">
                         <SubjectBadge subjectId={activeRecord.subjectId as any} />
-                        <span className="text-xs text-slate-400">
+                        <span className="text-xs font-mono text-slate-400">
                           Last visited: {new Date(activeRecord.lastVisited).toLocaleDateString()}
                         </span>
                       </div>
-                      <h3 className="text-lg font-bold text-slate-900 mt-1">
+                      <h3 className="font-display text-lg font-bold text-[#FAF9F5] mt-1">
                         {activeRecord.topicTitle}
                       </h3>
-                      <p className="text-xs text-slate-500 mt-0.5">
-                        Paths explored: <strong>{activeRecord.pathsUsed.join(', ') || 'Structured Explanation'}</strong>
+                      <p className="text-xs text-slate-400 mt-0.5">
+                        Paths explored: <strong className="text-slate-200">{activeRecord.pathsUsed.join(', ') || 'Structured Explanation'}</strong>
                       </p>
                     </div>
 
@@ -150,15 +147,15 @@ export const ReassessmentHistorySection: React.FC<ReassessmentHistorySectionProp
                     <div className="flex flex-wrap items-center gap-2">
                       <button
                         onClick={() => onOpenTopic(activeRecord.topicId)}
-                        className="px-3 py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold transition-colors flex items-center gap-1.5 shadow-xs"
+                        className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-[#FAF9F5] text-xs font-bold transition-colors flex items-center gap-1.5 shadow-sm border border-slate-700"
                       >
-                        <BookOpen className="w-3.5 h-3.5" />
+                        <BookOpen className="w-3.5 h-3.5 text-[#38BDF8]" />
                         <span>Revisit Workspace</span>
                       </button>
 
                       <button
                         onClick={() => onOpenTopic(activeRecord.topicId)}
-                        className="px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-colors flex items-center gap-1.5 shadow-xs"
+                        className="px-3 py-2 rounded-xl bg-[#B8FF00] hover:bg-[#a6e600] text-slate-950 text-xs font-bold transition-colors flex items-center gap-1.5 shadow-sm"
                       >
                         <RotateCcw className="w-3.5 h-3.5" />
                         <span>Re-take Feynman Mode</span>
@@ -169,41 +166,41 @@ export const ReassessmentHistorySection: React.FC<ReassessmentHistorySectionProp
 
                 {/* 1. Comparison Card (If >= 2 assessments exist) */}
                 {activeComparison ? (
-                  <div className="p-5 rounded-2xl bg-gradient-to-br from-emerald-50/70 to-slate-50 border-2 border-emerald-300 shadow-xs space-y-4">
-                    <div className="flex items-center justify-between border-b border-emerald-200 pb-3">
-                      <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center">
+                  <div className="p-5 rounded-2xl bg-gradient-to-br from-emerald-950/30 to-slate-950 border border-emerald-500/30 shadow-xl space-y-4">
+                    <div className="flex items-center justify-between border-b border-emerald-500/20 pb-3">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 flex items-center justify-center">
                           <TrendingUp className="w-4 h-4" />
                         </div>
                         <div>
-                          <h4 className="text-sm font-bold text-emerald-950">
+                          <h4 className="font-display text-sm font-bold text-emerald-300">
                             Reassessment Comparison: Changes in Understanding
                           </h4>
-                          <span className="text-[10px] text-emerald-700">
+                          <span className="font-mono text-[10px] text-emerald-400/80">
                             Previous ({new Date(activeComparison.previousDate).toLocaleDateString()}) vs. Latest ({new Date(activeComparison.currentDate).toLocaleDateString()})
                           </span>
                         </div>
                       </div>
 
-                      <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-200 text-emerald-900">
+                      <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
                         {activeComparison.newlyDemonstrated.length} New Concept(s) Demonstrated
                       </span>
                     </div>
 
                     {/* Resolved Misconceptions Banner */}
                     {activeComparison.resolvedMisconceptions.length > 0 && (
-                      <div className="p-3.5 rounded-xl bg-white border border-emerald-200 text-xs space-y-1.5">
-                        <span className="font-bold text-emerald-900 block flex items-center gap-1">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                      <div className="p-3.5 rounded-xl bg-slate-900/80 border border-emerald-500/30 text-xs space-y-1.5">
+                        <span className="font-bold text-emerald-400 block flex items-center gap-1">
+                          <CheckCircle2 className="w-3.5 h-3.5" />
                           <span>Resolved Misconception(s):</span>
                         </span>
                         {activeComparison.resolvedMisconceptions.map((res, i) => (
-                          <div key={i} className="text-slate-700 pl-4 border-l-2 border-emerald-400 text-[11px] space-y-0.5">
+                          <div key={i} className="text-slate-300 pl-4 border-l-2 border-emerald-500 text-[11px] space-y-0.5">
                             <p>
-                              <strong>Previous Flawed Statement:</strong> <span className="line-through text-rose-700">"{res.statement}"</span>
+                              <strong className="text-slate-400">Previous Flawed Statement:</strong> <span className="line-through text-rose-400">"{res.statement}"</span>
                             </p>
                             <p>
-                              <strong>Resolved With Accurate Reasoning:</strong> <span className="text-emerald-800 italic">"{res.resolvedEvidence}"</span>
+                              <strong className="text-emerald-400">Resolved With Accurate Reasoning:</strong> <span className="text-emerald-300 italic">"{res.resolvedEvidence}"</span>
                             </p>
                           </div>
                         ))}
@@ -212,26 +209,26 @@ export const ReassessmentHistorySection: React.FC<ReassessmentHistorySectionProp
 
                     {/* Concept Transitions List */}
                     <div className="space-y-2">
-                      <span className="text-[11px] font-bold uppercase tracking-wider text-slate-700 block">
+                      <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
                         Concept Transition Breakdown:
                       </span>
                       {activeComparison.conceptTransitions.map((t, i) => (
                         <div
                           key={i}
-                          className="p-3 rounded-xl bg-white border border-slate-200 shadow-2xs space-y-2 text-xs"
+                          className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-2 text-xs"
                         >
                           <div className="flex items-center justify-between">
-                            <span className="font-bold text-slate-900">{t.conceptName}</span>
-                            <div className="flex items-center gap-2 text-[10px] font-semibold">
-                              <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">
+                            <span className="font-display font-bold text-[#FAF9F5]">{t.conceptName}</span>
+                            <div className="flex items-center gap-2 text-[10px] font-semibold font-mono">
+                              <span className="px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700">
                                 Was: {t.previousStatus.replace(/-/g, ' ')}
                               </span>
                               <span>➔</span>
                               <span
                                 className={`px-2 py-0.5 rounded-full font-bold ${
                                   t.currentStatus === 'demonstrated'
-                                    ? 'bg-emerald-100 text-emerald-800'
-                                    : 'bg-amber-100 text-amber-800'
+                                    ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                                    : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
                                 }`}
                               >
                                 Now: {t.currentStatus.replace(/-/g, ' ')}
@@ -240,29 +237,28 @@ export const ReassessmentHistorySection: React.FC<ReassessmentHistorySectionProp
                           </div>
 
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-[11px]">
-                            <div className="p-2 rounded-lg bg-slate-50 border border-slate-100">
-                              <span className="text-[10px] font-bold text-slate-400 block">Previous Evidence Quote:</span>
-                              <p className="italic text-slate-600">"{t.previousEvidence}"</p>
+                            <div className="p-2.5 rounded-lg bg-slate-950/70 border border-slate-800">
+                              <span className="text-[10px] font-mono font-bold text-slate-500 block">Previous Evidence Quote:</span>
+                              <p className="italic text-slate-400">"{t.previousEvidence}"</p>
                             </div>
-                            <div className="p-2 rounded-lg bg-emerald-50/50 border border-emerald-100">
-                              <span className="text-[10px] font-bold text-emerald-700 block">Latest Evidence Quote:</span>
-                              <p className="italic text-emerald-950 font-medium">"{t.currentEvidence}"</p>
+                            <div className="p-2.5 rounded-lg bg-emerald-950/30 border border-emerald-500/20">
+                              <span className="text-[10px] font-mono font-bold text-emerald-400 block">Latest Evidence Quote:</span>
+                              <p className="italic text-emerald-200 font-medium">"{t.currentEvidence}"</p>
                             </div>
                           </div>
                         </div>
                       ))}
                     </div>
-
                   </div>
                 ) : (
                   activeRecord.feynmanAssessments.length === 1 && (
-                    <div className="p-4 rounded-xl bg-amber-50/70 border border-amber-200 text-xs text-amber-900 space-y-2">
+                    <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-xs text-amber-200 space-y-2">
                       <div className="flex items-center gap-2 font-bold">
-                        <AlertTriangle className="w-4 h-4 text-amber-600" />
+                        <AlertTriangle className="w-4 h-4 text-amber-400" />
                         <span>Baseline Assessment Recorded</span>
                       </div>
-                      <p>
-                        You have completed 1 Feynman assessment for this topic. Revisit the workspace or click <strong>Re-take Feynman Mode</strong> to teach Alex again with an updated explanation and generate a side-by-side reassessment comparison!
+                      <p className="text-amber-200/90 leading-relaxed">
+                        You have completed 1 Feynman assessment for this topic. Revisit the workspace or click <strong className="text-white">Re-take Feynman Mode</strong> to teach Alex again with an updated explanation and generate a side-by-side reassessment comparison!
                       </p>
                     </div>
                   )
@@ -271,7 +267,7 @@ export const ReassessmentHistorySection: React.FC<ReassessmentHistorySectionProp
                 {/* 2. Latest Assessment Evidence & Gaps */}
                 {activeRecord.feynmanAssessments.length > 0 && (
                   <div className="space-y-4">
-                    <h4 className="text-sm font-bold text-slate-900">
+                    <h4 className="font-display text-sm font-bold text-[#FAF9F5]">
                       Latest Assessed Concept Mastery (Grounded in Verbatim Evidence):
                     </h4>
 
@@ -281,17 +277,17 @@ export const ReassessmentHistorySection: React.FC<ReassessmentHistorySectionProp
                       ].assessment.conceptAssessments.map((c, i) => (
                         <div
                           key={i}
-                          className="p-3.5 rounded-xl bg-white border border-slate-200 text-xs space-y-1.5"
+                          className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 text-xs space-y-1.5"
                         >
                           <div className="flex items-center justify-between">
-                            <span className="font-bold text-slate-900">{c.name}</span>
+                            <span className="font-display font-bold text-[#FAF9F5]">{c.name}</span>
                             <span
-                              className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                              className={`px-2 py-0.5 rounded-full text-[10px] font-bold font-mono ${
                                 c.status === 'demonstrated'
-                                  ? 'bg-emerald-100 text-emerald-800'
+                                  ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
                                   : c.status === 'partly-demonstrated'
-                                  ? 'bg-amber-100 text-amber-800'
-                                  : 'bg-slate-100 text-slate-600'
+                                  ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                                  : 'bg-slate-800 text-slate-400 border border-slate-700'
                               }`}
                             >
                               {c.status.replace(/-/g, ' ')}
@@ -299,25 +295,22 @@ export const ReassessmentHistorySection: React.FC<ReassessmentHistorySectionProp
                           </div>
 
                           {c.evidence && c.evidence !== 'Not discussed in the explanation' && (
-                            <blockquote className="italic text-slate-700 bg-slate-50 p-2 rounded border border-slate-100">
+                            <blockquote className="italic text-slate-300 bg-slate-950 p-2.5 rounded-lg border border-slate-800">
                               "{c.evidence}"
                             </blockquote>
                           )}
 
-                          <p className="text-slate-500 text-[11px]">{c.reasoning}</p>
+                          <p className="text-slate-400 text-[11px] leading-relaxed">{c.reasoning}</p>
                         </div>
                       ))}
                     </div>
                   </div>
                 )}
-
               </div>
             ) : null}
           </div>
-
         </div>
       )}
-
     </div>
   );
 };
