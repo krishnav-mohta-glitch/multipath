@@ -22,20 +22,20 @@ export const VisualLearningView: React.FC<VisualLearningViewProps> = ({ content 
   return (
     <div className="space-y-8 animate-in fade-in duration-200">
       
-      {/* Visual Header (Warm Ivory Editorial Surface) */}
-      <div className="p-6 sm:p-7 rounded-2xl bg-[#FAF9F5] border border-[#E5E4DC] text-[#171C18] space-y-3 shadow-sm">
+      {/* Visual Header (Obsidian Observatory Surface) */}
+      <div className="p-6 sm:p-7 rounded-3xl bg-[#0D1117] border border-white/12 text-white space-y-3 shadow-xl">
         <div className="flex items-center gap-2">
-          <Eye className="w-4 h-4 text-[#080A0E]" />
-          <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#5E7A65]">
+          <Eye className="w-4 h-4 text-[#B8FF00]" />
+          <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#B8FF00]">
             SPATIAL TOPOLOGY &bull; {content.visualType.toUpperCase()}
           </span>
         </div>
 
-        <h3 className="font-display text-xl sm:text-2xl font-bold text-[#080A0E] tracking-tight">
+        <h3 className="font-display text-xl sm:text-2xl font-bold text-white tracking-tight">
           {content.headline}
         </h3>
 
-        <p className="text-sm sm:text-base text-[#171C18]/85 leading-relaxed max-w-3xl">
+        <p className="text-sm sm:text-base text-[#D0D4C7] leading-relaxed max-w-3xl">
           {content.caption}
         </p>
       </div>
@@ -51,7 +51,7 @@ export const VisualLearningView: React.FC<VisualLearningViewProps> = ({ content 
               <button
                 key={layer.layerId}
                 onClick={() => setActiveLayerId(layer.layerId)}
-                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl font-mono text-xs font-semibold whitespace-nowrap transition-all ${
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl font-mono text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
                   activeLayerId === layer.layerId
                     ? 'bg-[#B8FF00] text-[#080A0E] shadow-sm font-bold'
                     : 'bg-white/5 text-[#8DA391] hover:text-white hover:bg-white/10 border border-white/10'
@@ -64,7 +64,7 @@ export const VisualLearningView: React.FC<VisualLearningViewProps> = ({ content 
           </div>
 
           {activeLayer && (
-            <p className="text-xs text-[#171C18] bg-[#FAF9F5] p-3.5 rounded-xl border border-[#E5E4DC] italic">
+            <p className="text-xs text-[#D0D4C7] bg-[#141A22] p-3.5 rounded-2xl border border-white/10 italic">
               {activeLayer.description}
             </p>
           )}

@@ -15,6 +15,7 @@ import { TOPICS } from '../../data/topics';
 import { SUBJECTS } from '../../data/subjects';
 import { CURRICULUM_BOARDS } from '../../data/curriculumData';
 import { isTopicInCurriculum, getMappingsForTopic } from '../../data/curriculumMappings';
+import { TopicVisualExhibit } from '../visuals/TopicVisualExhibit';
 import type { SubjectId } from '../../types/subject';
 import type { CurriculumBoardCode, ClassLevel } from '../../types/curriculum';
 
@@ -232,35 +233,49 @@ export const SubjectGridPreview: React.FC = () => {
             return (
               <div
                 key={topic.id}
-                className="corner-reticle group p-6 rounded-3xl bg-[#141A22] hover:bg-[#161D26] border border-white/10 hover:border-white/20 transition-all duration-150 flex flex-col justify-between shadow-lg relative"
+                className="corner-reticle group p-2.5 rounded-3xl bg-[#141A22] hover:bg-[#161D26] border border-white/10 hover:border-white/20 transition-all duration-150 flex flex-col justify-between shadow-xl relative"
               >
-                <div className="space-y-4">
-                  
+                {/* Visual Exhibit Banner */}
+                <div
+                  onClick={() => openTopic(topic.id)}
+                  className="cursor-pointer overflow-hidden rounded-2xl mb-3"
+                >
+                  <TopicVisualExhibit
+                    topicId={topic.id}
+                    subjectId={topic.subjectId}
+                    title={topic.title}
+                  />
+                </div>
+
+                <div className="p-3.5 space-y-3.5 flex-1 flex flex-col justify-between">
                   {/* Top Metadata Badges */}
                   <div className="flex items-center justify-between gap-2">
-                    <span className="font-mono text-[10px] font-bold px-2.5 py-1 rounded-full bg-[#080A0E] text-[#B8FF00] border border-white/10">
-                      {topic.subjectId.toUpperCase()} • {topic.difficulty.toUpperCase()}
+                    <span className="font-mono text-[9px] font-bold px-2 py-0.5 rounded-full bg-[#080A0E] text-[#B8FF00] border border-white/10">
+                      {topic.subjectId.toUpperCase()} &bull; {topic.difficulty.toUpperCase()}
                     </span>
                     <span className="font-mono text-[9px] text-[#8B9DAE]">
-                      {topic.estimatedMinutes} MIN SESSION
+                      {topic.estimatedMinutes} MINS
                     </span>
                   </div>
 
                   {/* Title & Overview */}
-                  <div className="space-y-1.5">
-                    <h3 className="font-display text-lg font-bold text-white group-hover:text-[#B8FF00] transition-colors line-clamp-1">
+                  <div className="space-y-1">
+                    <h3
+                      onClick={() => openTopic(topic.id)}
+                      className="font-display text-base font-bold text-white group-hover:text-[#B8FF00] transition-colors line-clamp-1 cursor-pointer"
+                    >
                       {topic.title}
                     </h3>
                     <p className="text-xs text-[#D0D4C7] leading-relaxed line-clamp-2">
-                      {topic.overview}
+                      {topic.subtitle || topic.overview}
                     </p>
                   </div>
 
                   {/* Official Syllabus Provenance */}
                   {firstMapping && (
-                    <div className="p-2.5 rounded-xl bg-[#080A0E]/70 border border-white/05 font-mono text-[10px] text-[#8B9DAE] space-y-0.5">
-                      <div className="text-white font-semibold">
-                        {firstMapping.boardCode} Class {firstMapping.classLevel} • {firstMapping.subjectName}
+                    <div className="p-2 rounded-xl bg-[#080A0E]/80 border border-white/05 font-mono text-[10px] text-[#8B9DAE] space-y-0.5">
+                      <div className="text-white font-semibold truncate">
+                        {firstMapping.boardCode} Class {firstMapping.classLevel} &bull; {firstMapping.subjectName}
                       </div>
                       <div className="text-[#8B9DAE] truncate">
                         {firstMapping.unitName}
@@ -269,35 +284,35 @@ export const SubjectGridPreview: React.FC = () => {
                   )}
 
                   {/* 4 Epistemic Paths Indicator */}
-                  <div className="pt-2">
-                    <span className="font-mono text-[9px] uppercase tracking-wider text-[#8B9DAE] block mb-1.5">
-                      4 Epistemic Perspectives Available:
+                  <div className="pt-1">
+                    <span className="font-mono text-[9px] uppercase tracking-wider text-[#8B9DAE] block mb-1">
+                      4 Convergent Perspectives:
                     </span>
                     <div className="grid grid-cols-2 gap-1.5">
                       <button
                         onClick={() => openTopic(topic.id, 'structured-explanation')}
-                        className="px-2 py-1 rounded bg-[#080A0E] hover:bg-[#1C2430] text-[#E5E7EB] hover:text-[#B8FF00] text-[10px] font-mono text-left truncate border border-white/05 transition-colors cursor-pointer"
+                        className="px-2 py-1 rounded-lg bg-[#080A0E] hover:bg-[#1C2430] text-[#E5E7EB] hover:text-[#B8FF00] text-[10px] font-mono text-left truncate border border-white/05 transition-colors cursor-pointer"
                         title="Structured Proof"
                       >
                         1. Axiom Proof
                       </button>
                       <button
                         onClick={() => openTopic(topic.id, 'visual-learning')}
-                        className="px-2 py-1 rounded bg-[#080A0E] hover:bg-[#1C2430] text-[#E5E7EB] hover:text-[#B8FF00] text-[10px] font-mono text-left truncate border border-white/05 transition-colors cursor-pointer"
+                        className="px-2 py-1 rounded-lg bg-[#080A0E] hover:bg-[#1C2430] text-[#E5E7EB] hover:text-[#B8FF00] text-[10px] font-mono text-left truncate border border-white/05 transition-colors cursor-pointer"
                         title="Spatial Model"
                       >
                         2. Spatial Model
                       </button>
                       <button
                         onClick={() => openTopic(topic.id, 'examples-applications')}
-                        className="px-2 py-1 rounded bg-[#080A0E] hover:bg-[#1C2430] text-[#E5E7EB] hover:text-[#B8FF00] text-[10px] font-mono text-left truncate border border-white/05 transition-colors cursor-pointer"
+                        className="px-2 py-1 rounded-lg bg-[#080A0E] hover:bg-[#1C2430] text-[#E5E7EB] hover:text-[#B8FF00] text-[10px] font-mono text-left truncate border border-white/05 transition-colors cursor-pointer"
                         title="Engineering Case"
                       >
                         3. Real Systems
                       </button>
                       <button
                         onClick={() => openTopic(topic.id, 'explore-experiment')}
-                        className="px-2 py-1 rounded bg-[#080A0E] hover:bg-[#1C2430] text-[#E5E7EB] hover:text-[#B8FF00] text-[10px] font-mono text-left truncate border border-white/05 transition-colors cursor-pointer"
+                        className="px-2 py-1 rounded-lg bg-[#080A0E] hover:bg-[#1C2430] text-[#E5E7EB] hover:text-[#B8FF00] text-[10px] font-mono text-left truncate border border-white/05 transition-colors cursor-pointer"
                         title="Interactive Sandbox"
                       >
                         4. Active Lab

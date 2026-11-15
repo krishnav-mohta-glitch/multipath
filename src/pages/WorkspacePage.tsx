@@ -20,25 +20,25 @@ export const WorkspacePage: React.FC = () => {
       {/* Workspace Sticky Header */}
       <WorkspaceHeader topic={currentTopic} />
 
-      {/* Main Workspace Layout */}
+      {/* Main Workspace Layout (Visual-First Inverted Hierarchy) */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         
-        {/* Topic Introduction & Foundation Card */}
-        <TopicIntro topic={currentTopic} />
-
-        {/* Learning Path Selection Area */}
+        {/* Learning Path Selection Area (Prominent Top Controls) */}
         <PathSelector
           activePath={activePath}
           onSelectPath={setActivePath}
           availablePaths={currentTopic.availablePaths}
         />
 
-        {/* Central Content Area (Adapts to Active Learning Path) */}
+        {/* Central Visual Instrument & Simulator Stage (Front & Center) */}
         <PathViewer
           topic={currentTopic}
           activePath={activePath}
           onSwitchPath={setActivePath}
         />
+
+        {/* Conceptual Foundation & Inquiry Context */}
+        <TopicIntro topic={currentTopic} />
 
         {/* Core Capabilities Preview Bar (Guided Discovery & Feynman Mode) */}
         <FeatureBadges topic={currentTopic} />

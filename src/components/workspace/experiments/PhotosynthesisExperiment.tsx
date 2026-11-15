@@ -73,19 +73,19 @@ export const PhotosynthesisExperiment: React.FC = () => {
     <div className="bg-[#080A0E] text-[#F3F4EC] rounded-2xl border border-white/10 shadow-2xl overflow-hidden relative corner-reticle">
       {/* Top Telemetry Header */}
       <div className="p-5 sm:p-6 border-b border-white/10 bg-[#0D1117] flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
+        <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="font-mono text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-[#B8FF00]/10 text-[#B8FF00] border border-[#B8FF00]/30">
+            <span className="font-mono text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-[#B8FF00]/10 text-[#B8FF00] border border-[#B8FF00]/30 shrink-0">
               PHOTOCHEMICAL REACTION CHAMBER
             </span>
-            <span className="font-mono text-[10px] text-[#8DA391] uppercase">
+            <span className="font-mono text-[10px] text-[#8DA391] uppercase truncate">
               MODEL: {PHOTOSYNTHESIS_MODEL.name.toUpperCase()}
             </span>
           </div>
-          <h3 className="font-display text-lg sm:text-xl font-bold text-white tracking-tight mt-1">
+          <h3 className="font-display text-base sm:text-xl font-bold text-white tracking-tight mt-1 break-words">
             Photolysis of Water &amp; Blackman's Law of Limiting Factors
           </h3>
-          <p className="text-xs text-[#8DA391] mt-0.5 max-w-2xl">
+          <p className="text-xs text-[#8DA391] mt-0.5 max-w-2xl leading-relaxed">
             {PHOTOSYNTHESIS_MODEL.overview}
           </p>
         </div>

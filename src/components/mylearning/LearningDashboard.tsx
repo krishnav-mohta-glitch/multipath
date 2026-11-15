@@ -27,6 +27,7 @@ import { TrajectoryOverview } from '../trajectory/TrajectoryOverview';
 import { TrajectoryTimeline } from '../trajectory/TrajectoryTimeline';
 import { SubjectProgressMatrix } from '../trajectory/SubjectProgressMatrix';
 import { TopicResumptionDeck } from '../trajectory/TopicResumptionDeck';
+import { ConstellationMap } from '../trajectory/ConstellationMap';
 
 export type DashboardTab = 'progress' | 'resources' | 'reassessment' | 'bookmarks' | 'affinities';
 
@@ -295,6 +296,19 @@ export const LearningDashboard: React.FC = () => {
             preferredBoard={preferredBoard}
             preferredClass={preferredClass}
             onExploreClick={() => navigateTo('library')}
+          />
+
+          {/* Interactive Celestial Constellation Topology */}
+          <ConstellationMap
+            exploredTopicIds={new Set(Object.keys(topicHistories))}
+            completedTopicIds={
+              new Set(
+                Object.keys(topicHistories).filter(
+                  (id) => topicHistories[id]?.feynmanAssessments && topicHistories[id].feynmanAssessments!.length > 0
+                )
+              )
+            }
+            onSelectTopic={(topicId) => openTopic(topicId)}
           />
 
           <TopicResumptionDeck

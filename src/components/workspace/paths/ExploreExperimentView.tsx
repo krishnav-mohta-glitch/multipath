@@ -16,25 +16,25 @@ export const ExploreExperimentView: React.FC<ExploreExperimentViewProps> = ({ co
   return (
     <div className="space-y-8 animate-in fade-in duration-200">
       
-      {/* Activity Overview Banner (Warm Ivory Surface for High-Legibility Reading) */}
-      <div className="p-6 sm:p-7 rounded-2xl bg-[#FAF9F5] border border-[#E5E4DC] text-[#171C18] space-y-3 shadow-sm">
+      {/* Activity Overview Banner (Obsidian Observatory Surface) */}
+      <div className="p-6 sm:p-7 rounded-3xl bg-[#0D1117] border border-white/12 text-white space-y-3 shadow-xl">
         <div className="flex items-center gap-2">
-          <FlaskConical className="w-4 h-4 text-[#080A0E]" />
-          <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#5E7A65]">
+          <FlaskConical className="w-4 h-4 text-[#B8FF00]" />
+          <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#B8FF00]">
             EMPIRICAL LAB &bull; PARAMETRIC SIMULATION
           </span>
         </div>
 
-        <h3 className="font-display text-xl sm:text-2xl font-bold text-[#080A0E] tracking-tight">
+        <h3 className="font-display text-xl sm:text-2xl font-bold text-white tracking-tight">
           {content.activityTitle}
         </h3>
 
-        <div className="text-sm sm:text-base text-[#171C18] leading-relaxed max-w-3xl font-medium">
-          <span className="font-mono text-xs uppercase text-[#5E7A65] block font-bold">OBJECTIVE:</span>
+        <div className="text-sm sm:text-base text-[#D0D4C7] leading-relaxed max-w-3xl font-medium">
+          <span className="font-mono text-xs uppercase text-[#B8FF00] block font-bold">OBJECTIVE:</span>
           {content.objective}
         </div>
 
-        <p className="font-mono text-xs text-[#5E7A65] pt-1 border-t border-[#E5E4DC]">
+        <p className="font-mono text-xs text-[#8B9DAE] pt-2 border-t border-white/10">
           INSTRUCTIONS: {content.instructions}
         </p>
       </div>

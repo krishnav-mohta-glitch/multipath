@@ -16,16 +16,16 @@ export const ExamplesApplicationsView: React.FC<ExamplesApplicationsViewProps> =
   return (
     <div className="space-y-8 animate-in fade-in duration-200">
       
-      {/* Overview Banner (Warm Ivory Editorial Surface) */}
-      <div className="p-6 sm:p-7 rounded-2xl bg-[#FAF9F5] border border-[#E5E4DC] text-[#171C18] space-y-3 shadow-sm">
+      {/* Overview Banner (Obsidian Observatory Surface) */}
+      <div className="p-6 sm:p-7 rounded-3xl bg-[#0D1117] border border-white/12 text-white space-y-3 shadow-xl">
         <div className="flex items-center gap-2">
-          <Wrench className="w-4 h-4 text-[#080A0E]" />
-          <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#5E7A65]">
+          <Wrench className="w-4 h-4 text-[#B8FF00]" />
+          <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#B8FF00]">
             PRAGMATIC MASTERY &bull; WORKED SYSTEMS &amp; CASES
           </span>
         </div>
 
-        <p className="text-base sm:text-lg text-[#171C18] leading-relaxed font-sans font-medium">
+        <p className="text-base sm:text-lg text-[#FAF9F5] leading-relaxed font-sans font-medium">
           {content.overview}
         </p>
       </div>
@@ -47,35 +47,35 @@ export const ExamplesApplicationsView: React.FC<ExamplesApplicationsViewProps> =
             return (
               <div
                 key={example.id}
-                className="bg-[#FAF9F5] text-[#171C18] rounded-2xl border border-[#E5E4DC] shadow-sm overflow-hidden transition-all"
+                className="bg-[#0D1117] text-white rounded-3xl border border-white/10 shadow-xl overflow-hidden transition-all"
               >
                 {/* Example Header */}
                 <div
                   onClick={() => setExpandedExampleId(isExpanded ? '' : example.id)}
-                  className="p-5 sm:p-6 flex items-center justify-between cursor-pointer bg-[#F3F2EB] hover:bg-[#EBEAE1] transition-colors"
+                  className="p-5 sm:p-6 flex items-center justify-between cursor-pointer bg-[#141A22] hover:bg-[#161D26] transition-colors"
                 >
                   <div className="space-y-1.5">
                     <div className="flex items-center gap-2.5">
-                      <span className="font-mono text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-[#080A0E] text-[#B8FF00] uppercase">
+                      <span className="font-mono text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-[#080A0E] text-[#B8FF00] uppercase border border-white/10">
                         {example.difficulty}
                       </span>
-                      <h4 className="font-display text-base font-bold text-[#080A0E]">
+                      <h4 className="font-display text-base font-bold text-white">
                         {example.title}
                       </h4>
                     </div>
-                    <p className="text-xs sm:text-sm text-[#5E7A65] italic">
+                    <p className="text-xs sm:text-sm text-[#8B9DAE] italic">
                       &ldquo;{example.contextOrPrompt}&rdquo;
                     </p>
                   </div>
 
-                  <button className="text-[#080A0E] p-1" aria-label={isExpanded ? 'Collapse example' : 'Expand example'}>
+                  <button className="text-white p-1" aria-label={isExpanded ? 'Collapse example' : 'Expand example'}>
                     {isExpanded ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
                   </button>
                 </div>
 
                 {/* Steps Breakdown */}
                 {isExpanded && (
-                  <div className="p-6 border-t border-[#E5E4DC] space-y-5 animate-in fade-in">
+                  <div className="p-6 border-t border-white/10 space-y-5 animate-in fade-in bg-[#080A0E]/50">
                     <div className="space-y-3">
                       {example.steps.map((step) => (
                         <div

@@ -72,7 +72,7 @@ export const Navbar: React.FC = () => {
   ];
 
   return (
-    <header className="sticky top-0 z-50 transition-all duration-200 px-3 sm:px-6 lg:px-8 pt-2.5 pb-2">
+    <header className="sticky top-0 z-50 transition-all duration-200 px-3 sm:px-6 lg:px-8 pt-2.5 pb-2 bg-[#080A0E]/90 backdrop-blur-md">
       <div className="max-w-7xl mx-auto">
         <div className="glass-telemetry rounded-2xl px-4 sm:px-5 py-2.5 flex items-center justify-between gap-3 border border-white/10 shadow-2xl">
           

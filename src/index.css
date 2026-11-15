@@ -80,13 +80,13 @@
    V3 Premium Futuristic Scientific Minimalism Utilities
    ========================================================================== */
 
-/* Frosted Telemetry Glass (NASA Eyes / Lusion HUD inspired) */
+/* Frosted Telemetry Glass (NASA Eyes / Lusion HUD inspired) - High Opacity to eliminate scroll bleed */
 .glass-telemetry {
-  background: rgba(13, 17, 23, 0.82);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  box-shadow: 0 8px 32px -4px rgba(0, 0, 0, 0.35);
+  background: rgba(8, 10, 14, 0.96);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 10px 36px -4px rgba(0, 0, 0, 0.6);
 }
 
 .glass-telemetry-light {

@@ -17,33 +17,33 @@ export const TopicIntro: React.FC<TopicIntroProps> = ({ topic }) => {
   const [showVocab, setShowVocab] = useState(false);
 
   return (
-    <div className="bg-[#FAF9F5] rounded-2xl border border-[#E5E4DC] p-6 sm:p-8 space-y-6 shadow-sm text-[#171C18]">
+    <div className="bg-[#0D1117] rounded-3xl border border-white/12 p-6 sm:p-8 space-y-6 shadow-xl text-white">
       
       {/* Overview & Conceptual Foundation */}
       <div className="space-y-3">
         <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-[#080A0E]" />
-          <h2 className="font-mono text-xs font-bold uppercase tracking-wider text-[#5E7A65]">
-            CONCEPTUAL FOUNDATION
+          <span className="w-2 h-2 rounded-full bg-[#B8FF00] animate-pulse" />
+          <h2 className="font-mono text-xs font-bold uppercase tracking-wider text-[#B8FF00]">
+            CONCEPTUAL FOUNDATION &bull; FIRST PRINCIPLES
           </h2>
         </div>
-        <p className="text-base sm:text-lg text-[#171C18] leading-relaxed font-sans font-medium">
+        <p className="text-base sm:text-lg text-[#FAF9F5] leading-relaxed font-sans font-medium">
           {topic.overview}
         </p>
       </div>
 
       {/* Learning Objectives Box */}
-      <div className="p-5 rounded-xl bg-[#F3F2EB] border border-[#E5E4DC] space-y-3">
+      <div className="p-5 rounded-2xl bg-[#141A22] border border-white/10 space-y-3">
         <div className="flex items-center gap-2">
-          <Target className="w-4 h-4 text-[#080A0E]" />
-          <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#171C18]">
+          <Target className="w-4 h-4 text-[#B8FF00]" />
+          <span className="font-mono text-xs font-bold uppercase tracking-wider text-white">
             CORE LEARNING OBJECTIVES
           </span>
         </div>
-        <ul className="grid grid-cols-1 md:grid-cols-2 gap-2.5 text-xs sm:text-sm text-[#171C18] font-medium">
+        <ul className="grid grid-cols-1 md:grid-cols-2 gap-2.5 text-xs sm:text-sm text-[#D0D4C7] font-medium">
           {topic.learningObjectives.map((obj, idx) => (
             <li key={idx} className="flex items-start gap-2.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#080A0E] mt-2 shrink-0" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#B8FF00] mt-2 shrink-0" />
               <span className="leading-relaxed">{obj}</span>
             </li>
           ))}
@@ -51,15 +51,15 @@ export const TopicIntro: React.FC<TopicIntroProps> = ({ topic }) => {
       </div>
 
       {/* Why This Matters Callout (High-Contrast Cosmic Reticle Inset) */}
-      <div className="p-5 sm:p-6 rounded-xl bg-[#080A0E] text-[#F3F4EC] border border-white/10 flex items-start gap-3.5 shadow-md relative corner-reticle">
-        <div className="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center shrink-0 mt-0.5">
-          <Sparkles className="w-4 h-4 text-[#B8FF00]" />
+      <div className="p-5 sm:p-6 rounded-2xl bg-[#080A0E] text-[#F3F4EC] border border-white/15 flex items-start gap-3.5 shadow-md relative corner-reticle">
+        <div className="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center shrink-0 mt-0.5 text-[#B8FF00]">
+          <Sparkles className="w-4 h-4" />
         </div>
         <div className="space-y-1">
           <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-[#B8FF00]">
             SYSTEMIC SIGNIFICANCE
           </span>
-          <p className="text-xs sm:text-sm text-[#8DA391] leading-relaxed">
+          <p className="text-xs sm:text-sm text-[#D0D4C7] leading-relaxed">
             {topic.whyItMatters}
           </p>
         </div>
@@ -68,8 +68,8 @@ export const TopicIntro: React.FC<TopicIntroProps> = ({ topic }) => {
       {/* Core Questions to Ponder */}
       <div className="space-y-3">
         <div className="flex items-center gap-2">
-          <HelpCircle className="w-4 h-4 text-[#5E7A65]" />
-          <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-[#5E7A65]">
+          <HelpCircle className="w-4 h-4 text-[#38BDF8]" />
+          <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-[#38BDF8]">
             CORE INQUIRY QUESTIONS
           </h3>
         </div>
@@ -78,7 +78,7 @@ export const TopicIntro: React.FC<TopicIntroProps> = ({ topic }) => {
           {topic.coreQuestions.map((q, idx) => (
             <li
               key={idx}
-              className="p-4 rounded-xl bg-[#F3F2EB] border border-[#E5E4DC] text-xs text-[#171C18] font-medium leading-relaxed italic"
+              className="p-4 rounded-xl bg-[#141A22] border border-white/08 text-xs text-[#D0D4C7] font-medium leading-relaxed italic"
             >
               &ldquo;{q}&rdquo;
             </li>
@@ -87,7 +87,7 @@ export const TopicIntro: React.FC<TopicIntroProps> = ({ topic }) => {
       </div>
 
       {/* Prerequisites & Vocabulary Accordion */}
-      <div className="pt-4 border-t border-[#E5E4DC] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="pt-4 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         {/* Prerequisites */}
         <div className="flex items-center gap-2 flex-wrap text-xs text-[#171C18]">
           <span className="font-mono text-xs font-bold uppercase text-[#5E7A65]">PREREQUISITES:</span>

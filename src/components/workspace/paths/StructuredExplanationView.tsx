@@ -12,16 +12,16 @@ export const StructuredExplanationView: React.FC<StructuredExplanationViewProps>
   return (
     <div className="space-y-8 animate-in fade-in duration-200">
       
-      {/* Introduction Callout (Warm Ivory Editorial Surface) */}
-      <div className="p-6 sm:p-7 rounded-2xl bg-[#FAF9F5] border border-[#E5E4DC] text-[#171C18] space-y-3 shadow-sm">
+      {/* Introduction Callout (Obsidian Observatory Surface) */}
+      <div className="p-6 sm:p-7 rounded-3xl bg-[#0D1117] border border-white/12 text-white space-y-3 shadow-xl">
         <div className="flex items-center gap-2">
-          <BookOpen className="w-4 h-4 text-[#080A0E]" />
-          <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#5E7A65]">
+          <BookOpen className="w-4 h-4 text-[#B8FF00]" />
+          <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#B8FF00]">
             DEDUCTIVE FIRST-PRINCIPLES FOUNDATION
           </span>
         </div>
 
-        <p className="text-base sm:text-lg text-[#171C18] leading-relaxed font-sans font-medium">
+        <p className="text-base sm:text-lg text-[#FAF9F5] leading-relaxed font-sans font-medium">
           {content.introduction}
         </p>
       </div>
@@ -36,7 +36,7 @@ export const StructuredExplanationView: React.FC<StructuredExplanationViewProps>
             <button
               key={section.id}
               onClick={() => setActiveSectionId(section.id)}
-              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl font-mono text-xs font-semibold whitespace-nowrap transition-all ${
+              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl font-mono text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
                 activeSectionId === section.id
                   ? 'bg-[#B8FF00] text-[#080A0E] shadow-sm font-bold'
                   : 'bg-white/5 text-[#8DA391] hover:text-white hover:bg-white/10 border border-white/10'
@@ -61,25 +61,25 @@ export const StructuredExplanationView: React.FC<StructuredExplanationViewProps>
             <div
               key={section.id}
               id={section.id}
-              className={`rounded-2xl border p-6 sm:p-8 space-y-5 transition-all shadow-sm ${
+              className={`rounded-3xl border p-6 sm:p-8 space-y-5 transition-all shadow-xl ${
                 isHighlighted
-                  ? 'bg-[#FAF9F5] text-[#171C18] border-[#B8FF00] ring-1 ring-[#B8FF00]/40'
-                  : 'bg-[#FAF9F5] text-[#171C18] border-[#E5E4DC]'
+                  ? 'bg-[#141A22] text-white border-[#B8FF00] ring-1 ring-[#B8FF00]/40'
+                  : 'bg-[#0D1117] text-white border-white/10'
               }`}
             >
               {/* Section Header */}
               <div className="flex items-start justify-between gap-4">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2.5">
-                    <span className="w-6 h-6 rounded-lg bg-[#080A0E] text-[#B8FF00] font-mono font-bold text-xs flex items-center justify-center">
+                    <span className="w-6 h-6 rounded-lg bg-[#080A0E] text-[#B8FF00] font-mono font-bold text-xs flex items-center justify-center border border-white/10">
                       {idx + 1}
                     </span>
-                    <h3 className="font-display text-lg sm:text-xl font-bold text-[#080A0E] tracking-tight">
+                    <h3 className="font-display text-lg sm:text-xl font-bold text-white tracking-tight">
                       {section.title}
                     </h3>
                   </div>
                   {section.subtitle && (
-                    <p className="font-mono text-xs text-[#5E7A65] ml-8">
+                    <p className="font-mono text-xs text-[#8B9DAE] ml-8">
                       {section.subtitle}
                     </p>
                   )}
@@ -87,7 +87,7 @@ export const StructuredExplanationView: React.FC<StructuredExplanationViewProps>
               </div>
 
               {/* Paragraphs */}
-              <div className="space-y-4 text-sm sm:text-base text-[#171C18] leading-relaxed font-sans">
+              <div className="space-y-4 text-sm sm:text-base text-[#D0D4C7] leading-relaxed font-sans">
                 {section.paragraphs.map((p, pIdx) => (
                   <p key={pIdx}>{p}</p>
                 ))}
@@ -95,10 +95,10 @@ export const StructuredExplanationView: React.FC<StructuredExplanationViewProps>
 
               {/* Bullet points if present */}
               {section.bulletPoints && section.bulletPoints.length > 0 && (
-                <ul className="space-y-2 bg-[#F3F2EB] p-4 rounded-xl border border-[#E5E4DC]">
+                <ul className="space-y-2 bg-[#080A0E]/80 p-4 rounded-2xl border border-white/08">
                   {section.bulletPoints.map((bp, bIdx) => (
-                    <li key={bIdx} className="flex items-start gap-2.5 text-xs sm:text-sm text-[#171C18]">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#080A0E] mt-2 shrink-0" />
+                    <li key={bIdx} className="flex items-start gap-2.5 text-xs sm:text-sm text-[#D0D4C7]">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#B8FF00] mt-2 shrink-0" />
                       <span className="leading-relaxed">{bp}</span>
                     </li>
                   ))}

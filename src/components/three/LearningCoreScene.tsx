@@ -333,35 +333,35 @@ export const LearningCoreScene: React.FC<LearningCoreSceneProps> = ({
         </div>
 
         {/* Accessible Interactive Footer & Path Details */}
-        <div className="relative z-10 bg-[#19211C]/92 backdrop-blur-md rounded-2xl p-3 border border-white/10 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mt-auto">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-[#111714] border border-[#DFE2D7]/20 flex items-center justify-center text-[#C8F36B] shrink-0">
+        <div className="relative z-10 bg-[#080A0E]/95 backdrop-blur-md rounded-2xl p-3 border border-white/15 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mt-auto shadow-2xl">
+          <div className="flex items-center gap-2.5 min-w-0 flex-1">
+            <div className="w-8 h-8 rounded-xl bg-[#141A22] border border-[#B8FF00]/30 flex items-center justify-center text-[#B8FF00] shrink-0">
               <ActiveIcon className="w-4 h-4" />
             </div>
-            <div className="space-y-0.5 min-w-0">
-              <div className="flex items-center gap-1.5">
+            <div className="space-y-0.5 min-w-0 flex-1">
+              <div className="flex items-center gap-1.5 flex-wrap">
                 <span className="text-white text-xs font-bold truncate">
                   {activeMeta.title}
                 </span>
-                <span className="font-mono text-[9px] text-[#C8F36B] px-1.5 py-0.2 rounded bg-white/5 uppercase">
+                <span className="font-mono text-[9px] text-[#B8FF00] px-1.5 py-0.5 rounded bg-white/10 uppercase font-semibold shrink-0 max-w-[140px] truncate" title={activeMeta.bestFor}>
                   {activeMeta.bestFor}
                 </span>
               </div>
-              <p className="text-[10px] text-[#8DA391] line-clamp-1">
+              <p className="text-[10px] text-[#8B9DAE] line-clamp-1">
                 {activeMeta.tagline}
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-1.5 self-end sm:self-auto shrink-0">
+          <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
             {/* Quick Path Switcher Pills for non-pointer / keyboard users */}
             <div className="hidden md:flex items-center gap-1 mr-1">
               {SATELLITES.map((sat) => (
                 <button
                   key={sat.id}
                   onClick={() => handleSatelliteClick(sat.id)}
-                  className={`w-2.5 h-2.5 rounded-full transition-all ${
-                    activeDisplayPath === sat.id ? 'bg-[#C8F36B] scale-125' : 'bg-white/20 hover:bg-white/40'
+                  className={`w-3 h-3 rounded-full transition-all cursor-pointer ${
+                    activeDisplayPath === sat.id ? 'bg-[#B8FF00] scale-125 shadow-sm shadow-[#B8FF00]' : 'bg-white/20 hover:bg-white/40'
                   }`}
                   title={sat.name}
                   aria-label={sat.name}
@@ -371,10 +371,10 @@ export const LearningCoreScene: React.FC<LearningCoreSceneProps> = ({
 
             <button
               onClick={() => handleSatelliteClick(activeDisplayPath)}
-              className="px-3 py-1.5 rounded-xl bg-[#C8F36B] hover:bg-[#BCEB58] text-[#111714] font-mono font-bold text-xs flex items-center gap-1 transition-all active:scale-95"
+              className="px-3.5 py-1.5 rounded-xl bg-[#B8FF00] hover:bg-[#A3E635] text-[#080A0E] font-mono font-bold text-xs flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer shrink-0 whitespace-nowrap shadow-sm"
             >
               <span>Explore Mode</span>
-              <ArrowRight className="w-3 h-3" />
+              <ArrowRight className="w-3.5 h-3.5 stroke-[2.4]" />
             </button>
           </div>
         </div>

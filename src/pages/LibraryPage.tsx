@@ -13,6 +13,7 @@ import {
 } from '../utils/curriculumDiscovery';
 import { LibraryHeader } from '../components/library/LibraryHeader';
 import { CurriculumFilterBar } from '../components/library/CurriculumFilterBar';
+import { VisualSubjectGallery } from '../components/library/VisualSubjectGallery';
 import { SubjectFilterPills } from '../components/library/SubjectFilterPills';
 import { TopicGrid } from '../components/library/TopicGrid';
 
@@ -118,7 +119,18 @@ export const LibraryPage: React.FC = () => {
           onReset={handleResetCurriculum}
         />
 
-        {/* Subject Filter Pills (Dynamic Counts matching Board/Class) */}
+        {/* Visual Subject Discovery Gallery (Image-Led Google Labs / NASA Eyes Pattern) */}
+        <div className="pt-2">
+          <VisualSubjectGallery
+            selectedBoard={selectedBoard}
+            selectedClass={selectedClass}
+            activeSubject={selectedSubjectId}
+            onSelectSubject={setSelectedSubjectId}
+            subjectCounts={dynamicSubjectCounts}
+          />
+        </div>
+
+        {/* Compact Quick-Filter Pills */}
         <div className="pt-1">
           <SubjectFilterPills
             selectedSubjectId={selectedSubjectId}

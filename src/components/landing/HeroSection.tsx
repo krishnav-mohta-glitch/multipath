@@ -184,46 +184,39 @@ export const HeroSection: React.FC = () => {
               </span>
             </div>
 
-            {/* Action CTAs */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-1">
+            {/* Action CTAs: High-visibility Primary & Guest Exploration */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-2">
               <button
                 onClick={() => navigateTo('library')}
-                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 text-xs sm:text-sm font-bold text-[#080A0E] bg-[#B8FF00] hover:bg-[#A3E635] active:scale-[0.98] rounded-full shadow-lg shadow-[#B8FF00]/10 transition-all cursor-pointer"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 text-xs sm:text-sm font-bold text-[#080A0E] bg-[#B8FF00] hover:bg-[#A3E635] active:scale-[0.98] rounded-full shadow-lg shadow-[#B8FF00]/15 transition-all cursor-pointer"
               >
-                <span>Launch Knowledge Library</span>
+                <span>Explore Visual Curriculum</span>
                 <ArrowRight className="w-4 h-4 stroke-[2.4]" />
               </button>
 
               <button
-                onClick={() => {
-                  const el = document.getElementById('four-paths-section');
-                  el?.scrollIntoView({ behavior: 'smooth' });
-                }}
-                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 text-xs sm:text-sm font-semibold text-white bg-[#141A22] hover:bg-[#1C2430] border border-white/15 rounded-full transition-all cursor-pointer"
+                onClick={() => openTopic('math-linear-equations', 'explore-experiment')}
+                className="inline-flex items-center justify-center gap-2 px-6 py-4 text-xs sm:text-sm font-semibold text-white bg-[#141A22] hover:bg-[#1C2430] border border-white/15 rounded-full transition-all cursor-pointer"
               >
-                <Compass className="w-4 h-4 text-[#8B9DAE]" />
-                <span>Explore the 4 Paths</span>
+                <Compass className="w-4 h-4 text-[#B8FF00]" />
+                <span>Try Live Simulation Lab</span>
               </button>
             </div>
 
-            {/* Architecture Telemetry Metrics Grid */}
-            <div className="pt-6 border-t border-white/10 grid grid-cols-2 sm:grid-cols-4 gap-3">
-              <div className="p-3 rounded-xl bg-[#141A22]/70 border border-white/08">
-                <span className="font-mono text-[9px] uppercase tracking-wider text-[#8B9DAE] block mb-0.5">Perspectives</span>
-                <span className="font-display font-bold text-sm text-white">4 Convergent Paths</span>
-              </div>
-              <div className="p-3 rounded-xl bg-[#141A22]/70 border border-white/08">
-                <span className="font-mono text-[9px] uppercase tracking-wider text-[#8B9DAE] block mb-0.5">Coverage</span>
-                <span className="font-display font-bold text-sm text-white">64 Verified Topics</span>
-              </div>
-              <div className="p-3 rounded-xl bg-[#141A22]/70 border border-white/08">
-                <span className="font-mono text-[9px] uppercase tracking-wider text-[#8B9DAE] block mb-0.5">Curriculum</span>
-                <span className="font-display font-bold text-sm text-white">CBSE &amp; ICSE 6–10</span>
-              </div>
-              <div className="p-3 rounded-xl bg-[#141A22]/70 border border-white/08">
-                <span className="font-mono text-[9px] uppercase tracking-wider text-[#8B9DAE] block mb-0.5">Diagnostic</span>
-                <span className="font-display font-bold text-sm text-white">Feynman Engine</span>
-              </div>
+            {/* Concise Scientific Assurance Ledger */}
+            <div className="pt-4 flex flex-wrap items-center gap-4 text-xs font-mono text-[#8B9DAE]">
+              <span className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#B8FF00]" />
+                <span>64 Canonical Concepts</span>
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#38BDF8]" />
+                <span>CBSE &amp; CISCE Classes 6–10</span>
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#A78BFA]" />
+                <span>4 Epistemic Paths</span>
+              </span>
             </div>
 
           </div>
