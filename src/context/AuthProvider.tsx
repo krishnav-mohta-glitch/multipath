@@ -23,18 +23,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [profile, setProfile] = useState<StudentProfile | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(() => isSupabaseConfigured());
-  const [isGuest, setIsGuest] = useState<boolean>(() => {
-    if (!isSupabaseConfigured()) return true;
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem(GUEST_STORAGE_KEY) === 'true';
-    }
-    return true;
-  });
   const [error, setError] = useState<string | null>(null);
+
+  // Derived state: guest if no authenticated user and not loading
+  const isGuest = !user && !isLoading;
 
   // Modal UI State
   const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
   const [authModalMode, setAuthModalMode] = useState<AuthModalMode>('login');
+  const [authPromptReason, setAuthPromptReason] = useState<string | null>(null);
 
   // Guest-to-Account Migration Modal State
   const [isGuestImportModalOpen, setIsGuestImportModalOpen] = useState<boolean>(false);
@@ -73,7 +70,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (initialSession?.user) {
         setSession(initialSession);
         setUser(initialSession.user);
-        setIsGuest(false);
         localStorage.setItem(GUEST_STORAGE_KEY, 'false');
         storageService.setActiveUserId(initialSession.user.id);
 
@@ -89,7 +85,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setSession(null);
         setUser(null);
         setProfile(null);
-        setIsGuest(true);
         storageService.setActiveUserId(null);
         setIsLoading(false);
       }
@@ -97,7 +92,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       console.warn('[AuthProvider] Session retrieval exception:', err);
       if (isMounted) {
         setIsLoading(false);
-        setIsGuest(true);
         storageService.setActiveUserId(null);
       }
     });
@@ -109,7 +103,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (currentSession?.user) {
         setSession(currentSession);
         setUser(currentSession.user);
-        setIsGuest(false);
         localStorage.setItem(GUEST_STORAGE_KEY, 'false');
         storageService.setActiveUserId(currentSession.user.id);
 
@@ -122,7 +115,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setSession(null);
         setUser(null);
         setProfile(null);
-        setIsGuest(true);
         storageService.setActiveUserId(null);
         setIsGuestImportModalOpen(false);
       }
@@ -141,14 +133,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [configured, loadProfileForUser]);
 
   // Open modal helper
-  const openAuthModal = useCallback((mode: AuthModalMode = 'login') => {
+  const openAuthModal = useCallback((mode: AuthModalMode = 'login', reason?: string) => {
     setAuthModalMode(mode);
+    setAuthPromptReason(reason || null);
     setIsAuthModalOpen(true);
     setError(null);
   }, []);
 
   const closeAuthModal = useCallback(() => {
     setIsAuthModalOpen(false);
+    setAuthPromptReason(null);
     setError(null);
   }, []);
 
@@ -178,12 +172,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return result;
   }, [user]);
 
-  // Continue as Guest without cloud account
+  // Continue as Guest: returns to public overview without granting access to protected learning
   const continueAsGuest = useCallback(() => {
-    setIsGuest(true);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem(GUEST_STORAGE_KEY, 'true');
-    }
+    setAuthPromptReason(null);
     storageService.setActiveUserId(null);
     closeAuthModal();
   }, [closeAuthModal]);
@@ -219,6 +210,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return { success: true };
   }, [closeAuthModal]);
 
+  // Sign in with OAuth
+  const signInWithOAuth = useCallback(async (provider: 'google' | 'facebook' | 'custom:instagram' | 'twitter') => {
+    setError(null);
+    const res = await authService.signInWithOAuth(provider);
+    if (!res.success) {
+      setError(res.error || `Authentication with ${provider} failed`);
+      return { success: false, error: res.error };
+    }
+    return { success: true, url: res.url };
+  }, []);
+
   // Sign out
   const signOut = useCallback(async () => {
     await authService.signOut();
@@ -226,7 +228,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(null);
     setProfile(null);
     setSession(null);
-    setIsGuest(true);
     setIsGuestImportModalOpen(false);
     if (typeof window !== 'undefined') {
       localStorage.setItem(GUEST_STORAGE_KEY, 'true');
@@ -280,9 +281,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     isAuthModalOpen,
     authModalMode,
+    authPromptReason,
     openAuthModal,
     closeAuthModal,
     setAuthModalMode,
+    setAuthPromptReason,
 
     isGuestImportModalOpen,
     openGuestImportModal,
@@ -291,6 +294,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     signUp,
     signIn,
+    signInWithOAuth,
     signOut,
     resetPassword,
     resendVerification,
@@ -307,14 +311,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     error,
     isAuthModalOpen,
     authModalMode,
+    authPromptReason,
     openAuthModal,
     closeAuthModal,
+    setAuthModalMode,
+    setAuthPromptReason,
     isGuestImportModalOpen,
     openGuestImportModal,
     closeGuestImportModal,
     importGuestDataToAccount,
     signUp,
     signIn,
+    signInWithOAuth,
     signOut,
     resetPassword,
     resendVerification,

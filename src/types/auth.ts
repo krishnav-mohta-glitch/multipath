@@ -58,9 +58,11 @@ export interface AuthContextValue extends AuthState {
   // Modal State
   isAuthModalOpen: boolean;
   authModalMode: AuthModalMode;
-  openAuthModal: (mode?: AuthModalMode) => void;
+  authPromptReason: string | null;
+  openAuthModal: (mode?: AuthModalMode, reason?: string) => void;
   closeAuthModal: () => void;
   setAuthModalMode: (mode: AuthModalMode) => void;
+  setAuthPromptReason: (reason: string | null) => void;
 
   // Guest-to-Account Migration Modal State
   isGuestImportModalOpen: boolean;
@@ -71,6 +73,7 @@ export interface AuthContextValue extends AuthState {
   // Actions
   signUp: (email: string, password: string, meta: SignUpMetadata) => Promise<{ success: boolean; needsVerification: boolean; error?: string }>;
   signIn: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  signInWithOAuth: (provider: 'google' | 'facebook' | 'custom:instagram' | 'twitter') => Promise<{ success: boolean; error?: string; url?: string }>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<{ success: boolean; error?: string }>;
   resendVerification: (email: string) => Promise<{ success: boolean; error?: string }>;

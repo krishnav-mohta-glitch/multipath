@@ -80,6 +80,40 @@ export class AuthService {
   }
 
   /**
+   * Sign in with an OAuth provider (Google, Facebook, Instagram Custom OAuth, X/Twitter)
+   */
+  async signInWithOAuth(provider: 'google' | 'facebook' | 'custom:instagram' | 'twitter') {
+    if (!isSupabaseConfigured() || !supabase) {
+      return {
+        success: false,
+        error: 'Supabase authentication is not configured in this environment.'
+      };
+    }
+
+    try {
+      const redirectTo = typeof window !== 'undefined'
+        ? `${window.location.origin}/?tab=workspace`
+        : undefined;
+
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: provider as any,
+        options: {
+          redirectTo,
+        },
+      });
+
+      if (error) {
+        return { success: false, error: error.message };
+      }
+
+      return { success: true, url: data.url };
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Unknown OAuth initiation error';
+      return { success: false, error: msg };
+    }
+  }
+
+  /**
    * Sign out current user session
    */
   async signOut() {

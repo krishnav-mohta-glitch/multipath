@@ -176,11 +176,11 @@ export const HeroSection: React.FC = () => {
               </p>
             </div>
 
-            {/* Sovereign Guest-First Guarantee */}
+            {/* Authenticated Observatory Access Guarantee */}
             <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-[#141A22]/80 border border-white/08 max-w-md">
               <ShieldCheck className="w-4 h-4 text-[#B8FF00] shrink-0" />
               <span className="font-mono text-xs text-[#E5E7EB]">
-                <strong className="text-white font-semibold">100% Guest-First:</strong> Immediate access without mandatory registration. Progress persists locally.
+                <strong className="text-white font-semibold">Authenticated Access:</strong> Sign in to unlock full curriculum, 3D labs, and personal trajectory.
               </span>
             </div>
 

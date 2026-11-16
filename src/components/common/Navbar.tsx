@@ -12,13 +12,14 @@ import {
   Layers,
   FolderArchive,
   Sparkles,
+  Lock,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { useAuth } from '../../context/AuthContext';
 
 export const Navbar: React.FC = () => {
   const { currentTab, navigateTo, searchQuery, setSearchQuery, sessionState, dashboardSubTab } = useApp();
-  const { user, profile, isGuest, openAuthModal } = useAuth();
+  const { user, profile, openAuthModal } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -146,11 +147,14 @@ export const Navbar: React.FC = () => {
                         ? 'bg-[#B8FF00] text-[#080A0E] font-bold shadow-sm'
                         : 'text-[#E5E7EB] hover:text-white hover:bg-white/08'
                     }`}
-                    title={link.sublabel}
+                    title={!user && link.id !== 'home' ? 'Sign In Required' : link.sublabel}
                   >
                     <Icon className={`w-3.5 h-3.5 ${active ? 'text-[#080A0E]' : 'text-[#8B9DAE]'}`} />
                     <span className="whitespace-nowrap">{link.label}</span>
-                    {link.badge !== undefined && (
+                    {!user && link.id !== 'home' && (
+                      <Lock className="w-2.5 h-2.5 text-[#8B9DAE]/80" />
+                    )}
+                    {link.badge !== undefined && user && (
                       <span className={`ml-0.5 px-1.5 py-0.2 text-[9px] font-mono rounded-full font-bold ${
                         active ? 'bg-[#080A0E] text-[#B8FF00]' : 'bg-white/15 text-white'
                       }`}>
@@ -194,13 +198,13 @@ export const Navbar: React.FC = () => {
               </button>
             ) : (
               <button
-                onClick={() => openAuthModal('login')}
+                onClick={() => openAuthModal('login', 'Please sign in or register to access the full curriculum and workspaces.')}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#161D26] hover:bg-[#1C2430] text-[#E5E7EB] hover:text-white border border-white/10 text-xs font-medium transition-all cursor-pointer"
-                title={isGuest ? 'Guest mode active. Click to sign in and sync.' : 'Student Account'}
+                title="Sign in or register to unlock the learning observatory"
               >
                 <div className="w-2 h-2 rounded-full bg-[#B8FF00] animate-pulse" />
                 <UserIcon className="w-3.5 h-3.5 text-[#8B9DAE]" />
-                <span className="text-xs">{isGuest ? 'Guest Mode' : 'Sign In'}</span>
+                <span className="text-xs font-semibold">Sign In / Register</span>
               </button>
             )}
           </nav>

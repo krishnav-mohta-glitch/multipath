@@ -45,7 +45,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return 'structured-explanation';
   });
   const [selectedSubjectId, setSelectedSubjectId] = useState<SubjectId | 'all'>('all');
-  const { user } = useAuth();
+  const { user, openAuthModal } = useAuth();
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [sessionState, setSessionState] = useState<UserSessionState>(() => {
     // Hydrate bookmarks from persistent local storage on initial mount
@@ -104,12 +104,33 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [currentTab, selectedTopicId]);
 
+  // Synchronize router state with browser URL search params
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href);
+      if (currentTab === 'home') {
+        url.searchParams.delete('tab');
+        url.searchParams.delete('topic');
+        url.searchParams.delete('path');
+      } else {
+        url.searchParams.set('tab', currentTab);
+        if (selectedTopicId) url.searchParams.set('topic', selectedTopicId);
+        if (activePath) url.searchParams.set('path', activePath);
+      }
+      window.history.replaceState({}, '', url.toString());
+    }
+  }, [currentTab, selectedTopicId, activePath]);
+
   const navigateTo = (
     tab: NavTab,
     topicId?: string,
     pathId?: LearningPathId,
     subTab?: DashboardSubTab
   ) => {
+    if (!user && tab !== 'home') {
+      openAuthModal('login', 'Please sign in or register to access curriculum library and learning workspaces.');
+      return;
+    }
     setCurrentTab(tab);
     if (topicId) {
       setSelectedTopicId(topicId);
@@ -123,6 +144,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const openTopic = (topicId: string, pathId?: LearningPathId) => {
+    if (!user) {
+      openAuthModal('login', 'Please sign in or register to launch this learning workspace.');
+      return;
+    }
     setSelectedTopicId(topicId);
     const chosenPath = pathId || 'structured-explanation';
     setActivePathState(chosenPath);
