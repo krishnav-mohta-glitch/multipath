@@ -38,3 +38,6 @@ dist-ssr
 supabase/.temp
 .temp
 
+# Temporary Scratch Scripts
+scratch/
+

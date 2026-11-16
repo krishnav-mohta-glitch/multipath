@@ -1,0 +1,237 @@
+{
+  "auditTitle": "MULTIPATH V3 — Comprehensive Student-Journey Functional & UX Audit",
+  "auditDate": "2026-11-16",
+  "targetUrl": "https://multipath-one.vercel.app/",
+  "gitBaseline": {
+    "branch": "main",
+    "commit": "72eeced00a64842b0f2012df25b28842c99351d8",
+    "workingTreeStatus": "untracked audit artifacts only, zero modifications"
+  },
+  "summary": {
+    "totalTests": 14,
+    "pass": 13,
+    "fail": 1,
+    "blocked": 0,
+    "notTested": 0
+  },
+  "tests": [
+    {
+      "testId": "TEST-CHK-A-01",
+      "checkpoint": "Checkpoint A — Initial Access",
+      "description": "Verify homepage load, hero copy, trust metrics, and primary call-to-actions",
+      "status": "PASS",
+      "severity": "None",
+      "url": "https://multipath-one.vercel.app/",
+      "reproductionSteps": [
+        "1. Navigate to https://multipath-one.vercel.app/",
+        "2. Inspect title, eyebrow badge, hero headline, and CTA buttons"
+      ],
+      "evidenceFilename": "screenshots/01_checkpoint_a_homepage.png",
+      "notes": "Loaded instantaneously with zero layout shift. Clean dark theme styling."
+    },
+    {
+      "testId": "TEST-CHK-A-02",
+      "checkpoint": "Checkpoint A — Authentication & Guest Mode",
+      "description": "Inspect Auth Modal, offline notice badge, guest learner continuity, and modal dismissal",
+      "status": "PASS",
+      "severity": "None",
+      "url": "https://multipath-one.vercel.app/",
+      "reproductionSteps": [
+        "1. Click 'Guest Mode' / profile button in navbar",
+        "2. Observe modal fields and notice badge",
+        "3. Verify modal dismissal via backdrop and close icon",
+        "4. Confirm unauthenticated guest can access all learning features"
+      ],
+      "evidenceFilename": "screenshots/02_checkpoint_a_auth_modal.png",
+      "notes": "Zero paywall. Gracefully falls back to local IndexedDB guest mode when Supabase is unconfigured."
+    },
+    {
+      "testId": "TEST-CHK-B-01",
+      "checkpoint": "Checkpoint B — Curriculum Catalog & Filtering",
+      "description": "Inspect board selectors (CBSE vs CISCE/ICSE), class selectors (Classes 6-10), and syllabus codes",
+      "status": "PASS",
+      "severity": "None",
+      "url": "https://multipath-one.vercel.app/#library",
+      "reproductionSteps": [
+        "1. Click 'Library' in navbar",
+        "2. Toggle Board between CBSE and ICSE/CISCE",
+        "3. Observe dynamic syllabus citation badge swaps (e.g. CBSE 086 vs CISCE)"
+      ],
+      "evidenceFilename": "screenshots/03_checkpoint_b_curriculum_library.png",
+      "notes": "Catalog displays 64 topics across 8 academic disciplines with exact statutory board citations."
+    },
+    {
+      "testId": "TEST-CHK-B-02",
+      "checkpoint": "Checkpoint B — Real-time Topic Search",
+      "description": "Test real-time query filtering with keyword 'Reaction' and 'Force'",
+      "status": "PASS",
+      "severity": "None",
+      "url": "https://multipath-one.vercel.app/#library",
+      "reproductionSteps": [
+        "1. Enter search input on Library page",
+        "2. Type 'Reaction'",
+        "3. Verify cards filter immediately from 64 to 7 topics",
+        "4. Clear and type 'Force', verifying 11 matched topics"
+      ],
+      "evidenceFilename": "screenshots/04_checkpoint_b_topic_search_filtering.png",
+      "notes": "Instant debounced client-side filtering matching titles, concepts, and syllabus units."
+    },
+    {
+      "testId": "TEST-CHK-C-01",
+      "checkpoint": "Checkpoint C — Learning-Format Selection",
+      "description": "Inspect 4 parallel epistemic mode cards, cognitive descriptions, and format switching",
+      "status": "PASS",
+      "severity": "None",
+      "url": "https://multipath-one.vercel.app/#workspace",
+      "reproductionSteps": [
+        "1. Select topic 'phys-newtons-laws'",
+        "2. Inspect the 4 mode cards in top hero",
+        "3. Click between 'Structured Explanation', 'Visual Learning', 'Examples & Applications', and 'Explore & Experiment'"
+      ],
+      "evidenceFilename": "screenshots/05_checkpoint_c_learning_format_selection.png",
+      "notes": "Zero page reload. Clear target learner descriptions ('FOR: Learners who ask What does this look like?')."
+    },
+    {
+      "testId": "TEST-CHK-D-01",
+      "checkpoint": "Checkpoint D — Concept 1 Orientation & Explanation",
+      "description": "Evaluate Newton's Laws of Motion orientation, first-principles derivation, and prerequisite structure",
+      "status": "PASS",
+      "severity": "None",
+      "url": "https://multipath-one.vercel.app/#workspace",
+      "reproductionSteps": [
+        "1. Open topic phys-newtons-laws",
+        "2. Select 'Structured Explanation'",
+        "3. Read orientation, core inquiry questions, prerequisite definitions, and step-by-step law breakdowns"
+      ],
+      "evidenceFilename": "screenshots/06_checkpoint_d_concept1_newtons_laws_explanation.png",
+      "notes": "Exceptional pedagogical rigor. Defines inertia as intrinsic matter property rather than a force."
+    },
+    {
+      "testId": "TEST-CHK-D-02",
+      "checkpoint": "Checkpoint D — Concept 1 Spatial & 3D Interactivity",
+      "description": "Inspect 3D Topological Invariant Network and physical force equilibrium nodes",
+      "status": "PASS",
+      "severity": "None",
+      "url": "https://multipath-one.vercel.app/#workspace",
+      "reproductionSteps": [
+        "1. Toggle to 'Visual Learning' mode on Newton's Laws",
+        "2. Click network nodes (Inertial Mass, Dynamic Net Force, Reciprocal Action-Reaction)",
+        "3. Observe reactive topological focus"
+      ],
+      "evidenceFilename": "screenshots/07_checkpoint_d_concept1_visual_3d_network.png",
+      "notes": "WebGL renders smoothly without frame drops. Node inspection updates underlying invariant card."
+    },
+    {
+      "testId": "TEST-CHK-D-03",
+      "checkpoint": "Checkpoint D — Concept 1 Socratic Diagnostic Engine",
+      "description": "Submit incorrect hypothesis and scientifically correct answer to test 4-tier diagnostic feedback",
+      "status": "PASS",
+      "severity": "None",
+      "url": "https://multipath-one.vercel.app/#workspace",
+      "reproductionSteps": [
+        "1. Open Socratic inquiry prompt on friction in deep space",
+        "2. Submit incorrect answer: 'motion naturally runs out of energy'",
+        "3. Verify diagnostic feedback 'Clarification Needed' and guiding question",
+        "4. Submit correct Newton's First Law response",
+        "5. Verify 'Mastery Verified' badge and milestone progression"
+      ],
+      "evidenceFilename": "screenshots/08_checkpoint_d_concept1_socratic_mastery.png",
+      "notes": "Constructive, formative feedback instead of binary right/wrong flag."
+    },
+    {
+      "testId": "TEST-CHK-D-04",
+      "checkpoint": "Checkpoint D — Concept 2 Linear Equations Workbench",
+      "description": "Test Linear Equations Slope-Intercept & Pan Balance Interactive Workbench with live presets and sliders",
+      "status": "PASS",
+      "severity": "None",
+      "url": "https://multipath-one.vercel.app/#workspace",
+      "reproductionSteps": [
+        "1. Open topic math-linear-equations",
+        "2. Switch to 'Explore & Experiment' mode",
+        "3. Toggle Cartesian Plane vs Pan Balance views",
+        "4. Select preset 'Direct Proportion (y = 3x)'",
+        "5. Observe pan balance scale achieving 0-degree equilibrium at 6kg"
+      ],
+      "evidenceFilename": "screenshots/09_checkpoint_d_concept2_linear_equations_workbench.png",
+      "notes": "Bridges symbolic equation 3x = 6 to physical equilibrium and coordinate geometry (2, 6)."
+    },
+    {
+      "testId": "TEST-CHK-D-05",
+      "checkpoint": "Checkpoint D — Concept 2 Feynman Diagnostic Simulation",
+      "description": "Engage learner persona Alex in Feynman Teach-to-Learn mode, verify dynamic multi-turn dialogue",
+      "status": "PASS",
+      "severity": "None",
+      "url": "https://multipath-one.vercel.app/#workspace",
+      "reproductionSteps": [
+        "1. Scroll to Feynman 'Teach to Consolidate' module",
+        "2. Read Alex's prompt regarding balance scale and inverse operations",
+        "3. Type explanation explaining 3x+7=22 balance",
+        "4. Verify Alex's response acknowledging inverse operations and asking follow-up on variables on both sides"
+      ],
+      "evidenceFilename": "screenshots/10_checkpoint_d_concept2_alex_feynman_interaction.png",
+      "notes": "Creates authentic pedagogical dialogue simulating peer tutoring."
+    },
+    {
+      "testId": "TEST-CHK-D-06",
+      "checkpoint": "Checkpoint D — Concept 2 Six-Dimension Mastery Rubric",
+      "description": "Evaluate 'Assess My Explanation' output across 6 cognitive dimensions with verbatim quote grounding",
+      "status": "PASS",
+      "severity": "None",
+      "url": "https://multipath-one.vercel.app/#workspace",
+      "reproductionSteps": [
+        "1. Click 'Assess My Explanation' in Feynman lab",
+        "2. Inspect rubric ratings: Accuracy, Completeness, Understanding, Relationships, Terminology, Reasoning",
+        "3. Verify demonstrated vs unexamined concept analysis"
+      ],
+      "evidenceFilename": "screenshots/11_checkpoint_d_concept2_feynman_diagnostic_rubric.png",
+      "notes": "Produces actionable feedback identifying specific demonstrated theorems and missing areas."
+    },
+    {
+      "testId": "TEST-CHK-E-01",
+      "checkpoint": "Checkpoint E — Client-side State Persistence",
+      "description": "Verify IndexedDB guest telemetry tracking across multiple topics and activity logging",
+      "status": "PASS",
+      "severity": "None",
+      "url": "https://multipath-one.vercel.app/#mylearning",
+      "reproductionSteps": [
+        "1. Click 'My Learning' in navbar",
+        "2. Verify 'Topics Explored: 3/64', 'Paths Explored: 4/4'",
+        "3. Inspect Discipline Progress Matrix (Math 7%, Physics 8%, Biology 10%)",
+        "4. Verify Chronological Learning Activity Ledger shows 15 logged events with timestamps"
+      ],
+      "evidenceFilename": "screenshots/12_checkpoint_e_persistence_my_learning_trajectory.png",
+      "notes": "Includes full JSON Vault export and audit trail."
+    },
+    {
+      "testId": "TEST-CHK-E-02",
+      "checkpoint": "Checkpoint E — Workspace URL State Synchronization",
+      "description": "Test hard page reload (F5 / page.reload()) while on a topic workspace",
+      "status": "FAIL",
+      "severity": "Medium",
+      "url": "https://multipath-one.vercel.app/#workspace",
+      "reproductionSteps": [
+        "1. Navigate to topic 'math-linear-equations' in Workspace",
+        "2. Trigger browser hard reload (F5)",
+        "3. Observe active view resets to Home rather than preserving active topic URL parameter"
+      ],
+      "evidenceFilename": "screenshots/01_checkpoint_a_homepage.png",
+      "notes": "DEFECT-ROUTING-01: Router state is kept in memory and IndexedDB rather than synchronized with URL search params (e.g. /?topic=math-linear-equations). Clicking 'Learning Workspace' tab immediately reloads topic from memory, but direct refresh requires one extra click."
+    },
+    {
+      "testId": "TEST-CHK-F-01",
+      "checkpoint": "Checkpoint F — Responsive Layout & Accessibility",
+      "description": "Inspect mobile viewport (375x812) layout, touch targets, and contrast compliance",
+      "status": "PASS",
+      "severity": "None",
+      "url": "https://multipath-one.vercel.app/",
+      "reproductionSteps": [
+        "1. Switch viewport to 375x812",
+        "2. Verify navbar collapses cleanly",
+        "3. Verify cards stack vertically with zero horizontal scroll overflow",
+        "4. Verify contrast of lime text (#E2F952) and white typography on dark background (#080A0E)"
+      ],
+      "evidenceFilename": "screenshots/13_checkpoint_f_responsive_layout.png",
+      "notes": "WCAG AA compliant contrast ratio. Clean responsive vertical stacking."
+    }
+  ]
+}

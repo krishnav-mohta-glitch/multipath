@@ -15,6 +15,7 @@ import {
   Sparkles
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { getConfigurationDiagnostics } from '../../services/supabaseClient';
 import type { CurriculumBoard, GradeLevel, StudentProfile, AuthModalMode } from '../../types/auth';
 
 const CURRICULUM_BOARDS: CurriculumBoard[] = [
@@ -801,6 +802,8 @@ export const AuthModal: React.FC = () => {
     isConfigured,
   } = useAuth();
 
+  const configDiagnostics = getConfigurationDiagnostics();
+
   const [registeredEmail, setRegisteredEmail] = useState('');
 
   // Escape key handler
@@ -860,7 +863,10 @@ export const AuthModal: React.FC = () => {
         {!isConfigured && (
           <div className="px-6 py-2.5 bg-amber-500/10 border-b border-amber-500/20 text-amber-900 text-xs flex items-center gap-2">
             <AlertCircle className="w-4 h-4 shrink-0 text-amber-600" />
-            <span>Supabase credentials not configured in this environment.</span>
+            <span>
+              Supabase credentials not configured in this environment
+              {configDiagnostics.missingVars.length > 0 && ` (missing: ${configDiagnostics.missingVars.join(', ')})`}.
+            </span>
           </div>
         )}
 

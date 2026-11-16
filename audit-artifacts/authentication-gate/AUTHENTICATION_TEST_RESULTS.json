@@ -1,0 +1,177 @@
+{
+  "suite": "MULTIPATH V3 — Mandatory Authentication Enforcement & Provider Verification",
+  "directive": "GOAL-MULTIPATH-AUTH-PROVIDER-VERIFICATION-V1",
+  "auditDate": "2026-11-16",
+  "gateway": "https://oestvwgkpllikmufvjls.supabase.co",
+  "summary": {
+    "totalTests": 18,
+    "pass": 18,
+    "fail": 0,
+    "blocked": 0,
+    "notTested": 0
+  },
+  "tests": [
+    {
+      "id": "AUTH-01",
+      "scenario": "Open homepage without a session",
+      "expectedResult": "Homepage accessible without authentication prompt",
+      "actualResult": "Homepage loads cleanly; hero title, 4 epistemic paths, and public landing components render",
+      "status": "PASS",
+      "severity": "None",
+      "evidence": "AUTHENTICATION_SCREENSHOTS/01_public_homepage_access.png"
+    },
+    {
+      "id": "AUTH-02",
+      "scenario": "Attempt to open curriculum library without a session",
+      "expectedResult": "Remain on homepage; display sign-in requirement dialog",
+      "actualResult": "Navigation intercepted by application route guard; remains on homepage; AuthModal displayed with reason banner",
+      "status": "PASS",
+      "severity": "None",
+      "evidence": "AUTHENTICATION_SCREENSHOTS/02_route_interception_auth_modal.png"
+    },
+    {
+      "id": "AUTH-03",
+      "scenario": "Directly navigate to a protected workspace",
+      "expectedResult": "Access denied; sign-in required",
+      "actualResult": "openTopic() intercepted; active view remains home; AuthModal triggers with workspace access requirement",
+      "status": "PASS",
+      "severity": "None",
+      "evidence": "AUTHENTICATION_SCREENSHOTS/03_direct_url_denial.png"
+    },
+    {
+      "id": "AUTH-04",
+      "scenario": "Refresh while unauthenticated",
+      "expectedResult": "Protected functionality remains inaccessible; no flash of protected content",
+      "actualResult": "Session resolves to null; isLoading state prevents protected content flash; route guard resets view to home",
+      "status": "PASS",
+      "severity": "None",
+      "evidence": "AUTHENTICATION_SCREENSHOTS/03_direct_url_denial.png"
+    },
+    {
+      "id": "AUTH-05",
+      "scenario": "Use browser back/forward while unauthenticated",
+      "expectedResult": "No protected-content bypass",
+      "actualResult": "Popstate navigation to non-home tab intercepted by AppContent route guard effect; forces currentTab to home and cleans URL history",
+      "status": "PASS",
+      "severity": "None",
+      "evidence": "AUTHENTICATION_SCREENSHOTS/03_direct_url_denial.png"
+    },
+    {
+      "id": "AUTH-06",
+      "scenario": "Sign in with a valid email/password test account",
+      "expectedResult": "Authenticated access granted; protected curriculum and workspace unlock",
+      "actualResult": "Session tokens returned; user profile loaded; navigation guard unlocks tabs; workspace active",
+      "status": "PASS",
+      "severity": "None",
+      "evidence": "AUTHENTICATION_SCREENSHOTS/04_authenticated_workspace_unlock.png"
+    },
+    {
+      "id": "AUTH-07",
+      "scenario": "Sign in with invalid credentials",
+      "expectedResult": "Clear error displayed; remain unauthenticated; no route bypass",
+      "actualResult": "Returns HTTP 400 'Invalid login credentials'; UI error banner displays message; session remains null",
+      "status": "PASS",
+      "severity": "None",
+      "evidence": "AUTHENTICATION_SCREENSHOTS/05_invalid_credentials_error.png"
+    },
+    {
+      "id": "AUTH-08",
+      "scenario": "OAuth initiation for configured & custom providers",
+      "expectedResult": "Produces valid authorization redirect URLs with correct provider query parameters",
+      "actualResult": "Generated valid authorize URLs for google, facebook, twitter, and custom:instagram",
+      "status": "PASS",
+      "severity": "None",
+      "evidence": "tests/auth_gate_verification.test.ts"
+    },
+    {
+      "id": "AUTH-09",
+      "scenario": "OAuth failure / unconfigured provider recovery",
+      "expectedResult": "Safe recovery without false success or UI hang",
+      "actualResult": "Gateway returns HTTP 400 validation_failed; client catches error and remains on safe unauthenticated prompt",
+      "status": "PASS",
+      "severity": "None",
+      "evidence": "tests/auth_gate_verification.test.ts"
+    },
+    {
+      "id": "AUTH-10",
+      "scenario": "Refresh after successful sign-in",
+      "expectedResult": "Valid session restored; remain on protected workspace",
+      "actualResult": "Supabase client automatically hydrates session from token storage; protected route guard permits access",
+      "status": "PASS",
+      "severity": "None",
+      "evidence": "tests/auth_gate_verification.test.ts"
+    },
+    {
+      "id": "AUTH-11",
+      "scenario": "Sign out from authenticated session",
+      "expectedResult": "Protected access revoked immediately; redirect to home",
+      "actualResult": "Session cleared; route guard immediately resets currentTab to home; lock icons restored",
+      "status": "PASS",
+      "severity": "None",
+      "evidence": "tests/auth_gate_verification.test.ts"
+    },
+    {
+      "id": "AUTH-12",
+      "scenario": "Attempt access to another user's records (Empirical RLS verification)",
+      "expectedResult": "Denied by Row Level Security (RLS); cross-account queries and updates return 0 records even when row demonstrably exists",
+      "actualResult": "Account A record confirmed in DB (1 row read); Account B query returns 0 rows (RLS read isolation); Account B update returns 0 rows affected (RLS write isolation)",
+      "status": "PASS",
+      "severity": "None",
+      "evidence": "tests/auth_gate_verification.test.ts"
+    },
+    {
+      "id": "AUTH-13",
+      "scenario": "Attempt to use guest vault for protected learning",
+      "expectedResult": "Denied; guest flags in local storage cannot bypass session checks",
+      "actualResult": "Navigation controller checks user object existence; guest local storage flag rejected for protected access",
+      "status": "PASS",
+      "severity": "None",
+      "evidence": "tests/auth_gate_verification.test.ts"
+    },
+    {
+      "id": "AUTH-14",
+      "scenario": "Expired or invalid session handling",
+      "expectedResult": "Protected access denied; user redirected to home with recoverable sign-in state",
+      "actualResult": "Invalid/expired token rejected by auth.getUser(); route guard resets tab to home and surfaces AuthModal",
+      "status": "PASS",
+      "severity": "None",
+      "evidence": "tests/auth_gate_verification.test.ts"
+    },
+    {
+      "id": "AUTH-15",
+      "scenario": "Registration input validation (short password & invalid email)",
+      "expectedResult": "Rejects invalid email format and passwords shorter than 6 characters",
+      "actualResult": "Invalid email rejected with 400 validation error; password < 6 chars rejected with 'Password should be at least 6 characters.'",
+      "status": "PASS",
+      "severity": "None",
+      "evidence": "tests/auth_gate_verification.test.ts"
+    },
+    {
+      "id": "AUTH-16",
+      "scenario": "Duplicate account registration handling (Anti-enumeration security)",
+      "expectedResult": "Preserves anti-enumeration privacy; returns user object with empty identities array",
+      "actualResult": "Supabase returns HTTP 200 with user object containing empty identities `[]` to prevent account scraping",
+      "status": "PASS",
+      "severity": "None",
+      "evidence": "tests/auth_gate_verification.test.ts"
+    },
+    {
+      "id": "AUTH-17",
+      "scenario": "Email confirmation requirement reporting",
+      "expectedResult": "Unconfirmed registration returns null session or triggers 429 rate limit on confirmation email dispatch",
+      "actualResult": "User registered in unconfirmed state; session is null or rate-limited with 429 over_email_send_rate_limit, confirming active email verification transport",
+      "status": "PASS",
+      "severity": "None",
+      "evidence": "tests/auth_gate_verification.test.ts"
+    },
+    {
+      "id": "AUTH-18",
+      "scenario": "Unconfigured Custom OAuth provider handling (custom:instagram)",
+      "expectedResult": "Uses custom:instagram slug, generates valid authorize URL, and confirms gateway safely rejects unconfigured provider with HTTP 400 (no false session)",
+      "actualResult": "Authorization URL encodes provider=custom%3Ainstagram; gateway returns HTTP 400 validation_failed ('custom provider custom:instagram not found'); no false session granted",
+      "status": "PASS",
+      "severity": "None",
+      "evidence": "tests/auth_gate_verification.test.ts"
+    }
+  ]
+}

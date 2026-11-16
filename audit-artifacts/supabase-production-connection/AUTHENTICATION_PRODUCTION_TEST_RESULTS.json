@@ -1,0 +1,84 @@
+{
+  "directive": "GOAL-MULTIPATH-EXISTING-SUPABASE-VERCEL-CONNECTION-V1",
+  "timestamp": "2026-11-16T20:41:35Z",
+  "supabase_project": {
+    "project_id": "oestvwgkpllikmufvjls",
+    "name": "multipath",
+    "region": "ap-south-1",
+    "status": "ACTIVE_HEALTHY",
+    "api_url": "https://oestvwgkpllikmufvjls.supabase.co",
+    "tables_verified": {
+      "topics_count": 64,
+      "topic_learning_paths_count": 256,
+      "curriculum_topic_mappings_count": 128,
+      "curriculum_subjects_count": 54,
+      "rls_enabled_all_tables": true
+    },
+    "key_type": "publishable",
+    "key_prefix": "sb_publishable_"
+  },
+  "api_connectivity_tests": {
+    "auth_settings_endpoint": {
+      "url": "https://oestvwgkpllikmufvjls.supabase.co/auth/v1/settings",
+      "http_status": 200,
+      "status_text": "OK",
+      "disable_signup": false,
+      "autoconfirm": false,
+      "mailer_autoconfirm": false
+    },
+    "curriculum_read_test": {
+      "status": "PASS",
+      "table": "topics",
+      "rows_returned": 3,
+      "total_count": 64
+    },
+    "invalid_credentials_rejection": {
+      "status": "PASS",
+      "test_email": "invalid.nonexistent.user@multipath.education",
+      "http_status": 400,
+      "error_message": "Invalid login credentials"
+    }
+  },
+  "local_quality_gates": {
+    "auth_gate_verification_suite": {
+      "total": 18,
+      "passed": 18,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "typescript_typecheck": {
+      "command": "npx tsc -b",
+      "errors": 0,
+      "status": "PASS"
+    },
+    "oxlint_static_analysis": {
+      "command": "npm run lint",
+      "files_scanned": 175,
+      "errors": 0,
+      "warnings": 0,
+      "status": "PASS"
+    },
+    "production_build": {
+      "command": "npm run build",
+      "status": "PASS",
+      "bundle": "dist/assets/index-CkcK-tie.js"
+    },
+    "git_diff_check": {
+      "command": "git diff --check",
+      "status": "PASS"
+    }
+  },
+  "authentication_status": {
+    "end_to_end_student_login": "BLOCKED_PENDING_AUTHORIZED_CREDENTIALS",
+    "rationale": "Existing confirmed test account test.student.a.multipath@gmail.com exists in Supabase Auth, but password credentials are not held in repository secrets or provided by the director. Per Directive Section 8 Test C: If existing test-account credentials are unavailable, classify end-to-end login as BLOCKED rather than inventing a successful result.",
+    "invalid_login_rejection": "PASS"
+  },
+  "production_deployment_status": {
+    "current_live_bundle": "index-CzGOgYq3.js",
+    "live_status": "PENDING_VERCEL_REDEPLOYMENT_WITH_ENV_VARS",
+    "required_env_vars": [
+      "VITE_SUPABASE_URL",
+      "VITE_SUPABASE_PUBLISHABLE_KEY"
+    ]
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "suite": "MULTIPATH — Production Supabase Configuration Repair & Authentication Recovery",
+  "directive": "GOAL-MULTIPATH-PRODUCTION-SUPABASE-CONFIG-V1",
+  "auditDate": "2026-11-16",
+  "baselineCommit": "50080073616960d7c4f51409f95d4eb68bd00e62",
+  "productionUrl": "https://multipath-one.vercel.app/",
+  "gateway": "https://oestvwgkpllikmufvjls.supabase.co",
+  "summary": {
+    "totalScenarios": 7,
+    "completed": 5,
+    "pendingProductionRedeploy": 2
+  },
+  "tests": [
+    {
+      "id": "PROD-RECOVERY-01",
+      "phase": "Baseline Production Inspection",
+      "scenario": "Inspect deployed AuthModal on https://multipath-one.vercel.app/",
+      "expectedResult": "Detect existing unconfigured state and disabled submit buttons",
+      "actualResult": "Observed warning banner 'Supabase credentials not configured in this environment'; confirmed 'Sign In to MULTIPATH' and 'Register Student Account' buttons are disabled",
+      "status": "DEFECT_CONFIRMED",
+      "evidence": "audit-artifacts/supabase-production-repair/screenshots/step_18_shot_1.png"
+    },
+    {
+      "id": "PROD-RECOVERY-02",
+      "phase": "Static Asset Decompilation",
+      "scenario": "Inspect compiled production bundle assets/index-CzGOgYq3.js",
+      "expectedResult": "Verify whether Vite inlined undefined at build time",
+      "actualResult": "Confirmed 'nt=void 0,rt=void 0;' in emitted bundle; variables were missing from Vercel build environment",
+      "status": "ROOT_CAUSE_PROVEN",
+      "evidence": "audit-artifacts/supabase-production-repair/SUPABASE_PRODUCTION_CONFIGURATION_REPORT.md"
+    },
+    {
+      "id": "PROD-RECOVERY-03",
+      "phase": "Supabase Project & Key Verification",
+      "scenario": "Verify project status and publishable keys via Supabase Management API",
+      "expectedResult": "Confirm project oestvwgkpllikmufvjls is ACTIVE_HEALTHY and publishable key is active",
+      "actualResult": "Project is ACTIVE_HEALTHY; publishable key sb_publishable_ZxcO_ZdsXI11fehS2xajPA_uT2gRJ3M is active (disabled: false)",
+      "status": "PASS",
+      "evidence": "supabase_mcp.get_publishable_keys"
+    },
+    {
+      "id": "PROD-RECOVERY-04",
+      "phase": "Client-Side Fallback & Diagnostics Implementation",
+      "scenario": "Enhance supabaseClient.ts and vite.config.ts for multi-variable resolution",
+      "expectedResult": "Client supports VITE_SUPABASE_URL, VITE_SUPABASE_PUBLISHABLE_KEY, VITE_SUPABASE_ANON_KEY, and SUPABASE_* prefixes; returns granular diagnostics",
+      "actualResult": "Implemented trimmed multi-source resolution, envPrefix ['VITE_', 'SUPABASE_'], and getConfigurationDiagnostics()",
+      "status": "PASS",
+      "evidence": "src/services/supabaseClient.ts"
+    },
+    {
+      "id": "PROD-RECOVERY-05",
+      "phase": "Local Regression & Quality Gates",
+      "scenario": "Execute 18-scenario test suite, TypeScript compile, linter, and build",
+      "expectedResult": "18/18 tests pass; 0 TS errors; 0 linter errors; clean build",
+      "actualResult": "18/18 automated tests passed; tsc -b clean; oxlint 0 warnings/0 errors; npm run build completed cleanly in 6.45s",
+      "status": "PASS",
+      "evidence": "tests/auth_gate_verification.test.ts"
+    },
+    {
+      "id": "PROD-RECOVERY-06",
+      "phase": "Vercel Environment Provisioning",
+      "scenario": "Configure VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY in Vercel Project Settings",
+      "expectedResult": "Environment variables available in Vercel Production scope",
+      "actualResult": "Awaiting user Vercel configuration / plugin authentication to complete redeployment",
+      "status": "PENDING_VERCEL_ENV_CONFIG",
+      "evidence": "audit-artifacts/supabase-production-repair/VERCEL_ENVIRONMENT_VERIFICATION.md"
+    },
+    {
+      "id": "PROD-RECOVERY-07",
+      "phase": "Post-Deployment Production Verification",
+      "scenario": "Verify production application unlocks inputs, signs in, and unlocks workspace",
+      "expectedResult": "Warning banner disappears; sign-in inputs enabled; test account authenticates; workspace unlocks",
+      "actualResult": "Will be executed immediately upon deployment completion",
+      "status": "PENDING_REDEPLOYMENT",
+      "evidence": "To be captured via browser subagent"
+    }
+  ]
+}

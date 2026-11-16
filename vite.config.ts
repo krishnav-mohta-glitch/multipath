@@ -45,6 +45,7 @@ function discoveryApiPlugin(): Plugin {
 
 // https://vite.dev/config/
 export default defineConfig({
+  envPrefix: ['VITE_', 'SUPABASE_'],
   plugins: [react(), discoveryApiPlugin()],
   build: {
     chunkSizeWarningLimit: 1000,
