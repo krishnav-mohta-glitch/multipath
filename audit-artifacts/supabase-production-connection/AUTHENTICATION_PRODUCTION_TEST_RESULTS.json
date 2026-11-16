@@ -74,11 +74,21 @@
     "invalid_login_rejection": "PASS"
   },
   "production_deployment_status": {
-    "current_live_bundle": "index-CzGOgYq3.js",
-    "live_status": "PENDING_VERCEL_REDEPLOYMENT_WITH_ENV_VARS",
-    "required_env_vars": [
-      "VITE_SUPABASE_URL",
-      "VITE_SUPABASE_PUBLISHABLE_KEY"
+    "current_live_bundle": "index-BjSia1IP.js",
+    "live_status": "SUCCESSFULLY_DEPLOYED_AND_VERIFIED",
+    "supabase_client_initialized": true,
+    "amber_unconfigured_banner": "GONE",
+    "inputs_and_buttons_enabled": true,
+    "google_oauth_status": "ACTIVE_ENABLED",
+    "social_providers_registered": [
+      { "provider": "google", "status": "ACTIVE" },
+      { "provider": "facebook", "status": "SETUP_REQUIRED_IN_SUPABASE" },
+      { "provider": "custom:instagram", "status": "SETUP_REQUIRED_IN_SUPABASE" },
+      { "provider": "twitter", "status": "SETUP_REQUIRED_IN_SUPABASE" }
+    ],
+    "verified_screenshots": [
+      "audit-artifacts/supabase-production-connection/screenshots/production_verified_sign_in_modal.png",
+      "audit-artifacts/supabase-production-connection/screenshots/production_verified_register_modal.png"
     ]
   }
 }

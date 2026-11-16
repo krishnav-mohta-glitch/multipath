@@ -43,11 +43,25 @@ All quality gates passed cleanly locally:
 
 ---
 
-## 3. Redeployment Prerequisite & Readiness
+## 3. Production Deployment & Live Browser Verification (Post-Redeployment)
 
-Because client environment variables are embedded into JavaScript at compile time, the production deployment at `https://multipath-one.vercel.app/` requires:
-1. Setting `VITE_SUPABASE_URL = https://oestvwgkpllikmufvjls.supabase.co` in Vercel Project Settings (Production).
-2. Setting `VITE_SUPABASE_PUBLISHABLE_KEY = sb_publishable_...` in Vercel Project Settings (Production).
-3. Triggering a fresh Production build on Vercel.
+The production application was redeployed to Vercel with the configured Supabase environment variables:
+- **Serving Bundle**: `assets/index-BjSia1IP.js`
+- **Bundle Decompilation Verification**:
+  ```js
+  it="https://oestvwgkpllikmufvjls.supabase.co",at="sb_publishable_ZxcO_ZdsXI11fehS2xajPA_uT2gRJ3M";
+  var ct=ot(it)&&st(at),lt=null;
+  if(ct&&at)try{lt=Ze(it,at,{auth:{persistSession:!0,autoRefreshToken:!0,detectSessionInUrl:!0,storageKey:"multipath_supabase_auth_session"}})}catch(e){...}
+  ```
+  `it` is successfully bound to the live project URL, `at` is bound to the public publishable key, and `isSupabaseConfigured()` evaluates to `true`.
 
-Once redeployed, Vite will embed the active Supabase endpoints, enabling student authentication across MULTIPATH.
+### Live Subagent Audit Checklist:
+1. **Homepage & Modal Loading**: Verified. Header navigation opens authentication modal seamlessly.
+2. **Missing Credentials Warning**: **100% GONE**. The amber banner has disappeared; replaced by the clean informational note *"Please sign in or register to access the full curriculum and workspaces."*
+3. **Google Social Authentication**: **Active & Clickable** (`disabled: false`, labeled "Active"). Initiates genuine Supabase OAuth authorization flow.
+4. **Additional Social Providers**: Facebook, Instagram, and X are rendered with "(Setup Req.)". Clicking them invokes safe error handling detailing provider dashboard requirements without crashing.
+5. **Email / Password Authentication**: Input fields are active and editable. The submit button (`Sign In to MULTIPATH`) is active (`disabled: false`).
+6. **Registration Screen**: Accessible via "Register here". Contains student profile inputs and enables one-click student registration.
+7. **Photographic Evidence Captured**:
+   - `screenshots/production_verified_sign_in_modal.png`
+   - `screenshots/production_verified_register_modal.png`
