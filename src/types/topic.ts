@@ -3,6 +3,27 @@ import type { LearningPathId, TopicPathContent } from './learningPath';
 
 export type DifficultyLevel = 'Foundational' | 'Intermediate' | 'Advanced';
 
+export interface FeynmanAnchor {
+  visceralMetaphor: {
+    headline: string;
+    analogy: string;
+    physicalObject: string;
+  };
+  whySchoolConfusesYou: {
+    textbookTrap: string;
+    unmaskedTruth: string;
+  };
+  ahaLadder: {
+    step: number;
+    title: string;
+    intuition: string;
+  }[];
+  misconceptionAlert: {
+    commonBlunder: string;
+    realityCheck: string;
+  };
+}
+
 export interface Topic {
   id: string;
   slug: string;
@@ -22,4 +43,5 @@ export interface Topic {
   }[];
   paths: TopicPathContent;
   availablePaths: LearningPathId[];
+  feynmanAnchor?: FeynmanAnchor;
 }

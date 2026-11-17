@@ -1,6 +1,7 @@
 import type { Topic } from '../types/topic';
+import { FEYNMAN_ANCHORS } from './feynmanAnchors';
 
-export const TOPICS: Topic[] = [
+const BASE_TOPICS: Topic[] = [
   // =========================================================================
   // 1. MATHEMATICS: Linear Equations
   // =========================================================================
@@ -12408,3 +12409,8 @@ export const TOPICS: Topic[] = [
   }
 }
 ];
+
+export const TOPICS: Topic[] = BASE_TOPICS.map((topic) => ({
+  ...topic,
+  feynmanAnchor: FEYNMAN_ANCHORS[topic.id] ?? topic.feynmanAnchor,
+}));

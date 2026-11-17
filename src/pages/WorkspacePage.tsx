@@ -6,6 +6,7 @@ import { TopicIntro } from '../components/workspace/TopicIntro';
 import { PathSelector } from '../components/workspace/PathSelector';
 import { PathViewer } from '../components/workspace/PathViewer';
 import { FeatureBadges } from '../components/workspace/FeatureBadges';
+import { AILearningGuideDrawer } from '../components/workspace/AILearningGuideDrawer';
 import { ArrowLeft } from 'lucide-react';
 
 export const WorkspacePage: React.FC = () => {
@@ -57,6 +58,9 @@ export const WorkspacePage: React.FC = () => {
             TOPIC ID: <code className="text-[#B8FF00] bg-white/5 px-2 py-0.5 rounded border border-white/10">{currentTopic.id}</code>
           </div>
         </div>
+
+        {/* Persistent AI Learning Guide Companion Drawer */}
+        <AILearningGuideDrawer topic={currentTopic} />
 
       </main>
     </div>
