@@ -56,7 +56,7 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({ topic }) => {
             </span>
           </div>
 
-          <h1 className="font-display text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight">
+          <h1 className="font-display text-xl sm:text-2xl lg:text-3xl font-extrabold text-white tracking-tight break-words">
             {topic.title}
           </h1>
 

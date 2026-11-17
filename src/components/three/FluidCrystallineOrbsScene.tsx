@@ -1,4 +1,4 @@
-import React, { useRef, useState, useMemo } from 'react';
+import React, { useRef, useState, useMemo, useEffect } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { SceneCanvas } from './SceneCanvas';
@@ -272,16 +272,42 @@ const SceneContent: React.FC<{
   onSelectSubject: (id: SubjectId) => void;
   hoveredOrbId: SubjectId | null;
   setHoveredOrbId: (id: SubjectId | null) => void;
-}> = ({ onSelectSubject, hoveredOrbId, setHoveredOrbId }) => {
+  selectedOrbId: SubjectId | null;
+  setSelectedOrbId: (id: SubjectId | null) => void;
+  scrollProgress: number;
+}> = ({
+  hoveredOrbId,
+  setHoveredOrbId,
+  selectedOrbId,
+  setSelectedOrbId,
+  scrollProgress,
+}) => {
   const groupRef = useRef<THREE.Group | null>(null);
 
   useFrame((state, delta) => {
     if (!groupRef.current) return;
-    // Fluid subtle parallax camera follow
-    const targetRotY = state.pointer.x * 0.18;
-    const targetRotX = -state.pointer.y * 0.12;
+    // Fluid subtle parallax camera follow + responsive page scroll rotation
+    const scrollRotY = scrollProgress * Math.PI * 1.5;
+    const scrollTiltX = (scrollProgress - 0.5) * 0.35;
+    const targetRotY = state.pointer.x * 0.18 + scrollRotY;
+    const targetRotX = -state.pointer.y * 0.12 + scrollTiltX;
     groupRef.current.rotation.y = THREE.MathUtils.damp(groupRef.current.rotation.y, targetRotY, 3, delta);
     groupRef.current.rotation.x = THREE.MathUtils.damp(groupRef.current.rotation.x, targetRotX, 3, delta);
+
+    // Smooth camera zoom towards focused orb on click
+    const focused = ORB_CONFIGS.find((o) => o.id === selectedOrbId);
+    if (focused) {
+      const targetCamX = focused.basePosition[0] * 0.65;
+      const targetCamY = focused.basePosition[1] * 0.65;
+      const targetCamZ = 2.9;
+      state.camera.position.x = THREE.MathUtils.damp(state.camera.position.x, targetCamX, 4, delta);
+      state.camera.position.y = THREE.MathUtils.damp(state.camera.position.y, targetCamY, 4, delta);
+      state.camera.position.z = THREE.MathUtils.damp(state.camera.position.z, targetCamZ, 4, delta);
+    } else {
+      state.camera.position.x = THREE.MathUtils.damp(state.camera.position.x, 0, 4, delta);
+      state.camera.position.y = THREE.MathUtils.damp(state.camera.position.y, 0, 4, delta);
+      state.camera.position.z = THREE.MathUtils.damp(state.camera.position.z, 4.6, 4, delta);
+    }
   });
 
   return (
@@ -310,9 +336,12 @@ const SceneContent: React.FC<{
           key={orb.id}
           orb={orb}
           index={idx}
-          isHovered={hoveredOrbId === orb.id}
+          isHovered={hoveredOrbId === orb.id || selectedOrbId === orb.id}
           onHover={setHoveredOrbId}
-          onSelect={onSelectSubject}
+          onSelect={(id) => {
+            setSelectedOrbId(id);
+            setHoveredOrbId(id);
+          }}
         />
       ))}
     </group>
@@ -324,77 +353,153 @@ export const FluidCrystallineOrbsScene: React.FC<{
   fallback: React.ReactNode;
 }> = ({ onSelectSubject, fallback }) => {
   const [hoveredOrbId, setHoveredOrbId] = useState<SubjectId | null>(null);
+  const [selectedOrbId, setSelectedOrbId] = useState<SubjectId | null>(null);
+  const [scrollProgress, setScrollProgress] = useState<number>(0);
+
+  // Window scroll listener for responsive rotational physics
+  useEffect(() => {
+    const handleScroll = () => {
+      const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+      setScrollProgress(window.scrollY / maxScroll);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const activeOrb = useMemo(() => {
-    return ORB_CONFIGS.find(o => o.id === hoveredOrbId) || null;
-  }, [hoveredOrbId]);
+    return ORB_CONFIGS.find((o) => o.id === (selectedOrbId || hoveredOrbId)) || null;
+  }, [selectedOrbId, hoveredOrbId]);
 
   return (
-    <div className="relative w-full h-[480px] sm:h-[540px] lg:h-[600px] overflow-hidden rounded-3xl bg-radial from-[#0C121D] via-[#06080D] to-[#030407] border border-white/10 shadow-2xl select-none group">
+    <div className="relative w-full overflow-hidden rounded-3xl bg-radial from-[#0C121D] via-[#06080D] to-[#030407] border border-white/10 shadow-2xl select-none group">
       
-      {/* 3D WebGL Canvas */}
-      <ThreeSceneBoundary fallback={fallback}>
-        <SceneCanvas
-          fallback={fallback}
-          camera={{ position: [0, 0, 4.6], fov: 48 }}
-          className="w-full h-full"
-        >
-          <SceneContent
-            onSelectSubject={onSelectSubject}
-            hoveredOrbId={hoveredOrbId}
-            setHoveredOrbId={setHoveredOrbId}
-          />
-        </SceneCanvas>
-      </ThreeSceneBoundary>
+      {/* 3D WebGL Canvas Stage */}
+      <div className="relative w-full h-[460px] sm:h-[520px] lg:h-[580px]">
+        <ThreeSceneBoundary fallback={fallback}>
+          <SceneCanvas
+            fallback={fallback}
+            camera={{ position: [0, 0, 4.6], fov: 48 }}
+            className="w-full h-full"
+          >
+            <SceneContent
+              onSelectSubject={onSelectSubject}
+              hoveredOrbId={hoveredOrbId}
+              setHoveredOrbId={setHoveredOrbId}
+              selectedOrbId={selectedOrbId}
+              setSelectedOrbId={setSelectedOrbId}
+              scrollProgress={scrollProgress}
+            />
+          </SceneCanvas>
+        </ThreeSceneBoundary>
 
-      {/* Futuristic Floating Header Telemetry Overlay */}
-      <div className="absolute top-4 left-4 right-4 sm:top-6 sm:left-6 sm:right-6 flex items-center justify-between pointer-events-none">
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-white font-mono text-[10px] tracking-wider uppercase">
-          <span className="w-2 h-2 rounded-full bg-[#B8FF00] animate-pulse" />
-          <span>FLUID OBSERVATORY • 8 DISCIPLINE ORBS</span>
+        {/* Futuristic Floating Header Telemetry Overlay */}
+        <div className="absolute top-4 left-4 right-4 sm:top-6 sm:left-6 sm:right-6 flex flex-wrap items-center justify-between gap-2 pointer-events-none">
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-white font-mono text-[10px] tracking-wider uppercase shrink-0">
+            <span className="w-2 h-2 rounded-full bg-[#B8FF00] animate-pulse" />
+            <span className="break-words">FLUID OBSERVATORY • 8 DISCIPLINE ORBS</span>
+          </div>
+          <div className="flex items-center gap-2 text-white/60 font-mono text-[10px] bg-black/40 px-3 py-1 rounded-full border border-white/05 backdrop-blur-xs shrink-0">
+            <span>Scroll &amp; Click to Focus &bull; {Math.round(scrollProgress * 100)}% Orbit</span>
+          </div>
         </div>
-        <div className="hidden sm:flex items-center gap-2 text-white/50 font-mono text-[10px]">
-          <span>Hover to inspect &bull; Click to explore</span>
+
+        {/* Dynamic Focus / Hover Card HUD */}
+        {activeOrb && (
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 px-4 sm:px-5 py-3 rounded-2xl bg-black/85 backdrop-blur-xl border border-white/20 shadow-2xl pointer-events-auto flex flex-wrap sm:flex-nowrap items-center justify-between gap-3 max-w-[92%] sm:max-w-md animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-center gap-3 min-w-0">
+              <div
+                className="w-3.5 h-3.5 rounded-full shadow-[0_0_12px] shrink-0"
+                style={{ backgroundColor: activeOrb.color, boxShadow: `0 0 12px ${activeOrb.color}` }}
+              />
+              <div className="min-w-0">
+                <div className="font-display font-bold text-sm text-white tracking-tight flex items-center gap-2">
+                  <span className="truncate">{activeOrb.name}</span>
+                  <span className="text-[9px] font-mono px-1.5 py-0.5 rounded-md bg-white/10 text-white/70 uppercase shrink-0">
+                    {activeOrb.category}
+                  </span>
+                </div>
+                <div className="text-[11px] text-[#8DA391] font-mono truncate">
+                  {selectedOrbId === activeOrb.id ? 'Camera locked on crystalline orb' : 'Click orb or launch portal'}
+                </div>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-2 shrink-0">
+              {selectedOrbId && (
+                <button
+                  type="button"
+                  onClick={() => setSelectedOrbId(null)}
+                  className="px-2 py-1 rounded-lg text-[10px] font-mono text-[#8DA391] hover:text-white border border-white/10 cursor-pointer"
+                >
+                  Unfocus
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={() => onSelectSubject(activeOrb.id)}
+                className="px-3 py-1.5 rounded-xl bg-[#B8FF00] text-[#080A0E] font-mono text-xs font-bold hover:bg-[#CCFF00] transition-colors flex items-center gap-1 cursor-pointer shrink-0 shadow-sm"
+              >
+                <span>Launch</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Default Interaction Indicator when no orb is focused */}
+        {!activeOrb && (
+          <div className="absolute bottom-5 inset-x-0 flex justify-center pointer-events-none px-4">
+            <div className="px-4 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md text-[#8DA391] font-mono text-[10px] sm:text-[11px] flex items-center gap-2 text-center break-words">
+              <Sparkles className="w-3.5 h-3.5 text-[#B8FF00] shrink-0" />
+              <span>Scroll to rotate constellation &bull; Click any orb to zoom &amp; inspect</span>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Accessible 8-Discipline Interactive HTML Rail */}
+      <div className="px-4 py-3 bg-[#080A0E]/80 border-t border-white/10 flex items-center justify-between gap-2 overflow-x-auto">
+        <span className="font-mono text-[10px] text-[#8DA391] uppercase tracking-wider shrink-0 hidden sm:inline">
+          Discipline Rail:
+        </span>
+        <div className="flex items-center gap-1.5 overflow-x-auto py-0.5">
+          {ORB_CONFIGS.map((orb) => {
+            const isCurrent = (selectedOrbId || hoveredOrbId) === orb.id;
+            return (
+              <button
+                key={orb.id}
+                type="button"
+                onClick={() => {
+                  setSelectedOrbId(orb.id);
+                  setHoveredOrbId(orb.id);
+                }}
+                className={`px-2.5 py-1 rounded-lg font-mono text-[11px] font-medium transition-all cursor-pointer flex items-center gap-1.5 shrink-0 ${
+                  isCurrent
+                    ? 'bg-white/20 text-white border border-white/30 shadow-xs'
+                    : 'bg-white/5 text-[#8DA391] hover:text-white hover:bg-white/10 border border-white/5'
+                }`}
+              >
+                <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: orb.color }} />
+                <span>{orb.name}</span>
+              </button>
+            );
+          })}
+          {selectedOrbId && (
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedOrbId(null);
+                setHoveredOrbId(null);
+              }}
+              className="px-2 py-1 rounded-lg font-mono text-[10px] text-amber-400 hover:text-amber-300 border border-amber-400/20 bg-amber-400/10 cursor-pointer shrink-0"
+            >
+              Reset
+            </button>
+          )}
         </div>
       </div>
 
-      {/* Dynamic Hover Card HUD */}
-      {activeOrb && (
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 px-5 py-3 rounded-2xl bg-black/80 backdrop-blur-xl border border-white/20 shadow-2xl pointer-events-auto flex items-center gap-4 animate-in fade-in zoom-in-95 duration-150">
-          <div
-            className="w-4 h-4 rounded-full shadow-[0_0_12px]"
-            style={{ backgroundColor: activeOrb.color, boxShadow: `0 0 12px ${activeOrb.color}` }}
-          />
-          <div>
-            <div className="font-display font-bold text-sm text-white tracking-tight flex items-center gap-2">
-              <span>{activeOrb.name}</span>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-white/10 text-white/70">
-                {activeOrb.category}
-              </span>
-            </div>
-            <div className="text-[11px] text-[#8DA391] font-mono">
-              Click orb to open curriculum roadmap
-            </div>
-          </div>
-          <button
-            onClick={() => onSelectSubject(activeOrb.id)}
-            className="px-3 py-1.5 rounded-xl bg-[#B8FF00] text-[#080A0E] font-mono text-xs font-bold hover:bg-[#CCFF00] transition-colors flex items-center gap-1 cursor-pointer"
-          >
-            <span>Launch</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </button>
-        </div>
-      )}
-
-      {/* Bottom Subtitle / Interaction Indicator */}
-      {!activeOrb && (
-        <div className="absolute bottom-5 inset-x-0 flex justify-center pointer-events-none">
-          <div className="px-4 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md text-[#8DA391] font-mono text-[11px] flex items-center gap-2">
-            <Sparkles className="w-3.5 h-3.5 text-[#B8FF00]" />
-            <span>Interactive 3D Field: Drag cursor across orbs to perturb spacetime physics</span>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

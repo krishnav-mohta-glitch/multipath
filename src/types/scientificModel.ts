@@ -110,3 +110,78 @@ export interface PhotosynthesisOutputs {
   glucoseProductionRate: number;// mg / dm² / hr
   isOptimal: boolean;
 }
+
+// ============================================================================
+// 3. OPTICS LABORATORY (LIGHT, REFLECTION, SHADOWS) MODEL TYPES
+// ============================================================================
+
+export interface OpticsLabState {
+  incidentAngleDeg: number;       // 0 to 80 degrees
+  mirrorPresent: boolean;         // plane mirror reflection active
+  obstacleDistanceCm: number;     // distance of opaque obstacle from light source (10 to 80 cm)
+  screenDistanceCm: number;       // distance of screen from light source (50 to 120 cm)
+  lightSourceSizeMm: number;      // point vs extended light source (1 to 20 mm)
+  obstacleDiameterCm: number;     // diameter of circular obstacle (5 to 25 cm)
+}
+
+export interface OpticsLabOutputs {
+  reflectedAngleDeg: number;      // law of reflection: θ_r = θ_i
+  mirrorImageDistanceCm: number;  // virtual image distance behind mirror: d_i = d_o
+  isVirtualImage: boolean;        // plane mirror always virtual, upright
+  umbraDiameterCm: number;        // total dark shadow zone
+  penumbraDiameterCm: number;     // partial shadow transition zone
+  hasPenumbra: boolean;           // true when light source is extended
+  magnification: number;          // shadow / obstacle ratio = d_screen / d_obstacle
+  isLawOfReflectionVerified: boolean;
+}
+
+// ============================================================================
+// 4. THERMAL LABORATORY (CONDUCTION, FOURIER'S LAW) MODEL TYPES
+// ============================================================================
+
+export type ThermalMaterialId = 'copper' | 'aluminum' | 'iron' | 'glass';
+
+export interface ThermalLabState {
+  materialId: ThermalMaterialId;  // material thermal conductivity k
+  hotEndTempC: number;            // 20 to 150 °C
+  coldEndTempC: number;           // 0 to 30 °C
+  rodLengthCm: number;            // 10 to 50 cm
+  rodCrossSectionMm2: number;     // 20 to 200 mm²
+}
+
+export interface ThermalLabOutputs {
+  materialName: string;
+  thermalConductivityK: number;   // W / (m · K)
+  temperatureGradient: number;    // (T_hot - T_cold) / L in K/m
+  heatTransferRateWatts: number;  // Q/t = k * A * ΔT / L (Fourier's Law)
+  tempProfile: number[];          // 5 discrete probe points along rod
+  atomVibrationAmplitude: number; // normalized molecular kinetic lattice agitation [0.2, 1.8]
+  timeToMeltWaxSec: number;       // time for pin/wax to drop at probe point 3
+}
+
+// ============================================================================
+// 5. MECHANICS LABORATORY (FORCE, PRESSURE, NEWTON'S 2ND LAW) MODEL TYPES
+// ============================================================================
+
+export type SurfaceMaterialId = 'ice' | 'wood' | 'concrete';
+
+export interface MechanicsLabState {
+  appliedForceN: number;          // 0 to 200 N
+  contactAreaCm2: number;         // 1 to 100 cm²
+  blockMassKg: number;            // 1 to 20 kg
+  surfaceType: SurfaceMaterialId; // friction coefficients
+  mode: 'pressure' | 'dynamics';  // Pressure P=F/A vs Acceleration F=ma
+}
+
+export interface MechanicsLabOutputs {
+  pressurePascals: number;        // P = F / A (N/m²)
+  pressureAtm: number;            // standard atmospheres
+  frictionCoefficient: number;    // μ_k (ice: 0.05, wood: 0.35, concrete: 0.65)
+  maxFrictionForceN: number;      // f = μ * m * g
+  netForceN: number;              // F_applied - f (clamped >= 0)
+  accelerationMs2: number;        // a = F_net / m
+  velocityAfter2sMs: number;      // v = a * t (t = 2.0s)
+  displacementAfter2sM: number;   // s = 0.5 * a * t²
+  penetrationDepthMm: number;     // substrate indentation based on Pascals
+  motionState: 'stationary' | 'accelerating' | 'sliding';
+}

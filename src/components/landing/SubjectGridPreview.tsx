@@ -100,7 +100,7 @@ export const SubjectGridPreview: React.FC = () => {
               </span>
             </div>
 
-            <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight">
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight break-words">
               Interactive Subject &amp; Class Portals
             </h2>
 
@@ -124,17 +124,17 @@ export const SubjectGridPreview: React.FC = () => {
         {/* =================================================================== */}
         {showOrbs3D && (
           <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-[#B8FF00]" />
-                <span className="font-mono text-xs uppercase font-bold tracking-wider text-white">
-                  3D FLUID CRYSTALLINE OBSERVATORY &bull; HOVER TO PERTURB SPACETIME PHYSICS
+            <div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-3">
+              <div className="flex items-center gap-2 min-w-0">
+                <Sparkles className="w-4 h-4 text-[#B8FF00] shrink-0" />
+                <span className="font-mono text-[11px] sm:text-xs uppercase font-bold tracking-normal sm:tracking-wider text-white break-words">
+                  3D Fluid Crystalline Observatory &bull; Scroll &amp; Click Interactive Physics
                 </span>
               </div>
               <button
                 type="button"
                 onClick={() => setShowOrbs3D(false)}
-                className="text-[11px] font-mono text-[#8DA391] hover:text-white underline cursor-pointer"
+                className="text-[11px] font-mono text-[#8DA391] hover:text-white underline cursor-pointer shrink-0"
               >
                 Hide 3D View
               </button>

@@ -12,6 +12,14 @@ import type {
   LinearEquationsOutputs,
   PhotosynthesisState,
   PhotosynthesisOutputs,
+  OpticsLabState,
+  OpticsLabOutputs,
+  ThermalLabState,
+  ThermalLabOutputs,
+  ThermalMaterialId,
+  MechanicsLabState,
+  MechanicsLabOutputs,
+  SurfaceMaterialId,
   ScientificModelDefinition,
 } from '../types/scientificModel';
 
@@ -556,6 +564,791 @@ export const PHOTOSYNTHESIS_MODEL: ScientificModelDefinition<PhotosynthesisState
       influencingVariables: ['lightIntensity', 'co2Concentration', 'temperature', 'wavelength'],
       keyTakeaway: 'ATP and NADPH produced by the light-dependent reactions are consumed at an identical rate by the Calvin cycle in the stroma.',
       educationalLevel: 'CBSE & CISCE Class 10 Biology (Life Processes)',
+    };
+  },
+};
+
+// ============================================================================
+// 3. OPTICS LABORATORY (LIGHT, REFLECTION, SHADOWS)
+// Curriculum: sci-6-light-shadows (CBSE & CISCE Class 6-8 Physics)
+// ============================================================================
+
+export function calculateOpticsLab(state: OpticsLabState): OpticsLabOutputs {
+  const reflectedAngleDeg = state.incidentAngleDeg; // θ_r = θ_i
+  const mirrorImageDistanceCm = state.obstacleDistanceCm; // d_i = d_o
+  const isVirtualImage = true; // plane mirror images are always virtual & erect
+
+  const dObs = Math.max(1, state.obstacleDistanceCm);
+  const dScreen = Math.max(dObs + 1, state.screenDistanceCm);
+  const magnification = Number((dScreen / dObs).toFixed(2));
+
+  // Light source size: Point source vs Extended source
+  const sourceSize = state.lightSourceSizeMm / 10; // convert mm to cm
+  const hasPenumbra = sourceSize > 0.2;
+
+  let umbraDiameterCm = 0;
+  let penumbraDiameterCm = 0;
+
+  if (hasPenumbra) {
+    // Extended source shadow cone geometry
+    const rawUmbra = state.obstacleDiameterCm * (dScreen / dObs) - sourceSize * ((dScreen - dObs) / dObs);
+    umbraDiameterCm = Number(Math.max(0, rawUmbra).toFixed(2));
+    const rawPenumbra = state.obstacleDiameterCm * (dScreen / dObs) + sourceSize * ((dScreen - dObs) / dObs);
+    penumbraDiameterCm = Number(Math.max(umbraDiameterCm, rawPenumbra).toFixed(2));
+  } else {
+    // Point source: Sharp uniform shadow, zero penumbra
+    umbraDiameterCm = Number((state.obstacleDiameterCm * magnification).toFixed(2));
+    penumbraDiameterCm = 0;
+  }
+
+  return {
+    reflectedAngleDeg,
+    mirrorImageDistanceCm,
+    isVirtualImage,
+    umbraDiameterCm,
+    penumbraDiameterCm,
+    hasPenumbra,
+    magnification,
+    isLawOfReflectionVerified: Math.abs(reflectedAngleDeg - state.incidentAngleDeg) < 0.001,
+  };
+}
+
+export const OPTICS_LAB_MODEL: ScientificModelDefinition<OpticsLabState, OpticsLabOutputs> = {
+  id: 'optics-lab',
+  name: 'Optical Reflection & Shadow Formation Laboratory',
+  discipline: 'Physics & Optics',
+  curriculumTopicId: 'sci-6-light-shadows',
+  overview:
+    'Light travels in rectilinear straight rays in a homogeneous medium. When it strikes a polished plane mirror, the angle of reflection equals the angle of incidence (θ_r = θ_i), forming an upright virtual image at identical distance behind the reflecting surface. When an opaque body intercepts light, rectilinear propagation creates umbra and penumbra shadow regions governed by geometric similarity.',
+  initialState: {
+    incidentAngleDeg: 45,
+    mirrorPresent: true,
+    obstacleDistanceCm: 30,
+    screenDistanceCm: 80,
+    lightSourceSizeMm: 2,
+    obstacleDiameterCm: 10,
+  },
+  variables: [
+    {
+      id: 'incidentAngleDeg',
+      name: 'Angle of Incidence',
+      symbol: 'θ_i',
+      unit: '°',
+      min: 0,
+      max: 80,
+      step: 5,
+      defaultValue: 45,
+      description: 'The angle between the incoming incident ray and the normal vector to the reflecting plane.',
+      scientificMeaning: 'Governs the specular reflection ray vector according to Snell-Descartes law of reflection.',
+    },
+    {
+      id: 'lightSourceSizeMm',
+      name: 'Light Source Aperture',
+      symbol: 'S',
+      unit: 'mm',
+      min: 1,
+      max: 20,
+      step: 1,
+      defaultValue: 2,
+      description: 'Size of the illuminating aperture. Point sources produce sharp umbras; extended sources produce penumbras.',
+      scientificMeaning: 'Differentiates point-source pinhole ray optics from extended-source geometric penumbra transitions.',
+    },
+    {
+      id: 'obstacleDistanceCm',
+      name: 'Obstacle Distance',
+      symbol: 'd_o',
+      unit: 'cm',
+      min: 10,
+      max: 70,
+      step: 5,
+      defaultValue: 30,
+      description: 'Distance from the illumination origin to the opaque light-intercepting disk.',
+      scientificMeaning: 'Controls geometric ray magnification ratio M = d_screen / d_obstacle.',
+    },
+    {
+      id: 'screenDistanceCm',
+      name: 'Projection Screen Distance',
+      symbol: 'd_s',
+      unit: 'cm',
+      min: 40,
+      max: 120,
+      step: 5,
+      defaultValue: 80,
+      description: 'Distance to the observation backdrop where the shadow silhouette is cast.',
+      scientificMeaning: 'Determines the intercept plane of diverging rectilinear shadow rays.',
+    },
+  ],
+  components: [
+    {
+      id: 'light-source',
+      name: 'Coherent Illuminator',
+      scientificRole: 'Photon Emitter',
+      description: 'Emits diverging linear rays according to rectilinear propagation.',
+      relatedVariables: ['lightSourceSizeMm'],
+    },
+    {
+      id: 'plane-mirror',
+      name: 'Specular Plane Mirror',
+      scientificRole: 'Reflecting Boundary',
+      description: 'Reverses the normal component of incoming light vectors while preserving tangential velocity.',
+      relatedVariables: ['incidentAngleDeg'],
+    },
+    {
+      id: 'opaque-obstacle',
+      name: 'Opaque Obstacle Disk',
+      scientificRole: 'Photon Absorber',
+      description: 'Blocks photons, casting geometric umbra and penumbra cones behind it.',
+      relatedVariables: ['obstacleDistanceCm'],
+    },
+  ],
+  presets: [
+    {
+      id: 'specular-reflection-45',
+      name: 'Specular 45° Reflection',
+      description: 'Classic equal-angle specular reflection showing θ_i = θ_r = 45° with plane mirror image formation.',
+      state: {
+        incidentAngleDeg: 45,
+        mirrorPresent: true,
+        obstacleDistanceCm: 30,
+        screenDistanceCm: 80,
+        lightSourceSizeMm: 1,
+        obstacleDiameterCm: 10,
+      },
+      expectedOutcome: 'Reflected ray leaves at 45°; virtual image formed exactly 30 cm behind mirror.',
+    },
+    {
+      id: 'point-source-umbra',
+      name: 'Point Source Sharp Umbra',
+      description: 'Infinitesimal point emitter producing a razor-sharp, uniform shadow with zero penumbra boundary.',
+      state: {
+        incidentAngleDeg: 0,
+        mirrorPresent: false,
+        obstacleDistanceCm: 25,
+        screenDistanceCm: 100,
+        lightSourceSizeMm: 1,
+        obstacleDiameterCm: 10,
+      },
+      expectedOutcome: 'Zero penumbra (sharp boundary); shadow magnified 4.0× to 40 cm.',
+    },
+    {
+      id: 'extended-source-penumbra',
+      name: 'Extended Source (Solar/Lunar Eclipse Analog)',
+      description: 'Broad light source (20 mm) creating a dual-zone shadow: central dark umbra flanked by soft gray penumbra.',
+      state: {
+        incidentAngleDeg: 0,
+        mirrorPresent: false,
+        obstacleDistanceCm: 30,
+        screenDistanceCm: 90,
+        lightSourceSizeMm: 20,
+        obstacleDiameterCm: 15,
+      },
+      expectedOutcome: 'Both umbra and penumbra visible, demonstrating the physical mechanism of solar eclipses.',
+    },
+  ],
+  calculateOutputs: calculateOpticsLab,
+  getTelemetry: (_state, outputs) => [
+    {
+      id: 'reflection-angle',
+      label: 'Reflected Angle',
+      symbol: 'θ_r',
+      value: `${outputs.reflectedAngleDeg}°`,
+      unit: 'deg',
+      status: outputs.isLawOfReflectionVerified ? 'optimal' : 'neutral',
+      description: 'Law of Reflection: θ_r = θ_i',
+    },
+    {
+      id: 'virtual-distance',
+      label: 'Virtual Image Depth',
+      symbol: "d_i'",
+      value: `${outputs.mirrorImageDistanceCm} cm`,
+      unit: 'cm',
+      status: 'neutral',
+      description: 'Distance of virtual image behind mirror plane',
+    },
+    {
+      id: 'umbra-diameter',
+      label: 'Umbra Diameter',
+      symbol: 'D_u',
+      value: `${outputs.umbraDiameterCm} cm`,
+      unit: 'cm',
+      status: 'optimal',
+      description: 'Region of total photon occlusion',
+    },
+    {
+      id: 'penumbra-diameter',
+      label: 'Penumbra Outer Diameter',
+      symbol: 'D_p',
+      value: outputs.hasPenumbra ? `${outputs.penumbraDiameterCm} cm` : 'None (Point Source)',
+      unit: 'cm',
+      status: outputs.hasPenumbra ? 'limiting' : 'neutral',
+      description: 'Region of partial illumination around umbra',
+    },
+    {
+      id: 'magnification',
+      label: 'Shadow Magnification',
+      symbol: 'M',
+      value: `${outputs.magnification}×`,
+      unit: 'ratio',
+      status: 'neutral',
+      description: 'Ratio of screen distance to obstacle distance (d_s / d_o)',
+    },
+  ],
+  getExplanation: (state, outputs) => {
+    if (state.mirrorPresent) {
+      return {
+        observation: `Incident ray at ${state.incidentAngleDeg}° reflects symmetrically at ${outputs.reflectedAngleDeg}°. Virtual image forms ${outputs.mirrorImageDistanceCm} cm behind the mirror.`,
+        governingPrinciple: 'First Law of Specular Reflection (Rectilinear Ray Reversal)',
+        influencingVariables: ['incidentAngleDeg', 'obstacleDistanceCm'],
+        keyTakeaway: 'The angle of incidence equals the angle of reflection (θ_i = θ_r), and the incident ray, reflected ray, and normal all lie in the exact same plane.',
+        educationalLevel: 'CBSE & CISCE Class 6–8 Physics (Chapter: Light, Shadows and Reflections)',
+      };
+    }
+    if (outputs.hasPenumbra) {
+      return {
+        observation: `Extended light source (${state.lightSourceSizeMm} mm) produces an inner umbra (${outputs.umbraDiameterCm} cm) enveloped by a penumbra (${outputs.penumbraDiameterCm} cm).`,
+        governingPrinciple: 'Geometric Ray Divergence from Extended Illumination (Eclipse Mechanics)',
+        influencingVariables: ['lightSourceSizeMm', 'obstacleDistanceCm', 'screenDistanceCm'],
+        keyTakeaway: 'When a light source has finite size, some points on the screen receive light from part of the source (penumbra), while points shielded from the entire source form the dark umbra.',
+        educationalLevel: 'CBSE & CISCE Class 6–8 Physics (Chapter: Shadows and Eclipses)',
+      };
+    }
+    return {
+      observation: `Point light source produces a razor-sharp shadow magnified ${outputs.magnification}× on the projection screen.`,
+      governingPrinciple: 'Rectilinear Propagation of Light in a Uniform Medium',
+      influencingVariables: ['obstacleDistanceCm', 'screenDistanceCm'],
+      keyTakeaway: 'Light travels in strictly straight lines. Because light cannot bend around the opaque obstacle, a crisp geometric shadow silhouette forms on the screen.',
+      educationalLevel: 'CBSE & CISCE Class 6 Physics (Rectilinear Propagation)',
+    };
+  },
+};
+
+// ============================================================================
+// 4. THERMAL LABORATORY (CONDUCTION, FOURIER'S LAW)
+// Curriculum: sci-7-heat-transfer (CBSE & CISCE Class 7-9 Physics)
+// ============================================================================
+
+const THERMAL_CONDUCTIVITY_MAP: Record<ThermalMaterialId, { name: string; k: number }> = {
+  copper: { name: 'Pure Electrolytic Copper', k: 385 },
+  aluminum: { name: 'Duralumin / Aluminum', k: 205 },
+  iron: { name: 'Wrought Iron', k: 80 },
+  glass: { name: 'Borosilicate Glass', k: 0.8 },
+};
+
+export function calculateThermalLab(state: ThermalLabState): ThermalLabOutputs {
+  const mat = THERMAL_CONDUCTIVITY_MAP[state.materialId] || THERMAL_CONDUCTIVITY_MAP.copper;
+  const k = mat.k;
+
+  const lengthM = Math.max(0.05, state.rodLengthCm / 100);
+  const areaM2 = Math.max(1e-6, state.rodCrossSectionMm2 * 1e-6);
+  const deltaT = Math.max(0, state.hotEndTempC - state.coldEndTempC);
+
+  // Temperature gradient = ΔT / L in K/m
+  const temperatureGradient = Number((deltaT / lengthM).toFixed(1));
+
+  // Fourier's Law: Q / t = k * A * (T_hot - T_cold) / L in Watts
+  const heatTransferRateWatts = Number((k * areaM2 * (deltaT / lengthM)).toFixed(2));
+
+  // 5 discrete probe points along the rod: x = 0, 0.25, 0.5, 0.75, 1.0
+  const tempProfile = [0, 0.25, 0.5, 0.75, 1.0].map((frac) => {
+    return Number((state.hotEndTempC - deltaT * frac).toFixed(1));
+  });
+
+  // Molecular kinetic lattice agitation amplitude
+  const avgTempK = (state.hotEndTempC + state.coldEndTempC) / 2 + 273.15;
+  const atomVibrationAmplitude = Number(Math.min(2.0, Math.max(0.2, (avgTempK / 350) * (k > 100 ? 1.2 : 0.6))).toFixed(2));
+
+  // Time for wax to melt at probe point 3 (75% along rod)
+  // Inversely proportional to heat transfer rate
+  const timeToMeltWaxSec = heatTransferRateWatts > 0.01 
+    ? Number(Math.min(300, (45 / heatTransferRateWatts) * (lengthM / 0.2)).toFixed(1))
+    : 999;
+
+  return {
+    materialName: mat.name,
+    thermalConductivityK: k,
+    temperatureGradient,
+    heatTransferRateWatts,
+    tempProfile,
+    atomVibrationAmplitude,
+    timeToMeltWaxSec,
+  };
+}
+
+export const THERMAL_LAB_MODEL: ScientificModelDefinition<ThermalLabState, ThermalLabOutputs> = {
+  id: 'thermal-lab',
+  name: 'Thermal Conduction & Fourier Heat Flow Chamber',
+  discipline: 'Physics & Thermodynamics',
+  curriculumTopicId: 'sci-7-heat-transfer',
+  overview:
+    'Thermal conduction is the transfer of internal kinetic energy between adjacent atoms and through free electrons without macroscopic movement of the matter itself. Under steady-state conditions, heat flow Q/t is governed by Fourier’s Law: directly proportional to thermal conductivity (k), cross-sectional area (A), and temperature gradient (ΔT/L).',
+  initialState: {
+    materialId: 'copper',
+    hotEndTempC: 100,
+    coldEndTempC: 20,
+    rodLengthCm: 25,
+    rodCrossSectionMm2: 50,
+  },
+  variables: [
+    {
+      id: 'hotEndTempC',
+      name: 'Hot Reservoir Temperature',
+      symbol: 'T_hot',
+      unit: '°C',
+      min: 30,
+      max: 150,
+      step: 5,
+      defaultValue: 100,
+      description: 'Temperature applied at the heat source end of the conducting rod.',
+      scientificMeaning: 'Determines the high-energy boundary condition driving molecular lattice vibrations.',
+    },
+    {
+      id: 'coldEndTempC',
+      name: 'Cold Reservoir Temperature',
+      symbol: 'T_cold',
+      unit: '°C',
+      min: 0,
+      max: 30,
+      step: 2,
+      defaultValue: 20,
+      description: 'Temperature at the cold heat sink end of the conducting rod.',
+      scientificMeaning: 'Governs the thermal sink boundary condition and net temperature differential ΔT.',
+    },
+    {
+      id: 'rodLengthCm',
+      name: 'Rod Conduction Length',
+      symbol: 'L',
+      unit: 'cm',
+      min: 10,
+      max: 50,
+      step: 5,
+      defaultValue: 25,
+      description: 'Physical length of the conducting bar separating hot and cold reservoirs.',
+      scientificMeaning: 'Fourier’s Law states heat transfer is inversely proportional to conduction path length L.',
+    },
+    {
+      id: 'rodCrossSectionMm2',
+      name: 'Cross-Sectional Area',
+      symbol: 'A',
+      unit: 'mm²',
+      min: 20,
+      max: 200,
+      step: 10,
+      defaultValue: 50,
+      description: 'Area of the cylindrical conducting cross-section perpendicular to heat flow.',
+      scientificMeaning: 'Heat flux capacity scales linearly with available conduction cross-sectional area A.',
+    },
+  ],
+  components: [
+    {
+      id: 'burner-source',
+      name: 'Bunsen Heat Source',
+      scientificRole: 'Thermal Reservoir (T_hot)',
+      description: 'Injects continuous thermal kinetic energy into the crystal lattice.',
+      relatedVariables: ['hotEndTempC'],
+    },
+    {
+      id: 'conducting-rod',
+      name: 'Solid Conduction Medium',
+      scientificRole: 'Phonon & Electron Carrier',
+      description: 'Transfers kinetic vibrational packets (phonons) and free electrons along length L.',
+      relatedVariables: ['rodLengthCm', 'rodCrossSectionMm2'],
+    },
+    {
+      id: 'wax-probes',
+      name: 'Indicator Wax Pins',
+      scientificRole: 'Thermal Iso-Therm Detectors',
+      description: 'Fall when local rod temperature exceeds the melting point of paraffin wax (55°C).',
+    },
+  ],
+  presets: [
+    {
+      id: 'copper-high-conduction',
+      name: 'Copper (High Thermal Conductor)',
+      description: 'Electrolytic copper (k = 385 W/m·K) demonstrating rapid steady-state heat conduction and rapid wax drop.',
+      state: {
+        materialId: 'copper',
+        hotEndTempC: 100,
+        coldEndTempC: 20,
+        rodLengthCm: 25,
+        rodCrossSectionMm2: 50,
+      },
+      expectedOutcome: 'High heat flow rate (~6.16 W); wax pin at 75% mark drops in under 10 seconds.',
+    },
+    {
+      id: 'iron-moderate-conduction',
+      name: 'Iron (Moderate Conductor)',
+      description: 'Wrought iron (k = 80 W/m·K) demonstrating sluggish thermal propagation typical of transition metals.',
+      state: {
+        materialId: 'iron',
+        hotEndTempC: 100,
+        coldEndTempC: 20,
+        rodLengthCm: 25,
+        rodCrossSectionMm2: 50,
+      },
+      expectedOutcome: 'Heat transfer rate drops ~4.8× to ~1.28 W; pins drop with noticeable temporal delay.',
+    },
+    {
+      id: 'glass-insulator',
+      name: 'Borosilicate Glass (Thermal Insulator)',
+      description: 'Glass rod (k = 0.8 W/m·K) showing virtually zero conduction despite a 100°C thermal gradient.',
+      state: {
+        materialId: 'glass',
+        hotEndTempC: 120,
+        coldEndTempC: 10,
+        rodLengthCm: 20,
+        rodCrossSectionMm2: 50,
+      },
+      expectedOutcome: 'Heat flow rate under 0.03 W; distant wax pins never reach melting threshold.',
+    },
+  ],
+  calculateOutputs: calculateThermalLab,
+  getTelemetry: (_state, outputs) => [
+    {
+      id: 'heat-flow-rate',
+      label: 'Heat Transfer Rate',
+      symbol: 'Q/t',
+      value: `${outputs.heatTransferRateWatts} W`,
+      unit: 'Watts (J/s)',
+      status: outputs.heatTransferRateWatts > 3.0 ? 'optimal' : outputs.heatTransferRateWatts < 0.2 ? 'limiting' : 'neutral',
+      description: 'Fourier Law: Q/t = k · A · (ΔT / L)',
+    },
+    {
+      id: 'thermal-k',
+      label: 'Thermal Conductivity',
+      symbol: 'k',
+      value: `${outputs.thermalConductivityK}`,
+      unit: 'W / (m · K)',
+      status: outputs.thermalConductivityK > 150 ? 'optimal' : 'neutral',
+      description: `Material property for ${outputs.materialName}`,
+    },
+    {
+      id: 'temp-gradient',
+      label: 'Temperature Gradient',
+      symbol: 'dT/dx',
+      value: `${outputs.temperatureGradient} K/m`,
+      unit: 'K/m',
+      status: 'neutral',
+      description: 'Rate of temperature drop along rod axis',
+    },
+    {
+      id: 'mid-temp',
+      label: 'Mid-Point Temperature',
+      symbol: 'T_mid',
+      value: `${outputs.tempProfile[2]} °C`,
+      unit: '°C',
+      status: 'neutral',
+      description: 'Calculated steady-state temperature at x = L/2',
+    },
+    {
+      id: 'melt-time',
+      label: 'Wax Drop Time (Pin 3)',
+      symbol: 't_melt',
+      value: outputs.timeToMeltWaxSec < 290 ? `${outputs.timeToMeltWaxSec} s` : '> 5 mins (Insulator)',
+      unit: 'sec',
+      status: outputs.timeToMeltWaxSec < 15 ? 'optimal' : 'limiting',
+      description: 'Demonstrates the historic Ingen-Housz experiment',
+    },
+  ],
+  getExplanation: (state, outputs) => {
+    if (state.materialId === 'glass') {
+      return {
+        observation: `Glass conducts only ${outputs.heatTransferRateWatts} W of heat despite a ${state.hotEndTempC - state.coldEndTempC}°C differential. Wax pins do not drop.`,
+        governingPrinciple: 'Amorphous Lattice Phonon Scattering & Lack of Free Electrons',
+        influencingVariables: ['materialId'],
+        keyTakeaway: 'Insulators like glass lack free conduction electrons and have disordered atomic arrangements that rapidly scatter vibrational phonons, preventing macroscopic heat conduction.',
+        educationalLevel: 'CBSE & CISCE Class 7 Physics (Chapter: Heat Transfer & Thermal Conductors)',
+      };
+    }
+    if (state.materialId === 'copper') {
+      return {
+        observation: `Copper rod transfers ${outputs.heatTransferRateWatts} W, causing wax pins to drop in ${outputs.timeToMeltWaxSec} seconds.`,
+        governingPrinciple: 'Free Electron Conduction & Low Phonon Scattering in Metals',
+        influencingVariables: ['materialId', 'rodLengthCm', 'rodCrossSectionMm2'],
+        keyTakeaway: 'Good conductors possess a delocalized "sea of electrons" that rapidly transport kinetic energy from the high-temperature reservoir along the entire metallic rod.',
+        educationalLevel: 'CBSE & CISCE Class 7–8 Physics (Ingen-Housz Conduction Experiment)',
+      };
+    }
+    return {
+      observation: `Thermal gradient of ${outputs.temperatureGradient} K/m drives steady-state heat conduction across ${outputs.materialName}.`,
+      governingPrinciple: "Fourier's Law of One-Dimensional Thermal Conduction",
+      influencingVariables: ['hotEndTempC', 'coldEndTempC', 'rodLengthCm'],
+      keyTakeaway: 'Heat flows spontaneously from regions of higher temperature to lower temperature at a rate directly proportional to the temperature gradient.',
+      educationalLevel: 'CBSE & CISCE Class 7 Physics (Modes of Heat Transfer)',
+    };
+  },
+};
+
+// ============================================================================
+// 5. MECHANICS LABORATORY (FORCE, PRESSURE, NEWTON'S 2ND LAW)
+// Curriculum: sci-8-force-pressure (CBSE & CISCE Class 8-9 Physics)
+// ============================================================================
+
+const FRICTION_MAP: Record<SurfaceMaterialId, { name: string; mu: number }> = {
+  ice: { name: 'Polished Ice', mu: 0.05 },
+  wood: { name: 'Planed Pine Wood', mu: 0.35 },
+  concrete: { name: 'Rough Concrete', mu: 0.65 },
+};
+
+export function calculateMechanicsLab(state: MechanicsLabState): MechanicsLabOutputs {
+  const g = 9.8; // gravitational acceleration in m/s²
+  const areaM2 = Math.max(1e-4, state.contactAreaCm2 * 1e-4); // cm² to m²
+  const massKg = Math.max(0.1, state.blockMassKg);
+
+  // Pressure: P = F / A in Pascals (N/m²)
+  const pressurePascals = Number((state.appliedForceN / areaM2).toFixed(1));
+  const pressureAtm = Number((pressurePascals / 101325).toFixed(3));
+
+  // Friction: f = μ * m * g
+  const surface = FRICTION_MAP[state.surfaceType] || FRICTION_MAP.wood;
+  const mu = surface.mu;
+  const maxFrictionForceN = Number((mu * massKg * g).toFixed(2));
+
+  // Net force: F_net = F_applied - f
+  const rawNetForce = state.appliedForceN - maxFrictionForceN;
+  const netForceN = Number(Math.max(0, rawNetForce).toFixed(2));
+
+  // Acceleration: a = F_net / m
+  const accelerationMs2 = Number((netForceN / massKg).toFixed(2));
+
+  // Kinematics over t = 2.0s: v = a * t, s = 0.5 * a * t²
+  const t = 2.0;
+  const velocityAfter2sMs = Number((accelerationMs2 * t).toFixed(2));
+  const displacementAfter2sM = Number((0.5 * accelerationMs2 * t * t).toFixed(2));
+
+  // Substrate penetration depth (for knife edge vs blunt block pressure demo)
+  // Penetration scales with pressure (e.g. 1 mm per 50,000 Pa)
+  const penetrationDepthMm = Number(Math.min(25, (pressurePascals / 40000)).toFixed(1));
+
+  let motionState: 'stationary' | 'accelerating' | 'sliding' = 'stationary';
+  if (state.appliedForceN > maxFrictionForceN) {
+    motionState = 'accelerating';
+  } else if (state.appliedForceN === 0) {
+    motionState = 'stationary';
+  } else {
+    motionState = 'stationary'; // static friction balances applied force
+  }
+
+  return {
+    pressurePascals,
+    pressureAtm,
+    frictionCoefficient: mu,
+    maxFrictionForceN,
+    netForceN,
+    accelerationMs2,
+    velocityAfter2sMs,
+    displacementAfter2sM,
+    penetrationDepthMm,
+    motionState,
+  };
+}
+
+export const MECHANICS_LAB_MODEL: ScientificModelDefinition<MechanicsLabState, MechanicsLabOutputs> = {
+  id: 'mechanics-lab',
+  name: 'Force, Pressure & Kinetic Friction Dynamics Simulator',
+  discipline: 'Physics & Mechanics',
+  curriculumTopicId: 'sci-8-force-pressure',
+  overview:
+    'Force is a push or pull that can alter a body’s state of motion, direction, or shape. Pressure is the force acting perpendicularly per unit area of a surface (P = F / A). Newton’s Second Law dictates that the net unbalanced force produces acceleration proportional to force and inversely proportional to mass (F_net = m · a), subject to opposing surface friction (f = μ · m · g).',
+  initialState: {
+    appliedForceN: 50,
+    contactAreaCm2: 10,
+    blockMassKg: 5,
+    surfaceType: 'wood',
+    mode: 'pressure',
+  },
+  variables: [
+    {
+      id: 'appliedForceN',
+      name: 'Applied External Force',
+      symbol: 'F',
+      unit: 'N',
+      min: 0,
+      max: 200,
+      step: 5,
+      defaultValue: 50,
+      description: 'Magnitude of the perpendicular or lateral vector force applied to the test block.',
+      scientificMeaning: 'Determines both normal pressure thrust and kinetic acceleration potential.',
+    },
+    {
+      id: 'contactAreaCm2',
+      name: 'Contact Surface Area',
+      symbol: 'A',
+      unit: 'cm²',
+      min: 1,
+      max: 50,
+      step: 1,
+      defaultValue: 10,
+      description: 'Surface area in direct contact with the substrate (e.g., sharp tip 1 cm² vs broad block 50 cm²).',
+      scientificMeaning: 'Pressure is inversely proportional to contact area: halving area doubles thrust pressure.',
+    },
+    {
+      id: 'blockMassKg',
+      name: 'Block Inertial Mass',
+      symbol: 'm',
+      unit: 'kg',
+      min: 1,
+      max: 20,
+      step: 1,
+      defaultValue: 5,
+      description: 'Inertial mass of the specimen opposing acceleration and creating normal weight force (W = m·g).',
+      scientificMeaning: 'Quantifies linear inertia in Newton’s Second Law: a = F_net / m.',
+    },
+  ],
+  components: [
+    {
+      id: 'force-actuator',
+      name: 'Hydraulic / Vector Actuator',
+      scientificRole: 'Force Generator',
+      description: 'Applies calibrated force vectors in Newtons.',
+      relatedVariables: ['appliedForceN'],
+    },
+    {
+      id: 'contact-face',
+      name: 'Contact Face Geometry',
+      scientificRole: 'Area Reducer / Spreader',
+      description: 'Concentrates or disperses force across substrate.',
+      relatedVariables: ['contactAreaCm2'],
+    },
+    {
+      id: 'friction-track',
+      name: 'Substrate Interface Track',
+      scientificRole: 'Friction Interface',
+      description: 'Opposes lateral motion via microscopic surface asperities.',
+      relatedVariables: ['blockMassKg'],
+    },
+  ],
+  presets: [
+    {
+      id: 'sharp-pin-high-pressure',
+      name: 'Needle / Pin Point (High Pressure)',
+      description: 'Tiny contact area (1 cm²) demonstrating why sharp needles easily penetrate substrates under modest force.',
+      state: {
+        appliedForceN: 40,
+        contactAreaCm2: 1,
+        blockMassKg: 2,
+        surfaceType: 'wood',
+        mode: 'pressure',
+      },
+      expectedOutcome: 'Immense pressure of 400,000 Pa (~3.95 atm) causing 10.0 mm substrate penetration.',
+    },
+    {
+      id: 'broad-snowshoe-low-pressure',
+      name: 'Broad Snowshoe (Low Pressure)',
+      description: 'Large surface area (50 cm²) showing why wide bases prevent sinking into soft sand or snow.',
+      state: {
+        appliedForceN: 40,
+        contactAreaCm2: 50,
+        blockMassKg: 2,
+        surfaceType: 'wood',
+        mode: 'pressure',
+      },
+      expectedOutcome: 'Pressure drops to only 8,000 Pa (~0.08 atm); virtually zero substrate sinking (0.2 mm).',
+    },
+    {
+      id: 'newton-second-law-acceleration',
+      name: 'Newton’s 2nd Law Acceleration Run',
+      description: 'Unbalanced 80 N force pulling a 5 kg block across low-friction ice track.',
+      state: {
+        appliedForceN: 80,
+        contactAreaCm2: 20,
+        blockMassKg: 5,
+        surfaceType: 'ice',
+        mode: 'dynamics',
+      },
+      expectedOutcome: 'Friction is only 2.45 N; net force 77.55 N accelerates block at 15.51 m/s² reaching 31 m/s in 2 seconds.',
+    },
+  ],
+  calculateOutputs: calculateMechanicsLab,
+  getTelemetry: (_state, outputs) => [
+    {
+      id: 'pressure-pa',
+      label: 'Substrate Pressure',
+      symbol: 'P',
+      value: `${outputs.pressurePascals.toLocaleString()} Pa`,
+      unit: 'Pascals (N/m²)',
+      status: outputs.pressurePascals > 100000 ? 'optimal' : 'neutral',
+      description: 'P = F / A: Force distributed over contact area',
+    },
+    {
+      id: 'pressure-atm',
+      label: 'Atmospheric Equivalent',
+      symbol: 'P_atm',
+      value: `${outputs.pressureAtm} atm`,
+      unit: 'atm',
+      status: 'neutral',
+      description: 'Ratio relative to 1 standard atmosphere (101,325 Pa)',
+    },
+    {
+      id: 'friction-force',
+      label: 'Opposing Friction Force',
+      symbol: 'f',
+      value: `${outputs.maxFrictionForceN} N`,
+      unit: 'N',
+      status: 'neutral',
+      description: `f = μ · m · g (μ = ${outputs.frictionCoefficient})`,
+    },
+    {
+      id: 'net-force',
+      label: 'Net Unbalanced Force',
+      symbol: 'F_net',
+      value: `${outputs.netForceN} N`,
+      unit: 'N',
+      status: outputs.netForceN > 0 ? 'optimal' : 'limiting',
+      description: 'F_net = F_applied - f',
+    },
+    {
+      id: 'acceleration',
+      label: 'Linear Acceleration',
+      symbol: 'a',
+      value: `${outputs.accelerationMs2} m/s²`,
+      unit: 'm/s²',
+      status: outputs.accelerationMs2 > 0 ? 'optimal' : 'neutral',
+      description: 'Newton’s 2nd Law: a = F_net / m',
+    },
+    {
+      id: 'penetration',
+      label: 'Penetration Depth',
+      symbol: 'h_pen',
+      value: `${outputs.penetrationDepthMm} mm`,
+      unit: 'mm',
+      status: 'neutral',
+      description: 'Substrate deformation depth under localized pressure',
+    },
+  ],
+  getExplanation: (state, outputs) => {
+    if (state.mode === 'pressure') {
+      if (state.contactAreaCm2 <= 2) {
+        return {
+          observation: `Concentrating ${state.appliedForceN} N across a tiny area (${state.contactAreaCm2} cm²) generates ${outputs.pressurePascals.toLocaleString()} Pa of pressure, penetrating ${outputs.penetrationDepthMm} mm into the substrate.`,
+          governingPrinciple: 'Pressure Inversely Proportional to Contact Area (P = F / A)',
+          influencingVariables: ['appliedForceN', 'contactAreaCm2'],
+          keyTakeaway: 'For a given force, decreasing surface area multiplies the pressure exponentially. This is why cutting knives have sharp, narrow edges.',
+          educationalLevel: 'CBSE & CISCE Class 8 Physics (Chapter: Force and Pressure)',
+        };
+      }
+      return {
+        observation: `Spreading ${state.appliedForceN} N over a broad area (${state.contactAreaCm2} cm²) lowers pressure to ${outputs.pressurePascals.toLocaleString()} Pa (${outputs.pressureAtm} atm).`,
+        governingPrinciple: 'Pressure Distribution Across Extended Area',
+        influencingVariables: ['appliedForceN', 'contactAreaCm2'],
+        keyTakeaway: 'Increasing contact area disperses the perpendicular thrust, minimizing surface penetration. This explains why heavy construction vehicles use wide caterpillar tracks.',
+        educationalLevel: 'CBSE & CISCE Class 8 Physics (Applications of Pressure)',
+      };
+    }
+    if (outputs.netForceN === 0) {
+      return {
+        observation: `Applied force of ${state.appliedForceN} N cannot overcome the static friction threshold of ${outputs.maxFrictionForceN} N. The block remains stationary.`,
+        governingPrinciple: "Newton's First Law of Motion (Inertia & Balanced Forces)",
+        influencingVariables: ['appliedForceN', 'blockMassKg'],
+        keyTakeaway: 'An object will remain at rest unless acted upon by a net unbalanced external force. Here, friction exactly balances the applied force.',
+        educationalLevel: 'CBSE & CISCE Class 8–9 Physics (Newton’s Laws of Motion)',
+      };
+    }
+    return {
+      observation: `Net unbalanced force of ${outputs.netForceN} N accelerates the ${state.blockMassKg} kg block at ${outputs.accelerationMs2} m/s², reaching ${outputs.velocityAfter2sMs} m/s in 2 seconds.`,
+      governingPrinciple: "Newton's Second Law of Motion (F_net = m · a)",
+      influencingVariables: ['appliedForceN', 'blockMassKg'],
+      keyTakeaway: 'The acceleration of an object is directly proportional to the net force acting upon it and inversely proportional to its mass.',
+      educationalLevel: 'CBSE & CISCE Class 8–9 Physics (Force and Acceleration)',
     };
   },
 };

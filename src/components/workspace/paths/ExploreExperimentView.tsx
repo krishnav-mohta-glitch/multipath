@@ -1,18 +1,24 @@
 import React, { Suspense } from 'react';
-import { FlaskConical, Sparkles, HelpCircle, Eye, CheckCircle2, Sliders } from 'lucide-react';
+import { FlaskConical, HelpCircle, Sliders, Eye, CheckCircle2, Sparkles } from 'lucide-react';
 import type { ExploreExperimentContent } from '../../../types/learningPath';
+import type { Topic } from '../../../types/topic';
 import { LinearEquationsExperiment } from '../experiments/LinearEquationsExperiment';
 import { PhotosynthesisExperiment } from '../experiments/PhotosynthesisExperiment';
 import { FrenchRevolutionExperiment } from '../experiments/FrenchRevolutionExperiment';
 import { MetaphorWorkbenchExperiment } from '../experiments/MetaphorWorkbenchExperiment';
+import { getVisualizerForTopic } from '../../visualizers/registry';
 
 const InteractiveModelScene = React.lazy(() => import('../../three/InteractiveModelScene'));
 
 interface ExploreExperimentViewProps {
   content: ExploreExperimentContent;
+  topic?: Topic;
 }
 
-export const ExploreExperimentView: React.FC<ExploreExperimentViewProps> = ({ content }) => {
+export const ExploreExperimentView: React.FC<ExploreExperimentViewProps> = ({ content, topic }) => {
+  const visualizerMeta = topic ? getVisualizerForTopic(topic) : null;
+  const VisualizerComponent = visualizerMeta ? visualizerMeta.component : null;
+
   return (
     <div className="space-y-8 animate-in fade-in duration-200">
       
@@ -25,7 +31,7 @@ export const ExploreExperimentView: React.FC<ExploreExperimentViewProps> = ({ co
           </span>
         </div>
 
-        <h3 className="font-display text-xl sm:text-2xl font-bold text-white tracking-tight">
+        <h3 className="font-display text-xl sm:text-2xl font-bold text-white tracking-tight break-words">
           {content.activityTitle}
         </h3>
 
@@ -34,46 +40,50 @@ export const ExploreExperimentView: React.FC<ExploreExperimentViewProps> = ({ co
           {content.objective}
         </div>
 
-        <p className="font-mono text-xs text-[#8B9DAE] pt-2 border-t border-white/10">
+        <p className="font-mono text-xs text-[#8B9DAE] pt-2 border-t border-white/10 break-words">
           INSTRUCTIONS: {content.instructions}
         </p>
       </div>
 
-      {/* Dynamic Experiment Simulator Container (Phase 10 Three.js & 2D Host) */}
+      {/* Dynamic Experiment Simulator Container (Phase 10 Three.js & Registry Host) */}
       <div 
         id="threejs-simulation-container" 
         className="space-y-4"
       >
-        {(() => {
-          const fallback2D = (
-            <div className="rounded-2xl space-y-4">
-              <div className="pt-2">
-                {content.experimentType === 'linear-equations' && <LinearEquationsExperiment />}
-                {content.experimentType === 'photosynthesis' && <PhotosynthesisExperiment />}
-                {content.experimentType === 'french-revolution' && <FrenchRevolutionExperiment />}
-                {content.experimentType === 'metaphors' && <MetaphorWorkbenchExperiment />}
-                {content.experimentType === 'generic' && (
-                  <div className="p-8 bg-[#0D1117] text-[#F3F4EC] rounded-2xl border border-white/10 text-center space-y-3">
-                    <Sliders className="w-8 h-8 text-[#B8FF00] mx-auto" />
-                    <h4 className="font-display text-base font-bold text-white">Variable Parameter Sandbox</h4>
-                    <p className="text-xs text-[#8DA391] max-w-md mx-auto">
-                      Manipulate available system parameters below to observe real-time equilibrium shifts.
-                    </p>
-                  </div>
-                )}
+        {VisualizerComponent && topic ? (
+          <VisualizerComponent topic={topic} />
+        ) : (
+          (() => {
+            const fallback2D = (
+              <div className="rounded-2xl space-y-4">
+                <div className="pt-2">
+                  {content.experimentType === 'linear-equations' && <LinearEquationsExperiment />}
+                  {content.experimentType === 'photosynthesis' && <PhotosynthesisExperiment />}
+                  {content.experimentType === 'french-revolution' && <FrenchRevolutionExperiment />}
+                  {content.experimentType === 'metaphors' && <MetaphorWorkbenchExperiment />}
+                  {content.experimentType === 'generic' && (
+                    <div className="p-8 bg-[#0D1117] text-[#F3F4EC] rounded-2xl border border-white/10 text-center space-y-3">
+                      <Sliders className="w-8 h-8 text-[#B8FF00] mx-auto" />
+                      <h4 className="font-display text-base font-bold text-white">Variable Parameter Sandbox</h4>
+                      <p className="text-xs text-[#8DA391] max-w-md mx-auto">
+                        Manipulate available system parameters below to observe real-time equilibrium shifts.
+                      </p>
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-          );
+            );
 
-          return (
-            <Suspense fallback={fallback2D}>
-              <InteractiveModelScene
-                experimentType={content.experimentType}
-                fallback={fallback2D}
-              />
-            </Suspense>
-          );
-        })()}
+            return (
+              <Suspense fallback={fallback2D}>
+                <InteractiveModelScene
+                  experimentType={content.experimentType}
+                  fallback={fallback2D}
+                />
+              </Suspense>
+            );
+          })()
+        )}
       </div>
 
       {/* Guiding Questions to Investigate */}

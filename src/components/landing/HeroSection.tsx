@@ -161,7 +161,7 @@ export const HeroSection: React.FC = () => {
 
             {/* Main Headline */}
             <div className="space-y-4">
-              <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.06]">
+              <h1 className="font-display text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.08] break-words">
                 One concept. <br />
                 <span className="text-[#8B9DAE]">Multiple ways to</span> <br />
                 <span className="relative inline-block text-white">

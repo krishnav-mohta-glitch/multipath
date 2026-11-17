@@ -118,10 +118,10 @@ export const UnifiedLearningCanvas: React.FC<UnifiedLearningCanvasProps> = ({ to
               01
             </div>
             <div>
-              <h2 className="font-display text-xl sm:text-2xl font-black text-white tracking-tight">
+              <h2 className="font-display text-lg sm:text-xl md:text-2xl font-black text-white tracking-tight break-words">
                 Structured Explanation
               </h2>
-              <p className="text-xs text-[#8DA391] font-mono">
+              <p className="text-xs text-[#8DA391] font-mono break-words">
                 First-principles conceptual breakdown &amp; textbook syllabus fundamentals
               </p>
             </div>
@@ -147,10 +147,10 @@ export const UnifiedLearningCanvas: React.FC<UnifiedLearningCanvasProps> = ({ to
               02
             </div>
             <div>
-              <h2 className="font-display text-xl sm:text-2xl font-black text-white tracking-tight">
+              <h2 className="font-display text-lg sm:text-xl md:text-2xl font-black text-white tracking-tight break-words">
                 Examples and Applications
               </h2>
-              <p className="text-xs text-[#8DA391] font-mono">
+              <p className="text-xs text-[#8DA391] font-mono break-words">
                 Tailored through your favorite real-world passions &bull; Step-by-step discovery
               </p>
             </div>
@@ -344,10 +344,10 @@ export const UnifiedLearningCanvas: React.FC<UnifiedLearningCanvasProps> = ({ to
               03
             </div>
             <div>
-              <h2 className="font-display text-xl sm:text-2xl font-black text-white tracking-tight">
+              <h2 className="font-display text-lg sm:text-xl md:text-2xl font-black text-white tracking-tight break-words">
                 Explore and Experiment
               </h2>
-              <p className="text-xs text-[#8DA391] font-mono">
+              <p className="text-xs text-[#8DA391] font-mono break-words">
                 Hands-on simulation laboratory &bull; Interactive Audio &amp; Video Overviews
               </p>
             </div>
@@ -485,7 +485,7 @@ export const UnifiedLearningCanvas: React.FC<UnifiedLearningCanvasProps> = ({ to
 
         {/* Hands-On Simulation Workbench */}
         <div className="bg-[#0D1117] rounded-3xl border border-white/10 p-6 sm:p-8 shadow-2xl">
-          <ExploreExperimentView content={topic.paths['explore-experiment']} />
+          <ExploreExperimentView content={topic.paths['explore-experiment']} topic={topic} />
         </div>
       </section>
 

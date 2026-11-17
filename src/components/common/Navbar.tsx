@@ -36,6 +36,7 @@ export const Navbar: React.FC = () => {
     {
       id: 'home' as const,
       label: 'Home',
+      shortLabel: 'Home',
       icon: Compass,
       sublabel: 'Overview',
       isActive: currentTab === 'home',
@@ -45,6 +46,7 @@ export const Navbar: React.FC = () => {
     {
       id: 'library' as const,
       label: 'Explore / Curriculum',
+      shortLabel: 'Curriculum',
       icon: BookOpen,
       sublabel: 'CBSE & ICSE 6–12',
       isActive: currentTab === 'library',
@@ -60,6 +62,7 @@ export const Navbar: React.FC = () => {
     {
       id: 'workspace' as const,
       label: 'Learning Workspace',
+      shortLabel: 'Workspace',
       icon: Layers,
       sublabel: '4 Paths & 3D Sandbox',
       isActive: currentTab === 'workspace',
@@ -75,6 +78,7 @@ export const Navbar: React.FC = () => {
     {
       id: 'mylearning' as const,
       label: 'My Trajectory',
+      shortLabel: 'Trajectory',
       icon: Bookmark,
       sublabel: 'Evidence & Mastery',
       isActive: currentTab === 'mylearning' && dashboardSubTab !== 'resources',
@@ -91,6 +95,7 @@ export const Navbar: React.FC = () => {
     {
       id: 'resources' as const,
       label: 'Saved Resources',
+      shortLabel: 'Saved',
       icon: FolderArchive,
       sublabel: 'Media Vault',
       isActive: currentTab === 'mylearning' && dashboardSubTab === 'resources',
@@ -166,8 +171,8 @@ export const Navbar: React.FC = () => {
           </div>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-1 xl:gap-1.5">
-            <div className="flex items-center bg-[#141A22]/90 p-1 rounded-full border border-white/08">
+          <nav className="hidden md:flex items-center gap-1 xl:gap-1.5 min-w-0">
+            <div className="flex items-center bg-[#141A22]/90 p-1 rounded-full border border-white/08 min-w-0">
               {navLinks.map((link) => {
                 const Icon = link.icon;
                 const active = link.isActive;
@@ -175,24 +180,27 @@ export const Navbar: React.FC = () => {
                   <button
                     key={link.id}
                     onClick={link.onClick}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-150 cursor-pointer ${
+                    className={`flex items-center gap-1.5 px-2.5 lg:px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-150 cursor-pointer shrink-0 ${
                       active
                         ? 'bg-[#B8FF00] text-[#080A0E] font-bold shadow-sm'
                         : 'text-[#E5E7EB] hover:text-white hover:bg-white/08'
                     }`}
                     title={link.isLocked ? 'Complete your interest profile to unlock' : (!user && link.id !== 'home' ? 'Sign In Required' : link.sublabel)}
                   >
-                    <Icon className={`w-3.5 h-3.5 ${active ? 'text-[#080A0E]' : (link.isLocked ? 'text-amber-400' : 'text-[#8B9DAE]')}`} />
-                    <span className={`whitespace-nowrap ${link.isLocked ? 'opacity-70' : ''}`}>{link.label}</span>
+                    <Icon className={`w-3.5 h-3.5 shrink-0 ${active ? 'text-[#080A0E]' : (link.isLocked ? 'text-amber-400' : 'text-[#8B9DAE]')}`} />
+                    <span className={`whitespace-nowrap ${link.isLocked ? 'opacity-70' : ''}`}>
+                      <span className="hidden xl:inline">{link.label}</span>
+                      <span className="inline xl:hidden">{link.shortLabel}</span>
+                    </span>
                     {link.isLocked ? (
-                      <Lock className="w-2.5 h-2.5 text-amber-400 animate-pulse" />
+                      <Lock className="w-2.5 h-2.5 text-amber-400 animate-pulse shrink-0" />
                     ) : (
                       !user && link.id !== 'home' && (
-                        <Lock className="w-2.5 h-2.5 text-[#8B9DAE]/80" />
+                        <Lock className="w-2.5 h-2.5 text-[#8B9DAE]/80 shrink-0" />
                       )
                     )}
                     {link.badge !== undefined && user && (
-                      <span className={`ml-0.5 px-1.5 py-0.2 text-[9px] font-mono rounded-full font-bold ${
+                      <span className={`ml-0.5 px-1.5 py-0.2 text-[9px] font-mono rounded-full font-bold shrink-0 ${
                         active ? 'bg-[#080A0E] text-[#B8FF00]' : 'bg-white/15 text-white'
                       }`}>
                         {link.badge}
@@ -203,12 +211,12 @@ export const Navbar: React.FC = () => {
               })}
             </div>
 
-            <div className="h-4 w-px bg-white/10 mx-1 hidden xl:block" />
+            <div className="h-4 w-px bg-white/10 mx-1 hidden xl:block shrink-0" />
 
             {/* Quick Action: Explore / Workspace */}
             <button
               onClick={() => navigateTo('library')}
-              className="hidden xl:inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-white bg-[#1C2430] hover:bg-[#243040] hover:border-[#B8FF00]/40 border border-white/10 rounded-full transition-all cursor-pointer"
+              className="hidden xl:inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-white bg-[#1C2430] hover:bg-[#243040] hover:border-[#B8FF00]/40 border border-white/10 rounded-full transition-all cursor-pointer shrink-0"
             >
               <Sparkles className="w-3.5 h-3.5 text-[#B8FF00]" />
               <span>Explore</span>
@@ -217,7 +225,7 @@ export const Navbar: React.FC = () => {
             {/* Student Passion Persona Pill */}
             <button
               onClick={openPassionModal}
-              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#161D26] hover:bg-[#1C2430] text-[#C8D6C9] hover:text-white border border-white/10 text-xs font-mono transition-all cursor-pointer shadow-xs"
+              className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#161D26] hover:bg-[#1C2430] text-[#C8D6C9] hover:text-white border border-white/10 text-xs font-mono transition-all cursor-pointer shadow-xs shrink-0"
               title="Change your learning passion & personal explanation domain"
             >
               <span>{profile?.passion === 'gaming' ? '🎮' : profile?.passion === 'cricket' ? '🏏' : profile?.passion === 'space' ? '🚀' : profile?.passion === 'music' ? '🎵' : profile?.passion === 'robotics' ? '🤖' : '⚽'}</span>

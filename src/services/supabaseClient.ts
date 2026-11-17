@@ -1,16 +1,21 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 
+const DEFAULT_SUPABASE_URL = 'https://oestvwgkpllikmufvjls.supabase.co';
+const DEFAULT_SUPABASE_KEY = 'sb_publishable_ZxcO_ZdsXI11fehS2xajPA_uT2gRJ3M';
+
 const rawUrl = (
   import.meta.env.VITE_SUPABASE_URL ||
   import.meta.env.VITE_SUPABASE_PROJECT_URL ||
-  import.meta.env.SUPABASE_URL
+  import.meta.env.SUPABASE_URL ||
+  DEFAULT_SUPABASE_URL
 )?.trim();
 
 const rawKey = (
   import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
   import.meta.env.VITE_SUPABASE_ANON_KEY ||
   import.meta.env.SUPABASE_PUBLISHABLE_KEY ||
-  import.meta.env.SUPABASE_ANON_KEY
+  import.meta.env.SUPABASE_ANON_KEY ||
+  DEFAULT_SUPABASE_KEY
 )?.trim();
 
 function isValidHttpUrl(str?: string): boolean {
