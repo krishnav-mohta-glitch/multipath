@@ -92,6 +92,7 @@ export interface AuthContextValue extends AuthState {
 
   // Student Passion Onboarding Modal State
   isPassionModalOpen: boolean;
+  isOnboardingLocked: boolean;
   openPassionModal: () => void;
   closePassionModal: () => void;
   updatePassion: (passion: string, details?: string) => Promise<void>;
@@ -101,6 +102,7 @@ export interface AuthContextValue extends AuthState {
   signIn: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
   signInWithOAuth: (provider: 'google' | 'facebook' | 'custom:instagram' | 'twitter') => Promise<{ success: boolean; error?: string; url?: string }>;
   signOut: () => Promise<void>;
+  deleteAccount: () => Promise<{ success: boolean; error?: string }>;
   resetPassword: (email: string) => Promise<{ success: boolean; error?: string }>;
   resendVerification: (email: string) => Promise<{ success: boolean; error?: string }>;
   updateProfile: (updates: ProfileUpdatePayload) => Promise<{ success: boolean; error?: string }>;

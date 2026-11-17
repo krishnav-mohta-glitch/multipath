@@ -19,11 +19,15 @@ import { useAuth } from '../../context/AuthContext';
 
 export const Navbar: React.FC = () => {
   const { currentTab, navigateTo, searchQuery, setSearchQuery, sessionState, dashboardSubTab } = useApp();
-  const { user, profile, openAuthModal, openPassionModal } = useAuth();
+  const { user, profile, openAuthModal, openPassionModal, isOnboardingLocked } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (isOnboardingLocked) {
+      openPassionModal();
+      return;
+    }
     navigateTo('library');
     setMobileMenuOpen(false);
   };
@@ -35,6 +39,7 @@ export const Navbar: React.FC = () => {
       icon: Compass,
       sublabel: 'Overview',
       isActive: currentTab === 'home',
+      isLocked: false,
       onClick: () => navigateTo('home'),
     },
     {
@@ -43,7 +48,14 @@ export const Navbar: React.FC = () => {
       icon: BookOpen,
       sublabel: 'CBSE & ICSE 6–12',
       isActive: currentTab === 'library',
-      onClick: () => navigateTo('library'),
+      isLocked: isOnboardingLocked,
+      onClick: () => {
+        if (isOnboardingLocked) {
+          openPassionModal();
+        } else {
+          navigateTo('library');
+        }
+      },
     },
     {
       id: 'workspace' as const,
@@ -51,7 +63,14 @@ export const Navbar: React.FC = () => {
       icon: Layers,
       sublabel: '4 Paths & 3D Sandbox',
       isActive: currentTab === 'workspace',
-      onClick: () => navigateTo('workspace'),
+      isLocked: isOnboardingLocked,
+      onClick: () => {
+        if (isOnboardingLocked) {
+          openPassionModal();
+        } else {
+          navigateTo('workspace');
+        }
+      },
     },
     {
       id: 'mylearning' as const,
@@ -60,7 +79,14 @@ export const Navbar: React.FC = () => {
       sublabel: 'Evidence & Mastery',
       isActive: currentTab === 'mylearning' && dashboardSubTab !== 'resources',
       badge: sessionState.savedTopicIds.length > 0 ? sessionState.savedTopicIds.length : undefined,
-      onClick: () => navigateTo('mylearning', undefined, undefined, 'progress'),
+      isLocked: isOnboardingLocked,
+      onClick: () => {
+        if (isOnboardingLocked) {
+          openPassionModal();
+        } else {
+          navigateTo('mylearning', undefined, undefined, 'progress');
+        }
+      },
     },
     {
       id: 'resources' as const,
@@ -68,7 +94,14 @@ export const Navbar: React.FC = () => {
       icon: FolderArchive,
       sublabel: 'Media Vault',
       isActive: currentTab === 'mylearning' && dashboardSubTab === 'resources',
-      onClick: () => navigateTo('mylearning', undefined, undefined, 'resources'),
+      isLocked: isOnboardingLocked,
+      onClick: () => {
+        if (isOnboardingLocked) {
+          openPassionModal();
+        } else {
+          navigateTo('mylearning', undefined, undefined, 'resources');
+        }
+      },
     },
   ];
 
@@ -147,12 +180,16 @@ export const Navbar: React.FC = () => {
                         ? 'bg-[#B8FF00] text-[#080A0E] font-bold shadow-sm'
                         : 'text-[#E5E7EB] hover:text-white hover:bg-white/08'
                     }`}
-                    title={!user && link.id !== 'home' ? 'Sign In Required' : link.sublabel}
+                    title={link.isLocked ? 'Complete your interest profile to unlock' : (!user && link.id !== 'home' ? 'Sign In Required' : link.sublabel)}
                   >
-                    <Icon className={`w-3.5 h-3.5 ${active ? 'text-[#080A0E]' : 'text-[#8B9DAE]'}`} />
-                    <span className="whitespace-nowrap">{link.label}</span>
-                    {!user && link.id !== 'home' && (
-                      <Lock className="w-2.5 h-2.5 text-[#8B9DAE]/80" />
+                    <Icon className={`w-3.5 h-3.5 ${active ? 'text-[#080A0E]' : (link.isLocked ? 'text-amber-400' : 'text-[#8B9DAE]')}`} />
+                    <span className={`whitespace-nowrap ${link.isLocked ? 'opacity-70' : ''}`}>{link.label}</span>
+                    {link.isLocked ? (
+                      <Lock className="w-2.5 h-2.5 text-amber-400 animate-pulse" />
+                    ) : (
+                      !user && link.id !== 'home' && (
+                        <Lock className="w-2.5 h-2.5 text-[#8B9DAE]/80" />
+                      )
                     )}
                     {link.badge !== undefined && user && (
                       <span className={`ml-0.5 px-1.5 py-0.2 text-[9px] font-mono rounded-full font-bold ${

@@ -19,6 +19,8 @@ import { SUBJECTS } from '../../data/subjects';
 import { CURRICULUM_BOARDS } from '../../data/curriculumData';
 import { isTopicInCurriculum, getMappingsForTopic } from '../../data/curriculumMappings';
 import { TopicVisualExhibit } from '../visuals/TopicVisualExhibit';
+import { FluidCrystallineOrbsScene } from '../three/FluidCrystallineOrbsScene';
+import { WebGLFallback } from '../three/WebGLFallback';
 import type { SubjectId } from '../../types/subject';
 import type { CurriculumBoardCode, ClassLevel } from '../../types/curriculum';
 
@@ -28,6 +30,7 @@ export const SubjectGridPreview: React.FC = () => {
   const [selectedBoard, setSelectedBoard] = useState<CurriculumBoardCode | 'all'>('all');
   const [selectedClass, setSelectedClass] = useState<ClassLevel | 'all'>(10);
   const [activeSubject, setActiveSubject] = useState<SubjectId | 'all'>('all');
+  const [showOrbs3D, setShowOrbs3D] = useState<boolean>(true);
 
   const iconMap: Record<string, React.FC<{ className?: string; style?: React.CSSProperties }>> = {
     Binary,
@@ -115,6 +118,48 @@ export const SubjectGridPreview: React.FC = () => {
             <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
           </button>
         </div>
+
+        {/* =================================================================== */}
+        {/* 1.5. 3D FLUID CRYSTALLINE ORBS OBSERVATORY (Lusion + Active Theory) */}
+        {/* =================================================================== */}
+        {showOrbs3D && (
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-[#B8FF00]" />
+                <span className="font-mono text-xs uppercase font-bold tracking-wider text-white">
+                  3D FLUID CRYSTALLINE OBSERVATORY &bull; HOVER TO PERTURB SPACETIME PHYSICS
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowOrbs3D(false)}
+                className="text-[11px] font-mono text-[#8DA391] hover:text-white underline cursor-pointer"
+              >
+                Hide 3D View
+              </button>
+            </div>
+            <FluidCrystallineOrbsScene
+              onSelectSubject={(subId) => {
+                setActiveSubject(subId);
+                handleOpenLibrary(subId);
+              }}
+              fallback={<WebGLFallback title="3D Fluid Crystalline Observatory" />}
+            />
+          </div>
+        )}
+        {!showOrbs3D && (
+          <div className="flex justify-end">
+            <button
+              type="button"
+              onClick={() => setShowOrbs3D(true)}
+              className="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white font-mono text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-[#B8FF00]" />
+              <span>Launch 3D Fluid Crystalline Orbs</span>
+            </button>
+          </div>
+        )}
 
         {/* =================================================================== */}
         {/* 2. TACTILE CLASS SEGMENTED SLIDER (Classes 6 through 12)            */}

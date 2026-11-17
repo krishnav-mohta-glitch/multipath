@@ -12,7 +12,10 @@ import {
   ArrowRight, 
   LogOut, 
   RefreshCw,
-  Sparkles
+  Sparkles,
+  Trash2,
+  Key,
+  Heart
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { getConfigurationDiagnostics } from '../../services/supabaseClient';
@@ -55,17 +58,17 @@ const SocialAuthOptions: React.FC<{
           Google Active
         </span>
       </div>
-      <div className="grid grid-cols-2 gap-2">
+      <div>
         {/* Google */}
         <button
           type="button"
           onClick={() => onSelect('google')}
           disabled={disabled || oauthLoading !== null}
-          className="flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-white hover:bg-slate-50 text-xs font-semibold text-[#171C18] border border-[#DFE2D7] transition-all disabled:opacity-50 cursor-pointer shadow-xs"
+          className="w-full flex items-center justify-center gap-2.5 py-2.5 px-4 rounded-xl bg-white hover:bg-slate-50 text-xs font-semibold text-[#171C18] border border-[#DFE2D7] transition-all disabled:opacity-50 cursor-pointer shadow-xs"
           title="Sign in with Google"
         >
           {oauthLoading === 'google' ? (
-            <RefreshCw className="w-3.5 h-3.5 animate-spin text-[#111714]" />
+            <RefreshCw className="w-4 h-4 animate-spin text-[#111714]" />
           ) : (
             <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -74,65 +77,7 @@ const SocialAuthOptions: React.FC<{
               <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
             </svg>
           )}
-          <span>Google</span>
-          <span className="text-[9px] text-emerald-700 font-medium bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">Active</span>
-        </button>
-
-        {/* Facebook */}
-        <button
-          type="button"
-          onClick={() => onSelect('facebook')}
-          disabled={disabled || oauthLoading !== null}
-          className="flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-[#E8EAE1] hover:bg-[#DFE2D7] text-xs font-semibold text-[#171C18] border border-[#DFE2D7] transition-all disabled:opacity-50 cursor-pointer shadow-xs"
-          title="Sign in with Facebook"
-        >
-          {oauthLoading === 'facebook' ? (
-            <RefreshCw className="w-3.5 h-3.5 animate-spin text-[#1877F2]" />
-          ) : (
-            <svg className="w-4 h-4 shrink-0 fill-[#1877F2]" viewBox="0 0 24 24">
-              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-            </svg>
-          )}
-          <span>Facebook</span>
-          <span className="text-[9px] text-[#5E7A65] font-normal">(Setup Req.)</span>
-        </button>
-
-        {/* Instagram */}
-        <button
-          type="button"
-          onClick={() => onSelect('custom:instagram')}
-          disabled={disabled || oauthLoading !== null}
-          className="flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-[#E8EAE1] hover:bg-[#DFE2D7] text-xs font-semibold text-[#171C18] border border-[#DFE2D7] transition-all disabled:opacity-50 cursor-pointer shadow-xs"
-          title="Sign in with Instagram"
-        >
-          {oauthLoading === 'custom:instagram' ? (
-            <RefreshCw className="w-3.5 h-3.5 animate-spin text-[#E4405F]" />
-          ) : (
-            <svg className="w-4 h-4 shrink-0 fill-[#E4405F]" viewBox="0 0 24 24">
-              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-            </svg>
-          )}
-          <span>Instagram</span>
-          <span className="text-[9px] text-[#5E7A65] font-normal">(Setup Req.)</span>
-        </button>
-
-        {/* X (Twitter) */}
-        <button
-          type="button"
-          onClick={() => onSelect('twitter')}
-          disabled={disabled || oauthLoading !== null}
-          className="flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-[#E8EAE1] hover:bg-[#DFE2D7] text-xs font-semibold text-[#171C18] border border-[#DFE2D7] transition-all disabled:opacity-50 cursor-pointer shadow-xs"
-          title="Sign in with X"
-        >
-          {oauthLoading === 'twitter' ? (
-            <RefreshCw className="w-3.5 h-3.5 animate-spin text-[#000000]" />
-          ) : (
-            <svg className="w-3.5 h-3.5 shrink-0 fill-current text-[#171C18]" viewBox="0 0 24 24">
-              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-            </svg>
-          )}
-          <span>X</span>
-          <span className="text-[9px] text-[#5E7A65] font-normal">(Setup Req.)</span>
+          <span>Continue with Google</span>
         </button>
       </div>
     </div>
@@ -728,14 +673,42 @@ const ProfileSettingsView: React.FC<{
   userEmail?: string;
   onClose: () => void;
 }> = ({ profile, userEmail, onClose }) => {
-  const { updateProfile, signOut } = useAuth();
+  const { updateProfile, signOut, deleteAccount, resetPassword, openPassionModal } = useAuth();
   const [displayName, setDisplayName] = useState(profile?.display_name || '');
   const [preferredBoard, setPreferredBoard] = useState<CurriculumBoard>(profile?.preferred_board || 'CBSE');
   const [gradeLevel, setGradeLevel] = useState<GradeLevel>(profile?.grade_level || 'Class 10');
   const [preferredLanguage, setPreferredLanguage] = useState(profile?.preferred_language || 'English');
+  const [passionDetails, setPassionDetails] = useState(profile?.passion_details || '');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [resetSent, setResetSent] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handlePasswordReset = async () => {
+    if (!userEmail) return;
+    setError(null);
+    const res = await resetPassword(userEmail);
+    if (res.success) {
+      setResetSent(true);
+      setMessage('Password reset email sent to your inbox.');
+    } else {
+      setError(res.error || 'Failed to dispatch reset email.');
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    setIsDeleting(true);
+    setError(null);
+    const res = await deleteAccount();
+    setIsDeleting(false);
+    if (res.success) {
+      onClose();
+    } else {
+      setError(res.error || 'Failed to delete account.');
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -748,11 +721,12 @@ const ProfileSettingsView: React.FC<{
       preferred_board: preferredBoard,
       grade_level: gradeLevel,
       preferred_language: preferredLanguage.trim() || 'English',
+      passion_details: passionDetails.trim() || undefined,
     });
     setIsSubmitting(false);
 
     if (res.success) {
-      setMessage('Educational profile saved successfully.');
+      setMessage('Educational profile and interests saved successfully.');
       setTimeout(() => {
         onClose();
       }, 1000);
@@ -761,8 +735,13 @@ const ProfileSettingsView: React.FC<{
     }
   };
 
+  const currentPassionName = profile?.passion 
+    ? profile.passion.charAt(0).toUpperCase() + profile.passion.slice(1)
+    : 'Football / Sports';
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      {/* Account Info Header */}
       <div className="p-3.5 rounded-2xl bg-[#E8EAE1] border border-[#DFE2D7] flex items-center justify-between">
         <div>
           <div className="font-mono text-[10px] uppercase tracking-wider text-[#5E7A65]">
@@ -775,7 +754,7 @@ const ProfileSettingsView: React.FC<{
         <button
           type="button"
           onClick={signOut}
-          className="px-3 py-1.5 rounded-lg bg-red-100 hover:bg-red-200 text-red-700 font-mono text-[11px] font-bold flex items-center gap-1.5 transition-colors"
+          className="px-3 py-1.5 rounded-lg bg-red-100 hover:bg-red-200 text-red-700 font-mono text-[11px] font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
         >
           <LogOut className="w-3.5 h-3.5" />
           <span>Sign Out</span>
@@ -796,9 +775,97 @@ const ProfileSettingsView: React.FC<{
         </div>
       )}
 
+      {/* Email & Password In Bullets */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="space-y-1">
+          <label className="font-mono text-xs text-[#5E7A65] uppercase tracking-wider block flex items-center gap-1">
+            <Mail className="w-3 h-3 text-[#5E7A65]" />
+            <span>Account Email</span>
+          </label>
+          <input
+            type="text"
+            readOnly
+            value={userEmail || 'student@example.com'}
+            className="w-full px-3 py-2 rounded-xl bg-[#E8EAE1]/80 border border-[#DFE2D7] text-xs text-[#171C18] opacity-80 cursor-not-allowed"
+          />
+        </div>
+
+        <div className="space-y-1">
+          <label className="font-mono text-xs text-[#5E7A65] uppercase tracking-wider block flex items-center justify-between">
+            <span className="flex items-center gap-1">
+              <Key className="w-3 h-3 text-[#5E7A65]" />
+              <span>Password</span>
+            </span>
+            <button
+              type="button"
+              onClick={handlePasswordReset}
+              className="text-[10px] text-emerald-800 hover:underline font-mono"
+            >
+              {resetSent ? 'Link Sent' : 'Reset Link'}
+            </button>
+          </label>
+          <div className="flex items-center gap-2">
+            <input
+              type="password"
+              readOnly
+              value="••••••••••••••••"
+              className="w-full px-3 py-2 rounded-xl bg-[#E8EAE1]/80 border border-[#DFE2D7] text-xs font-mono text-[#171C18] opacity-80 tracking-widest cursor-not-allowed"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Student Passion & Interests Section */}
+      <div className="p-3.5 rounded-2xl bg-linear-to-br from-[#E8EAE1] to-[#DFE2D7] border border-[#C8F36B]/40 space-y-2.5">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-1.5">
+            <Heart className="w-4 h-4 text-emerald-600" />
+            <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#111714]">
+              Hobbies & Interests Profile
+            </span>
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              onClose();
+              openPassionModal();
+            }}
+            className="px-2.5 py-1 rounded-lg bg-[#111714] text-[#F3F4EC] text-[10px] font-mono uppercase font-bold hover:bg-[#19211C] transition-colors flex items-center gap-1 cursor-pointer"
+          >
+            <Sparkles className="w-3 h-3 text-[#C8F36B]" />
+            <span>Change Track</span>
+          </button>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <span className="text-xl">🌟</span>
+          <div>
+            <div className="text-xs font-bold text-[#111714]">
+              {currentPassionName}
+            </div>
+            <div className="text-[10px] text-[#5E7A65]">
+              AI synthesizes core physical & mathematical analogies through this field.
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-1 pt-1">
+          <label className="font-mono text-[10px] uppercase tracking-wider text-[#5E7A65] block">
+            Specific Sub-Interests / Favorite Elements
+          </label>
+          <input
+            type="text"
+            value={passionDetails}
+            onChange={(e) => setPassionDetails(e.target.value)}
+            placeholder="e.g. Aerodynamics of swerve shots, stadium grass biology, stud traction..."
+            className="w-full px-3 py-1.5 rounded-xl bg-white/80 border border-[#DFE2D7] text-xs text-[#171C18] focus:outline-hidden focus:border-[#111714]"
+          />
+        </div>
+      </div>
+
       <div className="space-y-1">
         <label className="font-mono text-xs text-[#5E7A65] uppercase tracking-wider block">
-          Display Name
+          Student Display Name
         </label>
         <input
           type="text"
@@ -857,10 +924,47 @@ const ProfileSettingsView: React.FC<{
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full py-2.5 px-4 rounded-xl bg-[#111714] text-[#F3F4EC] hover:bg-[#19211C] font-mono text-xs uppercase tracking-wider font-bold transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+        className="w-full py-2.5 px-4 rounded-xl bg-[#111714] text-[#F3F4EC] hover:bg-[#19211C] font-mono text-xs uppercase tracking-wider font-bold transition-all disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer shadow-xs"
       >
         {isSubmitting ? 'Saving Profile...' : 'Save Profile Changes'}
       </button>
+
+      {/* Danger Zone: Delete Account */}
+      <div className="pt-3 border-t border-[#DFE2D7]">
+        {!showDeleteConfirm ? (
+          <button
+            type="button"
+            onClick={() => setShowDeleteConfirm(true)}
+            className="w-full py-2 px-3 rounded-xl border border-red-200 bg-red-50/50 hover:bg-red-50 text-red-700 text-xs font-mono font-medium flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+          >
+            <Trash2 className="w-3.5 h-3.5 text-red-600" />
+            <span>Delete Student Account</span>
+          </button>
+        ) : (
+          <div className="p-3 rounded-xl bg-red-50 border border-red-300 space-y-2">
+            <div className="text-[11px] text-red-800 font-medium">
+              Are you sure? This will permanently delete your profile, saved topics, and trajectory history.
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={handleDeleteAccount}
+                disabled={isDeleting}
+                className="flex-1 py-1.5 px-3 rounded-lg bg-red-600 hover:bg-red-700 text-white font-mono text-xs font-bold transition-colors disabled:opacity-50 cursor-pointer"
+              >
+                {isDeleting ? 'Deleting...' : 'Yes, Delete Permanently'}
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowDeleteConfirm(false)}
+                className="py-1.5 px-3 rounded-lg bg-white border border-slate-300 text-slate-700 font-mono text-xs hover:bg-slate-50 transition-colors cursor-pointer"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
     </form>
   );
 };

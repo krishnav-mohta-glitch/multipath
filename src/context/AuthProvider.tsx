@@ -41,6 +41,37 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const openPassionModal = useCallback(() => setIsPassionModalOpen(true), []);
   const closePassionModal = useCallback(() => setIsPassionModalOpen(false), []);
 
+  // Strict onboarding gate: if user is authenticated and hasn't finished onboarding, lock access
+  const isOnboardingLocked = Boolean(user && (!profile || !profile.onboarding_completed));
+
+  const deleteAccount = useCallback(async (): Promise<{ success: boolean; error?: string }> => {
+    if (!user) {
+      return { success: false, error: 'No authenticated user to delete.' };
+    }
+    try {
+      setIsLoading(true);
+      if (supabase) {
+        await supabase.from('profiles').delete().eq('id', user.id);
+        await supabase.from('saved_topics').delete().eq('user_id', user.id);
+        await supabase.from('activity_events').delete().eq('user_id', user.id);
+        await supabase.from('learning_sessions').delete().eq('user_id', user.id);
+        await supabase.from('saved_resources').delete().eq('user_id', user.id);
+        await supabase.from('user_preferences').delete().eq('user_id', user.id);
+        await supabase.auth.signOut();
+      }
+      localStorage.clear();
+      setUser(null);
+      setProfile(null);
+      setSession(null);
+      setIsLoading(false);
+      return { success: true };
+    } catch (err: unknown) {
+      setIsLoading(false);
+      const msg = err instanceof Error ? err.message : 'Failed to delete account';
+      return { success: false, error: msg };
+    }
+  }, [user]);
+
   // Fetch or sync profile for authenticated user
   const loadProfileForUser = useCallback(async (userId: string) => {
     try {
@@ -338,6 +369,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     importGuestDataToAccount,
 
     isPassionModalOpen,
+    isOnboardingLocked,
     openPassionModal,
     closePassionModal,
     updatePassion,
@@ -346,6 +378,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     signIn,
     signInWithOAuth,
     signOut,
+    deleteAccount,
     resetPassword,
     resendVerification,
     updateProfile,
@@ -371,6 +404,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     closeGuestImportModal,
     importGuestDataToAccount,
     isPassionModalOpen,
+    isOnboardingLocked,
     openPassionModal,
     closePassionModal,
     updatePassion,
@@ -378,6 +412,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     signIn,
     signInWithOAuth,
     signOut,
+    deleteAccount,
     resetPassword,
     resendVerification,
     updateProfile,

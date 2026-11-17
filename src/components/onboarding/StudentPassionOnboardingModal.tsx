@@ -99,7 +99,8 @@ export const StudentPassionOnboardingModal: React.FC = () => {
     closePassionModal, 
     updatePassion, 
     profile,
-    updateProfile 
+    updateProfile,
+    isOnboardingLocked 
   } = useAuth();
 
   const [step, setStep] = useState<1 | 2>(1);
@@ -148,16 +149,18 @@ export const StudentPassionOnboardingModal: React.FC = () => {
           <div className="flex items-center gap-2.5">
             <span className="w-2.5 h-2.5 rounded-full bg-[#B8FF00] shadow-[0_0_8px_rgba(184,255,0,0.6)]" />
             <h2 className="font-mono text-xs uppercase tracking-wider font-semibold text-white">
-              AI LEARNER PROFILER • PERSONALIZE YOUR EXPLANATIONS
+              {isOnboardingLocked ? '🔒 ONBOARDING GATE • PROFILE YOUR LEARNER INTERESTS' : 'AI LEARNER PROFILER • PERSONALIZE YOUR EXPLANATIONS'}
             </h2>
           </div>
-          <button
-            onClick={closePassionModal}
-            className="p-1.5 rounded-xl hover:bg-white/10 text-[#8DA391] hover:text-white transition-colors"
-            aria-label="Close"
-          >
-            <X className="w-4 h-4" />
-          </button>
+          {!isOnboardingLocked && (
+            <button
+              onClick={closePassionModal}
+              className="p-1.5 rounded-xl hover:bg-white/10 text-[#8DA391] hover:text-white transition-colors cursor-pointer"
+              aria-label="Close"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          )}
         </div>
 
         {/* Modal Body */}
