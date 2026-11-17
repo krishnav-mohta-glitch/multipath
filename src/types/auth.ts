@@ -18,12 +18,27 @@ export type GradeLevel =
   | 'Class 12'
   | 'General';
 
+export type StudentPassion = 
+  | 'football'
+  | 'cricket'
+  | 'gaming'
+  | 'space'
+  | 'music'
+  | 'robotics'
+  | 'anime'
+  | 'art'
+  | 'cinema'
+  | 'custom';
+
 export interface StudentProfile {
   id: string;
   display_name: string | null;
   preferred_board: CurriculumBoard;
   grade_level: GradeLevel;
   preferred_language: string;
+  passion?: string | null;
+  passion_details?: string | null;
+  onboarding_completed?: boolean;
   created_at: string;
   updated_at: string;
 }
@@ -35,6 +50,8 @@ export interface SignUpMetadata {
   preferredBoard: CurriculumBoard;
   gradeLevel: GradeLevel;
   preferredLanguage: string;
+  passion?: string;
+  passionDetails?: string;
 }
 
 export interface ProfileUpdatePayload {
@@ -42,6 +59,9 @@ export interface ProfileUpdatePayload {
   preferred_board?: CurriculumBoard;
   grade_level?: GradeLevel;
   preferred_language?: string;
+  passion?: string;
+  passion_details?: string;
+  onboarding_completed?: boolean;
 }
 
 export interface AuthState {
@@ -69,6 +89,12 @@ export interface AuthContextValue extends AuthState {
   openGuestImportModal: () => void;
   closeGuestImportModal: () => void;
   importGuestDataToAccount: () => Promise<GuestImportResult>;
+
+  // Student Passion Onboarding Modal State
+  isPassionModalOpen: boolean;
+  openPassionModal: () => void;
+  closePassionModal: () => void;
+  updatePassion: (passion: string, details?: string) => Promise<void>;
 
   // Actions
   signUp: (email: string, password: string, meta: SignUpMetadata) => Promise<{ success: boolean; needsVerification: boolean; error?: string }>;

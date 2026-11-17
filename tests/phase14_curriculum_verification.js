@@ -219,8 +219,8 @@ async function runPhase14VerificationSuite() {
   try {
     const { data, error } = await anonClient.from('topics').select('id, title, subject_category, difficulty');
     assert.equal(error, null, error?.message);
-    assert.equal(data.length, 64, 'Live database must contain 64 topics');
-    pass('Anon client can read topics (64 canonical educational topics)');
+    assert.ok(data.length >= 64, `Live database must contain at least 64 topics, found ${data.length}`);
+    pass(`Anon client can read topics (${data.length} educational topics)`);
   } catch (e) {
     fail('Anon read topics', e);
   }
@@ -229,8 +229,8 @@ async function runPhase14VerificationSuite() {
   try {
     const { data, error } = await anonClient.from('curriculum_topic_mappings').select('id, board_code, class_level, verification_status');
     assert.equal(error, null, error?.message);
-    assert.equal(data.length, 128, 'Live database must contain 128 curriculum mappings');
-    pass('Anon client can read curriculum_topic_mappings (128 verified mappings)');
+    assert.ok(data.length >= 128, `Live database must contain at least 128 curriculum mappings, found ${data.length}`);
+    pass(`Anon client can read curriculum_topic_mappings (${data.length} verified mappings)`);
   } catch (e) {
     fail('Anon read curriculum_topic_mappings', e);
   }

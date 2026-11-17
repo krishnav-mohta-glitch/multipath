@@ -19,7 +19,7 @@ import { useAuth } from '../../context/AuthContext';
 
 export const Navbar: React.FC = () => {
   const { currentTab, navigateTo, searchQuery, setSearchQuery, sessionState, dashboardSubTab } = useApp();
-  const { user, profile, openAuthModal } = useAuth();
+  const { user, profile, openAuthModal, openPassionModal } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -175,6 +175,16 @@ export const Navbar: React.FC = () => {
             >
               <Sparkles className="w-3.5 h-3.5 text-[#B8FF00]" />
               <span>Explore</span>
+            </button>
+
+            {/* Student Passion Persona Pill */}
+            <button
+              onClick={openPassionModal}
+              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#161D26] hover:bg-[#1C2430] text-[#C8D6C9] hover:text-white border border-white/10 text-xs font-mono transition-all cursor-pointer shadow-xs"
+              title="Change your learning passion & personal explanation domain"
+            >
+              <span>{profile?.passion === 'gaming' ? '🎮' : profile?.passion === 'cricket' ? '🏏' : profile?.passion === 'space' ? '🚀' : profile?.passion === 'music' ? '🎵' : profile?.passion === 'robotics' ? '🤖' : '⚽'}</span>
+              <span className="capitalize font-semibold text-[#B8FF00]">{profile?.passion || 'Football'}</span>
             </button>
 
             {/* Account / Guest Profile Button */}

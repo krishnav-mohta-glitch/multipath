@@ -879,6 +879,7 @@ export const AuthModal: React.FC = () => {
     user,
     profile,
     isConfigured,
+    openPassionModal,
   } = useAuth();
 
   const configDiagnostics = getConfigurationDiagnostics();
@@ -968,6 +969,7 @@ export const AuthModal: React.FC = () => {
                   setAuthModalMode('verification-sent');
                 } else {
                   closeAuthModal();
+                  openPassionModal();
                 }
               }}
               switchMode={setAuthModalMode}

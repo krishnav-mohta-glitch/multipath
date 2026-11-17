@@ -3,14 +3,13 @@ import { useApp } from '../context/AppContext';
 import { TOPICS } from '../data/topics';
 import { WorkspaceHeader } from '../components/workspace/WorkspaceHeader';
 import { TopicIntro } from '../components/workspace/TopicIntro';
-import { PathSelector } from '../components/workspace/PathSelector';
-import { PathViewer } from '../components/workspace/PathViewer';
+import { UnifiedLearningCanvas } from '../components/workspace/UnifiedLearningCanvas';
 import { FeatureBadges } from '../components/workspace/FeatureBadges';
 import { AILearningGuideDrawer } from '../components/workspace/AILearningGuideDrawer';
 import { ArrowLeft } from 'lucide-react';
 
 export const WorkspacePage: React.FC = () => {
-  const { activeTopic, activePath, setActivePath, backToLibrary } = useApp();
+  const { activeTopic, backToLibrary } = useApp();
 
   // If no topic was selected yet, default to the flagship topic
   const currentTopic = activeTopic || TOPICS[0];
@@ -21,25 +20,14 @@ export const WorkspacePage: React.FC = () => {
       {/* Workspace Sticky Header */}
       <WorkspaceHeader topic={currentTopic} />
 
-      {/* Main Workspace Layout (Visual-First Inverted Hierarchy) */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      {/* Main Workspace Layout (Sequential 3-Part Learning Architecture) */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
         
-        {/* Learning Path Selection Area (Prominent Top Controls) */}
-        <PathSelector
-          activePath={activePath}
-          onSelectPath={setActivePath}
-          availablePaths={currentTopic.availablePaths}
-        />
-
-        {/* Central Visual Instrument & Simulator Stage (Front & Center) */}
-        <PathViewer
-          topic={currentTopic}
-          activePath={activePath}
-          onSwitchPath={setActivePath}
-        />
-
-        {/* Conceptual Foundation & Inquiry Context */}
+        {/* Conceptual Foundation & Syllabus Context */}
         <TopicIntro topic={currentTopic} />
+
+        {/* Unified 3-Part Sequential Learning Flow */}
+        <UnifiedLearningCanvas topic={currentTopic} />
 
         {/* Core Capabilities Preview Bar (Guided Discovery & Feynman Mode) */}
         <FeatureBadges topic={currentTopic} />

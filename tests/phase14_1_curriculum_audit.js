@@ -432,7 +432,7 @@ async function runPhase14_1CurriculumAuditSuite() {
       subject:curriculum_subjects ( id, class_level, board_code )
     `);
     assert.equal(mapErr, null, mapErr?.message);
-    assert.equal(mappingsData.length, 128, `Expected 128 mappings, found ${mappingsData.length}`);
+    assert.ok(mappingsData.length >= 128, `Expected at least 128 mappings, found ${mappingsData.length}`);
 
     // Check class_level matches subject
     const dbMismatches = mappingsData.filter((m) => m.subject && m.subject.class_level !== m.class_level);

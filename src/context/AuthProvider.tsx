@@ -36,15 +36,60 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Guest-to-Account Migration Modal State
   const [isGuestImportModalOpen, setIsGuestImportModalOpen] = useState<boolean>(false);
 
+  // Student Passion Onboarding Modal State
+  const [isPassionModalOpen, setIsPassionModalOpen] = useState<boolean>(false);
+  const openPassionModal = useCallback(() => setIsPassionModalOpen(true), []);
+  const closePassionModal = useCallback(() => setIsPassionModalOpen(false), []);
+
   // Fetch or sync profile for authenticated user
   const loadProfileForUser = useCallback(async (userId: string) => {
     try {
       const p = await authService.getProfile(userId);
       setProfile(p);
+      // If user has not completed passion profiling, open onboarding modal
+      if (p && !p.onboarding_completed) {
+        setIsPassionModalOpen(true);
+      }
     } catch (err) {
       console.warn('[AuthProvider] Error loading student profile:', err);
     }
   }, []);
+
+  const updatePassion = useCallback(async (passion: string, details?: string) => {
+    if (user) {
+      try {
+        await authService.updateProfile(user.id, {
+          passion,
+          passion_details: details,
+          onboarding_completed: true,
+        });
+        await loadProfileForUser(user.id);
+      } catch (err) {
+        console.warn('[AuthProvider] updatePassion error:', err);
+      }
+    } else {
+      localStorage.setItem('multipath_student_passion', passion);
+      if (details) localStorage.setItem('multipath_student_passion_details', details);
+      setProfile((prev) => prev ? {
+        ...prev,
+        passion,
+        passion_details: details,
+        onboarding_completed: true,
+      } : {
+        id: 'guest',
+        display_name: 'Guest Learner',
+        preferred_board: 'ICSE/CISCE',
+        grade_level: 'Class 9',
+        preferred_language: 'English',
+        passion,
+        passion_details: details,
+        onboarding_completed: true,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      });
+    }
+    setIsPassionModalOpen(false);
+  }, [user, loadProfileForUser]);
 
   const refreshProfile = useCallback(async () => {
     if (user) {
@@ -292,6 +337,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     closeGuestImportModal,
     importGuestDataToAccount,
 
+    isPassionModalOpen,
+    openPassionModal,
+    closePassionModal,
+    updatePassion,
+
     signUp,
     signIn,
     signInWithOAuth,
@@ -320,6 +370,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     openGuestImportModal,
     closeGuestImportModal,
     importGuestDataToAccount,
+    isPassionModalOpen,
+    openPassionModal,
+    closePassionModal,
+    updatePassion,
     signUp,
     signIn,
     signInWithOAuth,

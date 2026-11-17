@@ -6,6 +6,7 @@ import { Footer } from './components/common/Footer';
 import { FeaturePreviewModal } from './components/common/FeaturePreviewModal';
 import { AuthModal } from './components/auth/AuthModal';
 import { GuestImportModal } from './components/auth/GuestImportModal';
+import { StudentPassionOnboardingModal } from './components/onboarding/StudentPassionOnboardingModal';
 import { HomePage } from './pages/HomePage';
 import { LibraryPage } from './pages/LibraryPage';
 import { WorkspacePage } from './pages/WorkspacePage';
@@ -57,6 +58,9 @@ const AppContent: React.FC = () => {
 
       {/* Guest-to-Account Migration Modal */}
       <GuestImportModal />
+
+      {/* Student Passion Onboarding & Personalization Interview Modal */}
+      <StudentPassionOnboardingModal />
     </div>
   );
 };
