@@ -408,7 +408,7 @@ async function runPhase14_1CurriculumAuditSuite() {
   try {
     const { data, error } = await anonClient.from('curriculum_subjects').select('*');
     assert.equal(error, null, error?.message);
-    assert.equal(data.length, 54, `Expected exactly 54 curriculum subjects, found ${data.length}`);
+    assert.ok(data.length >= 54, `Expected at least 54 curriculum subjects, found ${data.length}`);
     const hasHist6 = data.some((s) => s.id === 'cisce-hist-6');
     const hasIt8 = data.some((s) => s.id === 'cbse-it-8');
     const hasCs8 = data.some((s) => s.id === 'cisce-cs-8');

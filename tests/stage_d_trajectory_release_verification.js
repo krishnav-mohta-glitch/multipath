@@ -113,11 +113,11 @@ test('Journey 3: Trajectory calculations group progress accurately without doubl
     assert(count > 0, `Discipline ${sub.name} must have mapped topics`);
     totalTopicsSum += count;
   }
-  assert.equal(totalTopicsSum, 64, 'Sum of all subject topics must equal 64 without double-counting');
+  assert.equal(totalTopicsSum, TOPICS.length, 'Sum of all subject topics must equal total topics without double-counting');
 
   // 2. Trajectory metric invariants
   const stats = getCurriculumStats(TOPICS, 'all', 'all');
-  assert.equal(stats.totalInFilter, 64);
+  assert.equal(stats.totalInFilter, TOPICS.length);
   assert(stats.interactiveCount >= 6);
   assert(stats.officialVerifiedCount > 0);
 });

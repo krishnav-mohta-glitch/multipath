@@ -19,16 +19,16 @@ function assert(condition: boolean, testName: string, detail?: string) {
   }
 }
 
-// 1. Verify 64 Topics in Canonical Database
-assert(TOPICS.length === 64, 'Total canonical topics equals exactly 64', `Actual: ${TOPICS.length}`);
+// 1. Verify Topics in Canonical Database
+assert(TOPICS.length >= 64, 'Total canonical topics at least 64', `Actual: ${TOPICS.length}`);
 
-// 2. Verify all 64 topics have hydrated feynmanAnchor
+// 2. Verify all topics have hydrated feynmanAnchor
 const hydratedCount = TOPICS.filter((t: Topic) => t.feynmanAnchor !== undefined).length;
-assert(hydratedCount === 64, 'All 64 topics have hydrated feynmanAnchor', `Hydrated: ${hydratedCount}`);
+assert(hydratedCount === TOPICS.length, 'All topics have hydrated feynmanAnchor', `Hydrated: ${hydratedCount}`);
 
-// 3. Verify FEYNMAN_ANCHORS registry has all 64 keys
+// 3. Verify FEYNMAN_ANCHORS registry has all keys
 const anchorKeys = Object.keys(FEYNMAN_ANCHORS);
-assert(anchorKeys.length === 64, 'FEYNMAN_ANCHORS dictionary has 64 entries', `Count: ${anchorKeys.length}`);
+assert(anchorKeys.length >= 64, 'FEYNMAN_ANCHORS dictionary has at least 64 entries', `Count: ${anchorKeys.length}`);
 
 // 4. Verify helper function getFeynmanAnchor
 const sampleAnchor = getFeynmanAnchor('math-linear-equations');
@@ -71,10 +71,10 @@ for (const topic of TOPICS) {
   if (hasMisconception) validMisconceptions++;
 }
 
-assert(completeAnchors === 64, 'All 64 topics possess complete visceral metaphors and physical objects', `Actual: ${completeAnchors}`);
-assert(validTraps === 64, 'All 64 topics possess unmasked textbook traps and truths', `Actual: ${validTraps}`);
-assert(threeStepLadders === 64, 'All 64 topics possess verified 3-step Aha! Ladders', `Actual: ${threeStepLadders}`);
-assert(validMisconceptions === 64, 'All 64 topics possess exam misconception alerts and reality checks', `Actual: ${validMisconceptions}`);
+assert(completeAnchors === TOPICS.length, 'All topics possess complete visceral metaphors and physical objects', `Actual: ${completeAnchors}`);
+assert(validTraps === TOPICS.length, 'All topics possess unmasked textbook traps and truths', `Actual: ${validTraps}`);
+assert(threeStepLadders === TOPICS.length, 'All topics possess verified 3-step Aha! Ladders', `Actual: ${threeStepLadders}`);
+assert(validMisconceptions === TOPICS.length, 'All topics possess exam misconception alerts and reality checks', `Actual: ${validMisconceptions}`);
 
 // 6. Verify Subject Representation
 const subjects = new Set(TOPICS.map((t: Topic) => t.subjectId));

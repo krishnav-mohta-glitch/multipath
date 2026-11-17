@@ -5,6 +5,7 @@ import { CHEM_ANCHORS } from './anchors/chemAnchors';
 import { BIO_ANCHORS } from './anchors/bioAnchors';
 import { CS_ANCHORS } from './anchors/csAnchors';
 import { HUMANITIES_ANCHORS } from './anchors/humanitiesAnchors';
+import { CLASS_EXPANSION_ANCHORS } from './anchors/classExpansionAnchors';
 
 export const FEYNMAN_ANCHORS: Record<string, FeynmanAnchor> = {
   ...MATH_ANCHORS,
@@ -12,7 +13,8 @@ export const FEYNMAN_ANCHORS: Record<string, FeynmanAnchor> = {
   ...CHEM_ANCHORS,
   ...BIO_ANCHORS,
   ...CS_ANCHORS,
-  ...HUMANITIES_ANCHORS
+  ...HUMANITIES_ANCHORS,
+  ...CLASS_EXPANSION_ANCHORS
 };
 
 export const getFeynmanAnchor = (topicId: string): FeynmanAnchor | undefined => {

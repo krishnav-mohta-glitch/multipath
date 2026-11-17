@@ -360,6 +360,38 @@ export const CURRICULUM_SUBJECTS: CurriculumSubject[] = [
   { id: 'cisce-econ-10', boardCode: 'CISCE', classLevel: 10, subjectCode: '64', subjectName: 'Economics', subjectCategory: 'social_sciences', isIntegrated: false, isCompulsory: false },
   { id: 'cisce-evs-9', boardCode: 'CISCE', classLevel: 9, subjectCode: '82', subjectName: 'Environmental Science', subjectCategory: 'science', isIntegrated: false, isCompulsory: false },
   { id: 'cisce-evs-10', boardCode: 'CISCE', classLevel: 10, subjectCode: '82', subjectName: 'Environmental Science', subjectCategory: 'science', isIntegrated: false, isCompulsory: false },
+
+  // CBSE Senior Secondary (Classes 11 & 12)
+  { id: 'cbse-math-11', boardCode: 'CBSE', classLevel: 11, subjectCode: '041', subjectName: 'Mathematics', subjectCategory: 'mathematics', isIntegrated: false, isCompulsory: false },
+  { id: 'cbse-math-12', boardCode: 'CBSE', classLevel: 12, subjectCode: '041', subjectName: 'Mathematics', subjectCategory: 'mathematics', isIntegrated: false, isCompulsory: false },
+  { id: 'cbse-phys-11', boardCode: 'CBSE', classLevel: 11, subjectCode: '042', subjectName: 'Physics', subjectCategory: 'science', isIntegrated: false, isCompulsory: false },
+  { id: 'cbse-phys-12', boardCode: 'CBSE', classLevel: 12, subjectCode: '042', subjectName: 'Physics', subjectCategory: 'science', isIntegrated: false, isCompulsory: false },
+  { id: 'cbse-chem-11', boardCode: 'CBSE', classLevel: 11, subjectCode: '043', subjectName: 'Chemistry', subjectCategory: 'science', isIntegrated: false, isCompulsory: false },
+  { id: 'cbse-chem-12', boardCode: 'CBSE', classLevel: 12, subjectCode: '043', subjectName: 'Chemistry', subjectCategory: 'science', isIntegrated: false, isCompulsory: false },
+  { id: 'cbse-bio-11', boardCode: 'CBSE', classLevel: 11, subjectCode: '044', subjectName: 'Biology', subjectCategory: 'science', isIntegrated: false, isCompulsory: false },
+  { id: 'cbse-bio-12', boardCode: 'CBSE', classLevel: 12, subjectCode: '044', subjectName: 'Biology', subjectCategory: 'science', isIntegrated: false, isCompulsory: false },
+  { id: 'cbse-cs-11', boardCode: 'CBSE', classLevel: 11, subjectCode: '083', subjectName: 'Computer Science', subjectCategory: 'computing_tech', isIntegrated: false, isCompulsory: false },
+  { id: 'cbse-cs-12', boardCode: 'CBSE', classLevel: 12, subjectCode: '083', subjectName: 'Computer Science', subjectCategory: 'computing_tech', isIntegrated: false, isCompulsory: false },
+  { id: 'cbse-eng-11', boardCode: 'CBSE', classLevel: 11, subjectCode: '301', subjectName: 'English Core', subjectCategory: 'languages', isIntegrated: false, isCompulsory: true },
+  { id: 'cbse-eng-12', boardCode: 'CBSE', classLevel: 12, subjectCode: '301', subjectName: 'English Core', subjectCategory: 'languages', isIntegrated: false, isCompulsory: true },
+  { id: 'cbse-hist-11', boardCode: 'CBSE', classLevel: 11, subjectCode: '027', subjectName: 'History', subjectCategory: 'social_sciences', isIntegrated: false, isCompulsory: false },
+  { id: 'cbse-hist-12', boardCode: 'CBSE', classLevel: 12, subjectCode: '027', subjectName: 'History', subjectCategory: 'social_sciences', isIntegrated: false, isCompulsory: false },
+
+  // CISCE (ISC) Senior Secondary (Classes 11 & 12)
+  { id: 'cisce-math-11', boardCode: 'CISCE', classLevel: 11, subjectCode: '860', subjectName: 'Mathematics', subjectCategory: 'mathematics', isIntegrated: false, isCompulsory: false },
+  { id: 'cisce-math-12', boardCode: 'CISCE', classLevel: 12, subjectCode: '860', subjectName: 'Mathematics', subjectCategory: 'mathematics', isIntegrated: false, isCompulsory: false },
+  { id: 'cisce-phys-11', boardCode: 'CISCE', classLevel: 11, subjectCode: '861', subjectName: 'Physics', subjectCategory: 'science', isIntegrated: false, isCompulsory: false },
+  { id: 'cisce-phys-12', boardCode: 'CISCE', classLevel: 12, subjectCode: '861', subjectName: 'Physics', subjectCategory: 'science', isIntegrated: false, isCompulsory: false },
+  { id: 'cisce-chem-11', boardCode: 'CISCE', classLevel: 11, subjectCode: '862', subjectName: 'Chemistry', subjectCategory: 'science', isIntegrated: false, isCompulsory: false },
+  { id: 'cisce-chem-12', boardCode: 'CISCE', classLevel: 12, subjectCode: '862', subjectName: 'Chemistry', subjectCategory: 'science', isIntegrated: false, isCompulsory: false },
+  { id: 'cisce-bio-11', boardCode: 'CISCE', classLevel: 11, subjectCode: '863', subjectName: 'Biology', subjectCategory: 'science', isIntegrated: false, isCompulsory: false },
+  { id: 'cisce-bio-12', boardCode: 'CISCE', classLevel: 12, subjectCode: '863', subjectName: 'Biology', subjectCategory: 'science', isIntegrated: false, isCompulsory: false },
+  { id: 'cisce-cs-11', boardCode: 'CISCE', classLevel: 11, subjectCode: '868', subjectName: 'Computer Science', subjectCategory: 'computing_tech', isIntegrated: false, isCompulsory: false },
+  { id: 'cisce-cs-12', boardCode: 'CISCE', classLevel: 12, subjectCode: '868', subjectName: 'Computer Science', subjectCategory: 'computing_tech', isIntegrated: false, isCompulsory: false },
+  { id: 'cisce-eng-11', boardCode: 'CISCE', classLevel: 11, subjectCode: '801', subjectName: 'English', subjectCategory: 'languages', isIntegrated: false, isCompulsory: true },
+  { id: 'cisce-eng-12', boardCode: 'CISCE', classLevel: 12, subjectCode: '801', subjectName: 'English', subjectCategory: 'languages', isIntegrated: false, isCompulsory: true },
+  { id: 'cisce-hist-11', boardCode: 'CISCE', classLevel: 11, subjectCode: '851', subjectName: 'History', subjectCategory: 'social_sciences', isIntegrated: false, isCompulsory: false },
+  { id: 'cisce-hist-12', boardCode: 'CISCE', classLevel: 12, subjectCode: '851', subjectName: 'History', subjectCategory: 'social_sciences', isIntegrated: false, isCompulsory: false },
 ];
 
 export interface SubjectMatrixRow {

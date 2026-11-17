@@ -1,4 +1,5 @@
 import type { CurriculumTopicMapping, ClassLevel } from '../types/curriculum';
+import { EXPANDED_CURRICULUM_TOPIC_MAPPINGS } from './expandedCurriculumMappings';
 
 export const CURRICULUM_TOPIC_MAPPINGS: CurriculumTopicMapping[] = [
   // =========================================================================
@@ -1950,8 +1951,13 @@ export const CURRICULUM_TOPIC_MAPPINGS: CurriculumTopicMapping[] = [
   },
 ];
 
+export const ALL_CURRICULUM_MAPPINGS: CurriculumTopicMapping[] = [
+  ...CURRICULUM_TOPIC_MAPPINGS,
+  ...EXPANDED_CURRICULUM_TOPIC_MAPPINGS,
+];
+
 export const getMappingsForTopic = (topicId: string): CurriculumTopicMapping[] => {
-  return CURRICULUM_TOPIC_MAPPINGS.filter((m) => m.topicId === topicId);
+  return ALL_CURRICULUM_MAPPINGS.filter((m) => m.topicId === topicId);
 };
 
 export const getPrimaryMappingForTopic = (

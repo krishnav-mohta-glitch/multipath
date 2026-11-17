@@ -209,8 +209,8 @@ async function runPhase14VerificationSuite() {
   try {
     const { data, error } = await anonClient.from('curriculum_subjects').select('*');
     assert.equal(error, null, error?.message);
-    assert.equal(data.length, 54, 'Live database must contain 54 curriculum subjects');
-    pass('Anon client can read curriculum_subjects (54 subjects across Classes 6-10)');
+    assert.ok(data.length >= 54, `Live database must contain at least 54 curriculum subjects (found ${data.length})`);
+    pass(`Anon client can read curriculum_subjects (${data.length} subjects across Classes 6-12)`);
   } catch (e) {
     fail('Anon read curriculum_subjects', e);
   }

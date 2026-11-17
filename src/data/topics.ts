@@ -1,5 +1,10 @@
 import type { Topic } from '../types/topic';
 import { FEYNMAN_ANCHORS } from './feynmanAnchors';
+import { CLASS_6_TOPICS } from './topics/class6Topics';
+import { CLASS_7_TOPICS } from './topics/class7Topics';
+import { CLASS_8_TOPICS } from './topics/class8Topics';
+import { CLASS_11_TOPICS } from './topics/class11Topics';
+import { CLASS_12_TOPICS } from './topics/class12Topics';
 
 const BASE_TOPICS: Topic[] = [
   // =========================================================================
@@ -12410,7 +12415,16 @@ const BASE_TOPICS: Topic[] = [
 }
 ];
 
-export const TOPICS: Topic[] = BASE_TOPICS.map((topic) => ({
+const ALL_BASE_TOPICS: Topic[] = [
+  ...BASE_TOPICS,
+  ...CLASS_6_TOPICS,
+  ...CLASS_7_TOPICS,
+  ...CLASS_8_TOPICS,
+  ...CLASS_11_TOPICS,
+  ...CLASS_12_TOPICS,
+];
+
+export const TOPICS: Topic[] = ALL_BASE_TOPICS.map((topic) => ({
   ...topic,
   feynmanAnchor: FEYNMAN_ANCHORS[topic.id] ?? topic.feynmanAnchor,
 }));
