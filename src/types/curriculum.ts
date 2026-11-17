@@ -6,7 +6,7 @@
 
 export type CurriculumBoardCode = 'CBSE' | 'CISCE';
 
-export type ClassLevel = 6 | 7 | 8 | 9 | 10;
+export type ClassLevel = 6 | 7 | 8 | 9 | 10 | 11 | 12;
 
 export type VerificationStatus =
   | 'verified_official'

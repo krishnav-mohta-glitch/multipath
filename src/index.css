@@ -26,7 +26,7 @@
 
 @layer base {
   body {
-    @apply bg-[#F1F1E9] text-[#171C18] antialiased selection:bg-[#C8F36B] selection:text-[#111714];
+    @apply bg-[#05070B] text-[#F3F4EC] antialiased selection:bg-[#B8FF00] selection:text-black;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
@@ -44,13 +44,13 @@
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    @apply bg-[#19211C]/20 rounded-full hover:bg-[#19211C]/40 transition-colors;
+    @apply bg-white/15 rounded-full hover:bg-white/30 transition-colors;
   }
 }
 
 /* Restrained Scientific / Hardware Aesthetic Utilities */
 .tech-border {
-  border: 1px solid rgba(25, 33, 28, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .tech-border-dark {
@@ -58,9 +58,10 @@
 }
 
 .tech-card {
-  background: #E8EAE1;
-  border: 1px solid rgba(25, 33, 28, 0.08);
-  box-shadow: 0 1px 3px rgba(17, 23, 20, 0.04);
+  background: rgba(13, 18, 26, 0.75);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
 }
 
 .tech-card-dark {

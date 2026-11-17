@@ -37,7 +37,7 @@ export const VisualSubjectGallery: React.FC<VisualSubjectGalleryProps> = ({
             Verified Curriculum Disciplines
           </h3>
           <span className="font-mono text-[10px] px-2 py-0.5 rounded-full bg-[#141A22] text-[#8B9DAE] border border-white/10">
-            {selectedBoard !== 'all' ? selectedBoard : 'All Boards'} &bull; {selectedClass !== 'all' ? `Class ${selectedClass}` : 'Classes 6–10'}
+            {selectedBoard !== 'all' ? selectedBoard : 'All Boards'} &bull; {selectedClass !== 'all' ? `Class ${selectedClass}` : 'Classes 6–12'}
           </span>
         </div>
 

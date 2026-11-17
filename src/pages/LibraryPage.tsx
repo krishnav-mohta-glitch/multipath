@@ -37,7 +37,7 @@ export const LibraryPage: React.FC = () => {
       const match = profile.grade_level.match(/Class\s*(\d+)/i);
       if (match) {
         const val = parseInt(match[1], 10);
-        if (val >= 6 && val <= 10) return val as ClassLevel;
+        if (val >= 6 && val <= 12) return val as ClassLevel;
       }
     }
     return 'all';

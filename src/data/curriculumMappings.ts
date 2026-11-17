@@ -1,4 +1,4 @@
-import type { CurriculumTopicMapping } from '../types/curriculum';
+import type { CurriculumTopicMapping, ClassLevel } from '../types/curriculum';
 
 export const CURRICULUM_TOPIC_MAPPINGS: CurriculumTopicMapping[] = [
   // =========================================================================
@@ -1957,7 +1957,7 @@ export const getMappingsForTopic = (topicId: string): CurriculumTopicMapping[] =
 export const getPrimaryMappingForTopic = (
   topicId: string,
   preferredBoard?: 'CBSE' | 'CISCE',
-  preferredClass?: 6 | 7 | 8 | 9 | 10
+  preferredClass?: ClassLevel
 ): CurriculumTopicMapping | undefined => {
   const mappings = getMappingsForTopic(topicId);
   if (mappings.length === 0) return undefined;
@@ -1981,7 +1981,7 @@ export const getPrimaryMappingForTopic = (
 export const isTopicInCurriculum = (
   topicId: string,
   boardCode?: 'CBSE' | 'CISCE' | 'all',
-  classLevel?: 6 | 7 | 8 | 9 | 10 | 'all'
+  classLevel?: ClassLevel | 'all'
 ): boolean => {
   if ((!boardCode || boardCode === 'all') && (!classLevel || classLevel === 'all')) {
     return true;

@@ -57,7 +57,7 @@ export const CurriculumFilterBar: React.FC<CurriculumFilterBarProps> = ({
   };
 
   const isFiltering = selectedBoard !== 'all' || selectedClass !== 'all';
-  const classOptions: ClassLevel[] = [6, 7, 8, 9, 10];
+  const classOptions: ClassLevel[] = [6, 7, 8, 9, 10, 11, 12];
 
   return (
     <div className="bg-slate-900/70 rounded-2xl border border-slate-800/90 p-4 sm:p-5 space-y-4 shadow-xl backdrop-blur-md relative overflow-hidden">

@@ -41,7 +41,7 @@ export const Navbar: React.FC = () => {
       id: 'library' as const,
       label: 'Explore / Curriculum',
       icon: BookOpen,
-      sublabel: 'CBSE & ICSE 6–10',
+      sublabel: 'CBSE & ICSE 6–12',
       isActive: currentTab === 'library',
       onClick: () => navigateTo('library'),
     },
