@@ -28,7 +28,7 @@ const SCIENTIFIC_DISCIPLINES: ScientificDisciplineData[] = [
     category: 'Formal Systems & Proofs',
     color: '#00F0FF', // Electric Cyan
     glowColor: '#38BDF8',
-    basePosition: [-1.75, 0.75, -0.15],
+    basePosition: [-1.65, 0.65, -0.15],
     size: 0.38,
     rotationSpeed: 0.55,
     coreInvariant: 'Axiomatic symmetry & invariant equality across all reversible algebraic transformations',
@@ -42,7 +42,7 @@ const SCIENTIFIC_DISCIPLINES: ScientificDisciplineData[] = [
     category: 'Mechanics & Field Invariants',
     color: '#10B981', // Emerald
     glowColor: '#34D399',
-    basePosition: [1.75, 0.8, 0.1],
+    basePosition: [1.65, 0.65, 0.1],
     size: 0.36,
     rotationSpeed: 0.5,
     coreInvariant: 'Universal conservation of momentum, energy & force distribution across fluid manifolds',
@@ -56,7 +56,7 @@ const SCIENTIFIC_DISCIPLINES: ScientificDisciplineData[] = [
     category: 'Molecular Kinetics & Bonds',
     color: '#F59E0B', // Amber
     glowColor: '#FBBF24',
-    basePosition: [-1.35, -0.65, 0.2],
+    basePosition: [-1.25, -0.22, 0.2],
     size: 0.34,
     rotationSpeed: 0.45,
     coreInvariant: 'Electron configuration stability, covalent orbital geometry & thermodynamic equilibrium',
@@ -70,7 +70,7 @@ const SCIENTIFIC_DISCIPLINES: ScientificDisciplineData[] = [
     category: 'Cellular Systems & Genetics',
     color: '#B8FF00', // Acid Lime
     glowColor: '#CCFF00',
-    basePosition: [1.45, -0.65, -0.1],
+    basePosition: [1.25, -0.22, -0.1],
     size: 0.35,
     rotationSpeed: 0.55,
     coreInvariant: 'Complementary base pairing, ATP energy transduction & homeostatic regulation',
@@ -84,7 +84,7 @@ const SCIENTIFIC_DISCIPLINES: ScientificDisciplineData[] = [
     category: 'Algorithms & Architecture',
     color: '#6366F1', // Indigo
     glowColor: '#818CF8',
-    basePosition: [0, 1.25, -0.35],
+    basePosition: [0, 0.95, -0.3],
     size: 0.32,
     rotationSpeed: 0.65,
     coreInvariant: 'Computational state transitions, deterministic logic networks & algorithmic complexity',
@@ -98,7 +98,7 @@ const SCIENTIFIC_DISCIPLINES: ScientificDisciplineData[] = [
     category: 'Causality & Civilization',
     color: '#FB7185', // Rose
     glowColor: '#FDA4AF',
-    basePosition: [-2.35, 0.1, -0.4],
+    basePosition: [-2.15, 0.15, -0.35],
     size: 0.3,
     rotationSpeed: 0.4,
     coreInvariant: 'Chronological causality, institutional dynamics & empirical primary source triangulation',
@@ -112,7 +112,7 @@ const SCIENTIFIC_DISCIPLINES: ScientificDisciplineData[] = [
     category: 'Geomorphology & Climate',
     color: '#14B8A6', // Teal
     glowColor: '#2DD4BF',
-    basePosition: [2.25, 0.1, -0.35],
+    basePosition: [2.15, 0.15, -0.3],
     size: 0.3,
     rotationSpeed: 0.42,
     coreInvariant: 'Tectonic convection, thermal equilibrium & atmospheric pressure differential circulation',
@@ -126,7 +126,7 @@ const SCIENTIFIC_DISCIPLINES: ScientificDisciplineData[] = [
     category: 'Semiotics & Rhetoric',
     color: '#C084FC', // Amethyst
     glowColor: '#E879F9',
-    basePosition: [0, -1.05, -0.25],
+    basePosition: [0, -0.32, 0.15],
     size: 0.31,
     rotationSpeed: 0.48,
     coreInvariant: 'Dialectical synthesis, narrative architecture & structural semiotic resonance',
@@ -270,16 +270,16 @@ const SceneContent: React.FC<{
     // Camera targeting on focused discipline
     const focused = SCIENTIFIC_DISCIPLINES.find((d) => d.id === selectedOrbId);
     if (focused) {
-      const targetCamX = focused.basePosition[0] * 0.6;
-      const targetCamY = focused.basePosition[1] * 0.6 + 0.15; // slightly raised for HUD clearance
-      const targetCamZ = 3.1;
+      const targetCamX = focused.basePosition[0] * 0.55;
+      const targetCamY = focused.basePosition[1] * 0.55 + 0.22; // raised for complete HUD clearance
+      const targetCamZ = 3.2;
       state.camera.position.x = THREE.MathUtils.damp(state.camera.position.x, targetCamX, 4, delta);
       state.camera.position.y = THREE.MathUtils.damp(state.camera.position.y, targetCamY, 4, delta);
       state.camera.position.z = THREE.MathUtils.damp(state.camera.position.z, targetCamZ, 4, delta);
     } else {
       state.camera.position.x = THREE.MathUtils.damp(state.camera.position.x, 0, 4, delta);
-      state.camera.position.y = THREE.MathUtils.damp(state.camera.position.y, 0.15, 4, delta);
-      state.camera.position.z = THREE.MathUtils.damp(state.camera.position.z, 4.6, 4, delta);
+      state.camera.position.y = THREE.MathUtils.damp(state.camera.position.y, 0.22, 4, delta);
+      state.camera.position.z = THREE.MathUtils.damp(state.camera.position.z, 4.4, 4, delta);
     }
   });
 
@@ -344,7 +344,7 @@ export const FluidCrystallineOrbsScene: React.FC<{
         <ThreeSceneBoundary fallback={fallback}>
           <SceneCanvas
             fallback={fallback}
-            camera={{ position: [0, 0.15, 4.6], fov: 46 }}
+            camera={{ position: [0, 0.22, 4.4], fov: 45 }}
             className="w-full h-full"
           >
             <SceneContent
@@ -430,12 +430,12 @@ export const FluidCrystallineOrbsScene: React.FC<{
       </div>
 
       {/* Accessible, 100% Visible 8-Discipline Interactive HTML Rail (No Cut-Offs) */}
-      <div className="px-4 sm:px-6 py-3.5 bg-[#080A0E] border-t border-white/10 flex flex-wrap items-center justify-between gap-3">
+      <div className="px-4 sm:px-6 py-3 bg-[#080A0E] border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
         <div className="flex items-center gap-2 font-mono text-xs text-[#8DA391] uppercase tracking-wider shrink-0">
           <Layers className="w-3.5 h-3.5 text-[#B8FF00]" />
           <span className="font-bold">Discipline Portals:</span>
         </div>
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
           {SCIENTIFIC_DISCIPLINES.map((discipline) => {
             const isCurrent = (selectedOrbId || hoveredOrbId) === discipline.id;
             return (

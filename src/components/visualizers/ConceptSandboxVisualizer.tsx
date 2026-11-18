@@ -112,7 +112,7 @@ export const ConceptSandboxVisualizer: React.FC<BaseVisualizerProps> = ({ topic 
             {/* Slider 1 */}
             <div className="space-y-1.5 p-3 rounded-xl bg-white/5 border border-white/08 font-mono text-xs">
               <div className="flex justify-between text-white">
-                <span>Variable A</span>
+                <span>A (Input Magnitude)</span>
                 <span className="text-[#B8FF00] font-bold">{paramA}</span>
               </div>
               <input
@@ -129,7 +129,7 @@ export const ConceptSandboxVisualizer: React.FC<BaseVisualizerProps> = ({ topic 
             {/* Slider 2 */}
             <div className="space-y-1.5 p-3 rounded-xl bg-white/5 border border-white/08 font-mono text-xs">
               <div className="flex justify-between text-white">
-                <span>Variable B</span>
+                <span>B (System Coupling)</span>
                 <span className="text-[#38BDF8] font-bold">{paramB}</span>
               </div>
               <input
@@ -146,7 +146,7 @@ export const ConceptSandboxVisualizer: React.FC<BaseVisualizerProps> = ({ topic 
             {/* Slider 3 */}
             <div className="space-y-1.5 p-3 rounded-xl bg-white/5 border border-white/08 font-mono text-xs">
               <div className="flex justify-between text-white">
-                <span>Variable C</span>
+                <span>C (Damping Resistance)</span>
                 <span className="text-amber-400 font-bold">{paramC}</span>
               </div>
               <input

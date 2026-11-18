@@ -44,7 +44,7 @@ export const Navbar: React.FC = () => {
     },
     {
       id: 'library' as const,
-      label: 'Explore / Curriculum',
+      label: 'Curriculum',
       shortLabel: 'Curriculum',
       icon: BookOpen,
       sublabel: 'CBSE & ICSE 6–12',
@@ -60,7 +60,7 @@ export const Navbar: React.FC = () => {
     },
     {
       id: 'workspace' as const,
-      label: 'Learning Workspace',
+      label: 'Workspace',
       shortLabel: 'Workspace',
       icon: Layers,
       sublabel: '4 Paths & 3D Sandbox',
@@ -76,7 +76,7 @@ export const Navbar: React.FC = () => {
     },
     {
       id: 'mylearning' as const,
-      label: 'My Trajectory',
+      label: 'Trajectory',
       shortLabel: 'Trajectory',
       icon: Bookmark,
       sublabel: 'Evidence & Mastery',
@@ -93,7 +93,7 @@ export const Navbar: React.FC = () => {
     },
     {
       id: 'resources' as const,
-      label: 'Saved Resources',
+      label: 'Saved',
       shortLabel: 'Saved',
       icon: FolderArchive,
       sublabel: 'Media Vault',
@@ -112,10 +112,10 @@ export const Navbar: React.FC = () => {
   return (
     <header className="sticky top-0 z-50 transition-all duration-200 px-3 sm:px-6 lg:px-8 pt-2.5 pb-2 bg-[#080A0E]/90 backdrop-blur-md">
       <div className="max-w-7xl mx-auto">
-        <div className="glass-telemetry rounded-2xl px-4 sm:px-5 py-2.5 flex items-center justify-between gap-3 border border-white/10 shadow-2xl">
+        <div className="glass-telemetry rounded-2xl px-3 sm:px-4 lg:px-5 py-2 sm:py-2.5 flex items-center justify-between gap-2 lg:gap-3 border border-white/10 shadow-2xl">
           
           {/* Brand Mark & Scientific Telemetry Tag */}
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
             <button
               onClick={() => {
                 navigateTo('home');
@@ -124,8 +124,8 @@ export const Navbar: React.FC = () => {
               className="flex items-center gap-2.5 sm:gap-3 text-left group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B8FF00] rounded-xl"
               aria-label="MULTIPATH Home"
             >
-              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#080A0E] border border-white/15 flex items-center justify-center text-[#B8FF00] shadow-md group-hover:scale-[1.03] transition-transform duration-150">
-                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#080A0E] border border-white/15 flex items-center justify-center text-[#B8FF00] shadow-md group-hover:scale-[1.03] transition-transform duration-150">
+                <svg className="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="12" r="3" />
                   <path d="M3 12h6m6 0h6" />
                   <path d="M12 3v6m0 6v6" />
@@ -133,13 +133,13 @@ export const Navbar: React.FC = () => {
                 </svg>
               </div>
               <div className="flex flex-col">
-                <div className="flex items-center gap-2">
-                  <span className="font-display font-bold text-base sm:text-lg tracking-tight text-white group-hover:text-[#B8FF00] transition-colors">
+                <div className="flex items-center gap-1.5 sm:gap-2">
+                  <span className="font-display font-bold text-sm sm:text-base lg:text-lg tracking-tight text-white group-hover:text-[#B8FF00] transition-colors">
                     MULTIPATH
                   </span>
                   <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#B8FF00] animate-pulse" />
                 </div>
-                <span className="font-mono text-[9px] uppercase tracking-widest text-[#8B9DAE] hidden sm:block">
+                <span className="font-mono text-[8px] sm:text-[9px] uppercase tracking-widest text-[#8B9DAE] hidden sm:block">
                   Observatory V3 • 4 Paths
                 </span>
               </div>
@@ -147,12 +147,12 @@ export const Navbar: React.FC = () => {
           </div>
 
           {/* Desktop Search Capsule */}
-          <div className="hidden lg:flex flex-1 max-w-[160px] xl:max-w-xs mx-2">
+          <div className="hidden lg:flex flex-1 max-w-[130px] xl:max-w-[170px] 2xl:max-w-[210px] mx-1.5">
             <form onSubmit={handleSearchSubmit} className="relative w-full">
-              <Search className="w-3.5 h-3.5 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#8B9DAE]" />
+              <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#8B9DAE]" />
               <input
                 type="text"
-                placeholder="Search concepts or disciplines..."
+                placeholder="Search concepts..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => {
@@ -160,9 +160,9 @@ export const Navbar: React.FC = () => {
                     navigateTo('library');
                   }
                 }}
-                className="w-full pl-9 pr-10 py-1.5 text-xs bg-[#161D26]/90 hover:bg-[#1C2430] focus:bg-[#080A0E] border border-white/10 rounded-full text-white placeholder-[#8B9DAE]/70 focus:outline-none focus:ring-1 focus:ring-[#B8FF00] focus:border-[#B8FF00] transition-all"
+                className="w-full pl-8 pr-9 py-1 text-xs bg-[#161D26]/90 hover:bg-[#1C2430] focus:bg-[#080A0E] border border-white/10 rounded-full text-white placeholder-[#8B9DAE]/70 focus:outline-none focus:ring-1 focus:ring-[#B8FF00] focus:border-[#B8FF00] transition-all"
               />
-              <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-0.5 text-[9px] text-[#8B9DAE] font-mono pointer-events-none">
+              <div className="absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center gap-0.5 text-[9px] text-[#8B9DAE] font-mono pointer-events-none">
                 <Command className="w-2.5 h-2.5" />
                 <span>K</span>
               </div>
@@ -170,8 +170,8 @@ export const Navbar: React.FC = () => {
           </div>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-1 xl:gap-1.5 min-w-0">
-            <div className="flex items-center bg-[#141A22]/90 p-1 rounded-full border border-white/08 min-w-0">
+          <nav className="hidden md:flex items-center gap-1.5 xl:gap-2 shrink-0">
+            <div className="flex items-center bg-[#141A22]/90 p-1 rounded-full border border-white/08">
               {navLinks.map((link) => {
                 const Icon = link.icon;
                 const active = link.isActive;
@@ -189,8 +189,7 @@ export const Navbar: React.FC = () => {
                   >
                     <Icon className={`w-3.5 h-3.5 shrink-0 ${active ? 'text-[#080A0E]' : (link.isLocked ? 'text-amber-400' : 'text-[#8B9DAE]')}`} />
                     <span className={`whitespace-nowrap ${link.isLocked ? 'opacity-70' : ''}`}>
-                      <span className="hidden xl:inline">{link.label}</span>
-                      <span className="inline xl:hidden">{link.shortLabel}</span>
+                      {link.shortLabel}
                     </span>
                     {link.isLocked ? (
                       <Lock className="w-2.5 h-2.5 text-amber-400 animate-pulse shrink-0" />
@@ -211,12 +210,12 @@ export const Navbar: React.FC = () => {
               })}
             </div>
 
-            <div className="h-4 w-px bg-white/10 mx-1 hidden lg:block shrink-0" />
+            <div className="h-4 w-px bg-white/10 mx-0.5 hidden lg:block shrink-0" />
 
             {/* Student Passion Persona Pill */}
             <button
               onClick={openPassionModal}
-              className="hidden sm:flex items-center gap-1.5 px-2.5 xl:px-3 py-1.5 rounded-full bg-[#161D26] hover:bg-[#1C2430] text-[#C8D6C9] hover:text-white border border-white/10 text-xs font-mono transition-all cursor-pointer shadow-xs shrink-0"
+              className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-[#161D26] hover:bg-[#1C2430] text-[#C8D6C9] hover:text-white border border-white/10 text-xs font-mono transition-all cursor-pointer shadow-xs shrink-0"
               title="Change your learning passion & personal explanation domain"
             >
               <span>{profile?.passion === 'gaming' ? '🎮' : profile?.passion === 'cricket' ? '🏏' : profile?.passion === 'space' ? '🚀' : profile?.passion === 'music' ? '🎵' : profile?.passion === 'robotics' ? '🤖' : '⚽'}</span>
@@ -227,14 +226,14 @@ export const Navbar: React.FC = () => {
             {user ? (
               <button
                 onClick={() => openAuthModal('profile')}
-                className="flex items-center gap-2 px-2.5 xl:px-3 py-1.5 rounded-full bg-[#161D26] hover:bg-[#1C2430] text-white border border-white/10 text-xs font-medium transition-all shadow-xs cursor-pointer shrink-0"
+                className="flex items-center gap-2 px-2.5 py-1.5 rounded-full bg-[#161D26] hover:bg-[#1C2430] text-white border border-white/10 text-xs font-medium transition-all shadow-xs cursor-pointer shrink-0"
                 title="Learner Profile & Telemetry"
               >
                 <div className="w-5 h-5 rounded-full bg-[#B8FF00] text-[#080A0E] font-bold text-[10px] flex items-center justify-center font-mono shrink-0">
                   {(profile?.display_name || user.email || 'S')[0].toUpperCase()}
                 </div>
                 <div className="flex flex-col text-left">
-                  <span className="font-bold text-[11px] leading-tight max-w-[80px] xl:max-w-[100px] truncate text-white">
+                  <span className="font-bold text-[11px] leading-tight max-w-[70px] xl:max-w-[85px] truncate text-white">
                     {profile?.display_name || user.email?.split('@')[0]}
                   </span>
                   <span className="font-mono text-[8px] text-[#B8FF00] leading-none">
@@ -245,7 +244,7 @@ export const Navbar: React.FC = () => {
             ) : (
               <button
                 onClick={() => openAuthModal('login', 'Please sign in or register to access the full curriculum and workspaces.')}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#161D26] hover:bg-[#1C2430] text-[#E5E7EB] hover:text-white border border-white/10 text-xs font-medium transition-all cursor-pointer"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#161D26] hover:bg-[#1C2430] text-[#E5E7EB] hover:text-white border border-white/10 text-xs font-medium transition-all cursor-pointer shrink-0"
                 title="Sign in or register to unlock the learning observatory"
               >
                 <div className="w-2 h-2 rounded-full bg-[#B8FF00] animate-pulse" />

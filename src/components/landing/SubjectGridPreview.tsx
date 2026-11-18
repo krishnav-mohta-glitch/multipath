@@ -100,7 +100,7 @@ export const SubjectGridPreview: React.FC = () => {
               </span>
             </div>
 
-            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight break-words">
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-extrabold text-white tracking-tight leading-snug break-words">
               Interactive Subject &amp; Class Portals
             </h2>
 

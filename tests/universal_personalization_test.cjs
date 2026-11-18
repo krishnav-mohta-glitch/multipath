@@ -67,7 +67,7 @@ async function testUniversalPersonalizationEngine() {
   console.log('[TEST 5] Full Matrix Stress Test: 74 Canonical Topics × 15 Contexts (1,110 Evaluations):');
   let totalEvaluations = 0;
   for (const t of topics) {
-    for (const interest of interestIds) {
+    for (const _interest of interestIds) {
       assert.ok(t.id, 'Topic must have valid ID');
       assert.ok(t.title, 'Topic must have valid title');
       assert.ok(t.subjectId, 'Topic must have valid subjectId');
