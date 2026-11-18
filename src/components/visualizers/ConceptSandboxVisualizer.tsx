@@ -74,7 +74,7 @@ export const ConceptSandboxVisualizer: React.FC<BaseVisualizerProps> = ({ topic 
                 {calculatedOutput} <span className="text-sm font-mono text-white/50">units</span>
               </div>
               <p className="font-mono text-xs text-[#8DA391]">
-                Governing relation: <code className="text-white">Y = (Param_A &times; Param_B) / Param_C</code>
+                Governing relation: <code className="text-white">Y = (A &times; B) / C</code>
               </p>
             </div>
 
@@ -83,7 +83,7 @@ export const ConceptSandboxVisualizer: React.FC<BaseVisualizerProps> = ({ topic 
               <div className="p-3.5 rounded-xl bg-white/5 border border-white/08 space-y-1">
                 <span className="font-mono text-[10px] uppercase text-[#8DA391] block">Sensitivity Slope</span>
                 <span className="font-mono text-base font-bold text-white block">{rateOfChange}</span>
-                <span className="text-[10px] text-[#8DA391]">ΔY / ΔParam_B</span>
+                <span className="text-[10px] text-[#8DA391]">ΔY / ΔB</span>
               </div>
               <div className="p-3.5 rounded-xl bg-white/5 border border-white/08 space-y-1">
                 <span className="font-mono text-[10px] uppercase text-[#8DA391] block">Stability Index</span>
@@ -112,7 +112,7 @@ export const ConceptSandboxVisualizer: React.FC<BaseVisualizerProps> = ({ topic 
             {/* Slider 1 */}
             <div className="space-y-1.5 p-3 rounded-xl bg-white/5 border border-white/08 font-mono text-xs">
               <div className="flex justify-between text-white">
-                <span>Input Magnitude (A)</span>
+                <span>Variable A</span>
                 <span className="text-[#B8FF00] font-bold">{paramA}</span>
               </div>
               <input
@@ -129,7 +129,7 @@ export const ConceptSandboxVisualizer: React.FC<BaseVisualizerProps> = ({ topic 
             {/* Slider 2 */}
             <div className="space-y-1.5 p-3 rounded-xl bg-white/5 border border-white/08 font-mono text-xs">
               <div className="flex justify-between text-white">
-                <span>Reaction Velocity (B)</span>
+                <span>Variable B</span>
                 <span className="text-[#38BDF8] font-bold">{paramB}</span>
               </div>
               <input
@@ -146,7 +146,7 @@ export const ConceptSandboxVisualizer: React.FC<BaseVisualizerProps> = ({ topic 
             {/* Slider 3 */}
             <div className="space-y-1.5 p-3 rounded-xl bg-white/5 border border-white/08 font-mono text-xs">
               <div className="flex justify-between text-white">
-                <span>Damping / Resistance (C)</span>
+                <span>Variable C</span>
                 <span className="text-amber-400 font-bold">{paramC}</span>
               </div>
               <input

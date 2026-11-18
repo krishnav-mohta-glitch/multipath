@@ -394,19 +394,20 @@ export const FluidCrystallineOrbsScene: React.FC<{
         </ThreeSceneBoundary>
 
         {/* Futuristic Floating Header Telemetry Overlay */}
-        <div className="absolute top-4 left-4 right-4 sm:top-6 sm:left-6 sm:right-6 flex flex-wrap items-center justify-between gap-2 pointer-events-none">
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-white font-mono text-[10px] tracking-wider uppercase shrink-0">
+        <div className="absolute top-4 left-4 right-4 sm:top-5 sm:left-6 sm:right-6 flex flex-wrap items-center justify-between gap-2 pointer-events-none z-10">
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/70 backdrop-blur-md border border-white/15 text-white font-mono text-[10px] tracking-wider uppercase shrink-0">
             <span className="w-2 h-2 rounded-full bg-[#B8FF00] animate-pulse" />
             <span className="break-words">FLUID OBSERVATORY • 8 DISCIPLINE ORBS</span>
           </div>
-          <div className="flex items-center gap-2 text-white/60 font-mono text-[10px] bg-black/40 px-3 py-1 rounded-full border border-white/05 backdrop-blur-xs shrink-0">
-            <span>Scroll &amp; Click to Focus &bull; {Math.round(scrollProgress * 100)}% Orbit</span>
+          <div className="flex items-center gap-2 text-white/70 font-mono text-[10px] bg-black/60 px-3.5 py-1.5 rounded-full border border-white/10 backdrop-blur-md shrink-0">
+            <Sparkles className="w-3 h-3 text-[#B8FF00]" />
+            <span>Scroll to Orbit &bull; Click to Inspect &bull; {Math.round(scrollProgress * 100)}%</span>
           </div>
         </div>
 
         {/* Dynamic Focus / Hover Card HUD */}
         {activeOrb && (
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 px-4 sm:px-5 py-3 rounded-2xl bg-black/85 backdrop-blur-xl border border-white/20 shadow-2xl pointer-events-auto flex flex-wrap sm:flex-nowrap items-center justify-between gap-3 max-w-[92%] sm:max-w-md animate-in fade-in zoom-in-95 duration-150">
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 px-4 sm:px-5 py-3 rounded-2xl bg-black/85 backdrop-blur-xl border border-white/20 shadow-2xl pointer-events-auto flex flex-wrap sm:flex-nowrap items-center justify-between gap-3 max-w-[92%] sm:max-w-md animate-in fade-in zoom-in-95 duration-150 z-20">
             <div className="flex items-center gap-3 min-w-0">
               <div
                 className="w-3.5 h-3.5 rounded-full shadow-[0_0_12px] shrink-0"
@@ -446,24 +447,15 @@ export const FluidCrystallineOrbsScene: React.FC<{
             </div>
           </div>
         )}
-
-        {/* Default Interaction Indicator when no orb is focused */}
-        {!activeOrb && (
-          <div className="absolute bottom-5 inset-x-0 flex justify-center pointer-events-none px-4">
-            <div className="px-4 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md text-[#8DA391] font-mono text-[10px] sm:text-[11px] flex items-center gap-2 text-center break-words">
-              <Sparkles className="w-3.5 h-3.5 text-[#B8FF00] shrink-0" />
-              <span>Scroll to rotate constellation &bull; Click any orb to zoom &amp; inspect</span>
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Accessible 8-Discipline Interactive HTML Rail */}
-      <div className="px-4 py-3 bg-[#080A0E]/80 border-t border-white/10 flex items-center justify-between gap-2 overflow-x-auto">
-        <span className="font-mono text-[10px] text-[#8DA391] uppercase tracking-wider shrink-0 hidden sm:inline">
-          Discipline Rail:
-        </span>
-        <div className="flex items-center gap-1.5 overflow-x-auto py-0.5">
+      <div className="px-4 py-3 bg-[#080A0E]/90 border-t border-white/10 flex flex-wrap items-center justify-between gap-2.5">
+        <div className="flex items-center gap-2 font-mono text-[10px] text-[#8DA391] uppercase tracking-wider shrink-0">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#B8FF00]" />
+          <span>Discipline Portals:</span>
+        </div>
+        <div className="flex flex-wrap items-center gap-1.5">
           {ORB_CONFIGS.map((orb) => {
             const isCurrent = (selectedOrbId || hoveredOrbId) === orb.id;
             return (
@@ -476,11 +468,11 @@ export const FluidCrystallineOrbsScene: React.FC<{
                 }}
                 className={`px-2.5 py-1 rounded-lg font-mono text-[11px] font-medium transition-all cursor-pointer flex items-center gap-1.5 shrink-0 ${
                   isCurrent
-                    ? 'bg-white/20 text-white border border-white/30 shadow-xs'
-                    : 'bg-white/5 text-[#8DA391] hover:text-white hover:bg-white/10 border border-white/5'
+                    ? 'bg-[#B8FF00] text-[#080A0E] font-bold shadow-sm'
+                    : 'bg-white/5 text-[#8DA391] hover:text-white hover:bg-white/10 border border-white/05'
                 }`}
               >
-                <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: orb.color }} />
+                <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: isCurrent ? '#080A0E' : orb.color }} />
                 <span>{orb.name}</span>
               </button>
             );
@@ -492,9 +484,9 @@ export const FluidCrystallineOrbsScene: React.FC<{
                 setSelectedOrbId(null);
                 setHoveredOrbId(null);
               }}
-              className="px-2 py-1 rounded-lg font-mono text-[10px] text-amber-400 hover:text-amber-300 border border-amber-400/20 bg-amber-400/10 cursor-pointer shrink-0"
+              className="px-2.5 py-1 rounded-lg font-mono text-[11px] font-semibold text-amber-400 hover:text-amber-300 border border-amber-400/30 bg-amber-400/10 cursor-pointer shrink-0"
             >
-              Reset
+              Reset View
             </button>
           )}
         </div>

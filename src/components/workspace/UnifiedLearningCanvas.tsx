@@ -1,12 +1,8 @@
 import React, { useState } from 'react';
 import { 
-  Headphones, 
-  Film, 
   Sparkles, 
   ChevronRight, 
-  ChevronDown, 
-  Play, 
-  RotateCcw
+  ChevronDown
 } from 'lucide-react';
 import type { Topic } from '../../types/topic';
 import { useAuth } from '../../context/AuthContext';
@@ -14,10 +10,6 @@ import { StructuredExplanationView } from './paths/StructuredExplanationView';
 import { ExploreExperimentView } from './paths/ExploreExperimentView';
 import { ExamplesApplicationsView } from './paths/ExamplesApplicationsView';
 import { getPassionExplanation } from '../../data/passionExplanations';
-import { mediaService } from '../../services/mediaService';
-import { PodcastPlayer } from './adaptiveMedia/PodcastPlayer';
-import { ExplainerVideoPlayer } from './adaptiveMedia/ExplainerVideoPlayer';
-import type { PodcastContent, VideoContent } from '../../types/media';
 
 interface UnifiedLearningCanvasProps {
   topic: Topic;
@@ -42,60 +34,6 @@ export const UnifiedLearningCanvas: React.FC<UnifiedLearningCanvasProps> = ({ to
       ...prev,
       [stepNumber]: !prev[stepNumber]
     }));
-  };
-
-  // Media choices state for Subheading 3 (Explore and Experiment)
-  const [activeMediaMode, setActiveMediaMode] = useState<'none' | 'audio' | 'video'>('none');
-  const [podcastContent, setPodcastContent] = useState<PodcastContent | null>(null);
-  const [videoContent, setVideoContent] = useState<VideoContent | null>(null);
-  const [isMediaLoading, setIsMediaLoading] = useState<boolean>(false);
-
-  // Load or generate podcast content
-  const handleLaunchAudioOverview = async () => {
-    if (activeMediaMode === 'audio' && podcastContent) {
-      setActiveMediaMode('none');
-      return;
-    }
-    setIsMediaLoading(true);
-    setActiveMediaMode('audio');
-    try {
-      const res = await mediaService.generateMedia({
-        format: 'podcast',
-        topicId: topic.id,
-        subject: topic.subjectId,
-        topicTitle: topic.title,
-        selectedGaps: topic.learningObjectives.slice(0, 3)
-      });
-      setPodcastContent(res.content as PodcastContent);
-    } catch (err) {
-      console.warn('Failed to load audio overview:', err);
-    } finally {
-      setIsMediaLoading(false);
-    }
-  };
-
-  // Load or generate video overview content
-  const handleLaunchVideoOverview = async () => {
-    if (activeMediaMode === 'video' && videoContent) {
-      setActiveMediaMode('none');
-      return;
-    }
-    setIsMediaLoading(true);
-    setActiveMediaMode('video');
-    try {
-      const res = await mediaService.generateMedia({
-        format: 'video',
-        topicId: topic.id,
-        subject: topic.subjectId,
-        topicTitle: topic.title,
-        selectedGaps: topic.learningObjectives.slice(0, 3)
-      });
-      setVideoContent(res.content as VideoContent);
-    } catch (err) {
-      console.warn('Failed to load video overview:', err);
-    } finally {
-      setIsMediaLoading(false);
-    }
   };
 
   const passionData = getPassionExplanation(
@@ -348,7 +286,7 @@ export const UnifiedLearningCanvas: React.FC<UnifiedLearningCanvasProps> = ({ to
                 Explore and Experiment
               </h2>
               <p className="text-xs text-[#8DA391] font-mono break-words">
-                Hands-on simulation laboratory &bull; Interactive Audio &amp; Video Overviews
+                Hands-on simulation laboratory &bull; Interactive Variable Workbench
               </p>
             </div>
           </div>
@@ -356,132 +294,6 @@ export const UnifiedLearningCanvas: React.FC<UnifiedLearningCanvasProps> = ({ to
             Part 3 • Interactive Laboratory
           </span>
         </div>
-
-        {/* TWO PROMINENT MEDIA CHOICES: AUDIO OVERVIEW & VIDEO OVERVIEW */}
-        <div className="space-y-3">
-          <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-[#B8FF00]" />
-            <h3 className="font-mono text-xs uppercase font-bold tracking-wider text-white">
-              SELECT YOUR INTERACTIVE MEDIA OVERVIEW
-            </h3>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            
-            {/* Audio Overview Card (Podcasts for clarity on the topic) */}
-            <div className={`p-6 rounded-3xl border transition-all flex flex-col justify-between gap-4 ${
-              activeMediaMode === 'audio'
-                ? 'bg-[#151D24] border-[#B8FF00] ring-1 ring-[#B8FF00]/40 shadow-2xl'
-                : 'bg-[#0D1117] hover:bg-[#11171F] border-white/10 shadow-xl'
-            }`}>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <div className="w-10 h-10 rounded-2xl bg-[#B8FF00]/15 text-[#B8FF00] flex items-center justify-center border border-[#B8FF00]/30">
-                    <Headphones className="w-5 h-5" />
-                  </div>
-                  <span className="font-mono text-[10px] uppercase font-bold px-2.5 py-0.5 rounded-full bg-white/5 text-[#8DA391] border border-white/10">
-                    Interactive Podcast
-                  </span>
-                </div>
-
-                <div className="space-y-1">
-                  <h4 className="font-display text-lg font-bold text-white tracking-tight">
-                    Audio Overview
-                  </h4>
-                  <p className="text-xs text-[#8DA391] leading-relaxed">
-                    Interactive audio podcast designed for clarity. Listen to Devon and Maya break down this concept through inquiry, with live transcript scrolling and scrub controls.
-                  </p>
-                </div>
-              </div>
-
-              <button
-                type="button"
-                onClick={handleLaunchAudioOverview}
-                disabled={isMediaLoading}
-                className="w-full py-2.5 px-4 rounded-xl bg-[#080A0E] hover:bg-[#B8FF00] text-white hover:text-[#080A0E] border border-white/10 hover:border-[#B8FF00] font-mono text-xs uppercase font-bold tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm disabled:opacity-50"
-              >
-                {activeMediaMode === 'audio' ? (
-                  <>
-                    <RotateCcw className="w-3.5 h-3.5" />
-                    <span>Close Audio Overview</span>
-                  </>
-                ) : (
-                  <>
-                    <Play className="w-3.5 h-3.5 text-[#B8FF00]" />
-                    <span>Launch Audio Overview</span>
-                  </>
-                )}
-              </button>
-            </div>
-
-            {/* Video Overview Card (Interactive video & diagrammatic explanations) */}
-            <div className={`p-6 rounded-3xl border transition-all flex flex-col justify-between gap-4 ${
-              activeMediaMode === 'video'
-                ? 'bg-[#151D24] border-[#B8FF00] ring-1 ring-[#B8FF00]/40 shadow-2xl'
-                : 'bg-[#0D1117] hover:bg-[#11171F] border-white/10 shadow-xl'
-            }`}>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <div className="w-10 h-10 rounded-2xl bg-[#C8F36B]/15 text-[#C8F36B] flex items-center justify-center border border-[#C8F36B]/30">
-                    <Film className="w-5 h-5" />
-                  </div>
-                  <span className="font-mono text-[10px] uppercase font-bold px-2.5 py-0.5 rounded-full bg-white/5 text-[#8DA391] border border-white/10">
-                    Diagrammatic Video
-                  </span>
-                </div>
-
-                <div className="space-y-1">
-                  <h4 className="font-display text-lg font-bold text-white tracking-tight">
-                    Video Overview
-                  </h4>
-                  <p className="text-xs text-[#8DA391] leading-relaxed">
-                    Interactive animated video with diagrammatic visual explanations, narrated scene chapters, and step-by-step pause checkpoints to master the visual structure.
-                  </p>
-                </div>
-              </div>
-
-              <button
-                type="button"
-                onClick={handleLaunchVideoOverview}
-                disabled={isMediaLoading}
-                className="w-full py-2.5 px-4 rounded-xl bg-[#080A0E] hover:bg-[#B8FF00] text-white hover:text-[#080A0E] border border-white/10 hover:border-[#B8FF00] font-mono text-xs uppercase font-bold tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm disabled:opacity-50"
-              >
-                {activeMediaMode === 'video' ? (
-                  <>
-                    <RotateCcw className="w-3.5 h-3.5" />
-                    <span>Close Video Overview</span>
-                  </>
-                ) : (
-                  <>
-                    <Play className="w-3.5 h-3.5 text-[#B8FF00]" />
-                    <span>Launch Video Overview</span>
-                  </>
-                )}
-              </button>
-            </div>
-
-          </div>
-        </div>
-
-        {/* Inline Audio Player Active Mode */}
-        {activeMediaMode === 'audio' && podcastContent && (
-          <div className="bg-[#0D1117] rounded-3xl border border-[#B8FF00]/40 p-6 shadow-2xl animate-in fade-in duration-200">
-            <PodcastPlayer 
-              content={podcastContent} 
-              onBackToSelector={() => setActiveMediaMode('none')} 
-            />
-          </div>
-        )}
-
-        {/* Inline Video Player Active Mode */}
-        {activeMediaMode === 'video' && videoContent && (
-          <div className="bg-[#0D1117] rounded-3xl border border-[#B8FF00]/40 p-6 shadow-2xl animate-in fade-in duration-200">
-            <ExplainerVideoPlayer 
-              content={videoContent} 
-              onBackToSelector={() => setActiveMediaMode('none')} 
-            />
-          </div>
-        )}
 
         {/* Hands-On Simulation Workbench */}
         <div className="bg-[#0D1117] rounded-3xl border border-white/10 p-6 sm:p-8 shadow-2xl">

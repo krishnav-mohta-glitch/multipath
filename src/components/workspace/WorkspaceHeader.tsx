@@ -1,8 +1,9 @@
-import React from 'react';
-import { ArrowLeft, Clock, Bookmark } from 'lucide-react';
+import React, { useState } from 'react';
+import { ArrowLeft, Clock, Bookmark, Headphones } from 'lucide-react';
 import type { Topic } from '../../types/topic';
 import { SubjectBadge, DifficultyBadge } from '../common/Badge';
 import { useApp } from '../../context/AppContext';
+import { AdaptiveMediaStudioModal } from './adaptiveMedia/AdaptiveMediaStudioModal';
 
 interface WorkspaceHeaderProps {
   topic: Topic;
@@ -10,6 +11,7 @@ interface WorkspaceHeaderProps {
 
 export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({ topic }) => {
   const { backToLibrary, toggleBookmark, isBookmarked } = useApp();
+  const [isMediaModalOpen, setIsMediaModalOpen] = useState(false);
   const bookmarked = isBookmarked(topic.id);
 
   return (
@@ -17,22 +19,32 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({ topic }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 space-y-4">
         
         {/* Navigation Breadcrumb & Actions */}
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center justify-between gap-4 flex-wrap">
           <button
             onClick={backToLibrary}
-            className="inline-flex items-center gap-1.5 font-mono text-xs font-semibold text-[#8DA391] hover:text-[#B8FF00] transition-colors group"
+            className="inline-flex items-center gap-1.5 font-mono text-xs font-semibold text-[#8DA391] hover:text-[#B8FF00] transition-colors group cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             <span>LIBRARY / {topic.subjectId.toUpperCase()}</span>
           </button>
 
-          {/* Quick Actions: Bookmark */}
-          <div className="flex items-center gap-2">
+          {/* Quick Actions: Adaptive Media Studio & Bookmark */}
+          <div className="flex items-center gap-2 flex-wrap">
+            <button
+              type="button"
+              onClick={() => setIsMediaModalOpen(true)}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-mono text-xs font-semibold bg-[#161D26] hover:bg-[#1E2836] border border-white/15 text-white transition-all cursor-pointer shadow-xs"
+              title="Open Adaptive Media Studio for interactive podcasts and diagrammatic videos"
+            >
+              <Headphones className="w-3.5 h-3.5 text-[#B8FF00]" />
+              <span>MEDIA STUDIO (AUDIO &amp; VIDEO)</span>
+            </button>
+
             <button
               onClick={() => toggleBookmark(topic.id)}
-              className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl font-mono text-xs font-semibold border transition-all ${
+              className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl font-mono text-xs font-semibold border transition-all cursor-pointer ${
                 bookmarked
-                  ? 'bg-[#B8FF00] text-[#080A0E] border-[#B8FF00] shadow-sm'
+                  ? 'bg-[#B8FF00] text-[#080A0E] border-[#B8FF00] shadow-sm font-bold'
                   : 'bg-white/5 border-white/10 text-[#8DA391] hover:text-white hover:bg-white/10'
               }`}
             >
@@ -66,6 +78,13 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({ topic }) => {
         </div>
 
       </div>
+
+      {/* Adaptive Media Studio Modal */}
+      <AdaptiveMediaStudioModal
+        topic={topic}
+        isOpen={isMediaModalOpen}
+        onClose={() => setIsMediaModalOpen(false)}
+      />
     </div>
   );
 };

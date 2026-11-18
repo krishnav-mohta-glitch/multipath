@@ -51,10 +51,10 @@ const SocialAuthOptions: React.FC<{
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <label className="font-mono text-[11px] text-[#5E7A65] uppercase tracking-wider block font-bold">
+        <label className="font-mono text-[11px] text-slate-400 uppercase tracking-wider block font-bold">
           Social Authentication
         </label>
-        <span className="text-[10px] font-mono text-emerald-800 font-medium bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+        <span className="text-[10px] font-mono text-[#B8FF00] font-medium bg-[#B8FF00]/10 px-2 py-0.5 rounded border border-[#B8FF00]/25">
           Google Active
         </span>
       </div>
@@ -64,11 +64,11 @@ const SocialAuthOptions: React.FC<{
           type="button"
           onClick={() => onSelect('google')}
           disabled={disabled || oauthLoading !== null}
-          className="w-full flex items-center justify-center gap-2.5 py-2.5 px-4 rounded-xl bg-white hover:bg-slate-50 text-xs font-semibold text-[#171C18] border border-[#DFE2D7] transition-all disabled:opacity-50 cursor-pointer shadow-xs"
+          className="w-full flex items-center justify-center gap-2.5 py-2.5 px-4 rounded-xl bg-[#141A22] hover:bg-[#1C2430] text-xs font-semibold text-white border border-white/10 hover:border-white/20 transition-all disabled:opacity-50 cursor-pointer shadow-xs"
           title="Sign in with Google"
         >
           {oauthLoading === 'google' ? (
-            <RefreshCw className="w-4 h-4 animate-spin text-[#111714]" />
+            <RefreshCw className="w-4 h-4 animate-spin text-[#B8FF00]" />
           ) : (
             <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -151,8 +151,8 @@ const SignInView: React.FC<{
   return (
     <div className="space-y-4">
       {error && (
-        <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-start gap-2">
-          <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-red-600" />
+        <div className="p-3 rounded-xl bg-red-950/40 border border-red-500/30 text-red-200 text-xs flex items-start gap-2">
+          <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-red-400" />
           <span className="leading-relaxed">{error}</span>
         </div>
       )}
@@ -165,53 +165,53 @@ const SignInView: React.FC<{
       />
 
       <div className="relative flex py-1 items-center">
-        <div className="flex-grow border-t border-[#DFE2D7]"></div>
-        <span className="flex-shrink mx-3 text-[10px] font-mono uppercase text-[#2D5A27] font-bold">
+        <div className="flex-grow border-t border-white/10"></div>
+        <span className="flex-shrink mx-3 text-[10px] font-mono uppercase text-[#B8FF00] font-bold">
           Or continue with Email &amp; Password
         </span>
-        <div className="flex-grow border-t border-[#DFE2D7]"></div>
+        <div className="flex-grow border-t border-white/10"></div>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-3.5">
         <div className="space-y-1.5">
-          <label className="font-mono text-xs text-[#5E7A65] uppercase tracking-wider block">
+          <label className="font-mono text-xs text-slate-400 uppercase tracking-wider block">
             Student Email
           </label>
           <div className="relative">
-            <Mail className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#8DA391]" />
+            <Mail className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="student@example.com"
               required
-              className="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-[#E8EAE1] border border-[#DFE2D7] text-xs text-[#171C18] focus:outline-hidden focus:border-[#111714]"
+              className="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-[#141A22] border border-white/10 text-xs text-white placeholder-slate-500 focus:outline-hidden focus:border-[#B8FF00]"
             />
           </div>
         </div>
 
         <div className="space-y-1.5">
           <div className="flex items-center justify-between">
-            <label className="font-mono text-xs text-[#5E7A65] uppercase tracking-wider block">
+            <label className="font-mono text-xs text-slate-400 uppercase tracking-wider block">
               Password
             </label>
             <button
               type="button"
               onClick={() => switchMode('forgot-password')}
-              className="text-xs text-[#5E7A65] hover:text-[#111714] underline underline-offset-2"
+              className="text-xs text-slate-400 hover:text-white underline underline-offset-2"
             >
               Forgot password?
             </button>
           </div>
           <div className="relative">
-            <Lock className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#8DA391]" />
+            <Lock className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
               required
-              className="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-[#E8EAE1] border border-[#DFE2D7] text-xs text-[#171C18] focus:outline-hidden focus:border-[#111714]"
+              className="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-[#141A22] border border-white/10 text-xs text-white placeholder-slate-500 focus:outline-hidden focus:border-[#B8FF00]"
             />
           </div>
         </div>
@@ -219,36 +219,36 @@ const SignInView: React.FC<{
         <button
           type="submit"
           disabled={isSubmitting || !isConfigured}
-          className="w-full py-2.5 px-4 rounded-xl bg-[#111714] text-[#F3F4EC] hover:bg-[#19211C] font-mono text-xs uppercase tracking-wider font-bold transition-all disabled:opacity-50 flex items-center justify-center gap-2 shadow-xs cursor-pointer"
+          className="w-full py-2.5 px-4 rounded-xl bg-[#B8FF00] hover:bg-[#A3E635] text-[#080A0E] font-mono text-xs uppercase tracking-wider font-bold transition-all disabled:opacity-50 flex items-center justify-center gap-2 shadow-xs cursor-pointer"
         >
           {isSubmitting ? (
             <>
-              <RefreshCw className="w-3.5 h-3.5 animate-spin text-[#C8F36B]" />
+              <RefreshCw className="w-3.5 h-3.5 animate-spin text-[#080A0E]" />
               <span>Authenticating...</span>
             </>
           ) : (
             <>
               <span>Sign In to MULTIPATH</span>
-              <ArrowRight className="w-3.5 h-3.5 text-[#C8F36B]" />
+              <ArrowRight className="w-3.5 h-3.5 text-[#080A0E]" />
             </>
           )}
         </button>
 
-        <div className="pt-2 border-t border-[#DFE2D7] flex flex-col gap-2.5 text-center">
+        <div className="pt-2 border-t border-white/10 flex flex-col gap-2.5 text-center">
           <button
             type="button"
             onClick={onContinueGuest}
-            className="w-full py-2 px-3 rounded-xl bg-[#E8EAE1] hover:bg-[#DFE2D7] text-xs text-[#171C18] font-medium transition-colors cursor-pointer"
+            className="w-full py-2 px-3 rounded-xl bg-[#141A22] hover:bg-[#1C2430] text-xs text-slate-300 hover:text-white border border-white/10 font-medium transition-colors cursor-pointer"
           >
             Return to Public Overview
           </button>
 
-          <p className="text-xs text-[#5E7A65]">
+          <p className="text-xs text-slate-400">
             Need an account?{' '}
             <button
               type="button"
               onClick={() => switchMode('register')}
-              className="font-bold text-[#111714] underline underline-offset-2 cursor-pointer"
+              className="font-bold text-[#B8FF00] underline underline-offset-2 cursor-pointer"
             >
               Register here
             </button>
@@ -340,8 +340,8 @@ const RegisterView: React.FC<{
   return (
     <div className="space-y-4">
       {error && (
-        <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-start gap-2">
-          <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-red-600" />
+        <div className="p-3 rounded-xl bg-red-950/40 border border-red-500/30 text-red-200 text-xs flex items-start gap-2">
+          <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-red-400" />
           <span>{error}</span>
         </div>
       )}
@@ -354,55 +354,55 @@ const RegisterView: React.FC<{
       />
 
       <div className="relative flex py-1 items-center">
-        <div className="flex-grow border-t border-[#DFE2D7]"></div>
-        <span className="flex-shrink mx-3 text-[10px] font-mono uppercase text-[#2D5A27] font-bold">
+        <div className="flex-grow border-t border-white/10"></div>
+        <span className="flex-shrink mx-3 text-[10px] font-mono uppercase text-[#B8FF00] font-bold">
           Or register educational profile
         </span>
-        <div className="flex-grow border-t border-[#DFE2D7]"></div>
+        <div className="flex-grow border-t border-white/10"></div>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-3">
 
       <div className="space-y-1">
-        <label className="font-mono text-xs text-[#5E7A65] uppercase tracking-wider block">
+        <label className="font-mono text-xs text-slate-400 uppercase tracking-wider block">
           Student Name
         </label>
         <div className="relative">
-          <UserIcon className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#8DA391]" />
+          <UserIcon className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
           <input
             type="text"
             value={displayName}
             onChange={(e) => setDisplayName(e.target.value)}
             placeholder="e.g. Arjun Sharma"
-            className="w-full pl-10 pr-3.5 py-2 rounded-xl bg-[#E8EAE1] border border-[#DFE2D7] text-xs text-[#171C18] focus:outline-hidden focus:border-[#111714]"
+            className="w-full pl-10 pr-3.5 py-2 rounded-xl bg-[#141A22] border border-white/10 text-xs text-white placeholder-slate-500 focus:outline-hidden focus:border-[#B8FF00]"
           />
         </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
         <div className="space-y-1">
-          <label className="font-mono text-xs text-[#5E7A65] uppercase tracking-wider block">
+          <label className="font-mono text-xs text-slate-400 uppercase tracking-wider block">
             Email
           </label>
           <div className="relative">
-            <Mail className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#8DA391]" />
+            <Mail className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="student@example.com"
               required
-              className="w-full pl-10 pr-3.5 py-2 rounded-xl bg-[#E8EAE1] border border-[#DFE2D7] text-xs text-[#171C18] focus:outline-hidden focus:border-[#111714]"
+              className="w-full pl-10 pr-3.5 py-2 rounded-xl bg-[#141A22] border border-white/10 text-xs text-white placeholder-slate-500 focus:outline-hidden focus:border-[#B8FF00]"
             />
           </div>
         </div>
 
         <div className="space-y-1">
-          <label className="font-mono text-xs text-[#5E7A65] uppercase tracking-wider block">
+          <label className="font-mono text-xs text-slate-400 uppercase tracking-wider block">
             Password (6+ chars)
           </label>
           <div className="relative">
-            <Lock className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#8DA391]" />
+            <Lock className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
             <input
               type="password"
               value={password}
@@ -410,7 +410,7 @@ const RegisterView: React.FC<{
               placeholder="••••••••"
               required
               minLength={6}
-              className="w-full pl-10 pr-3.5 py-2 rounded-xl bg-[#E8EAE1] border border-[#DFE2D7] text-xs text-[#171C18] focus:outline-hidden focus:border-[#111714]"
+              className="w-full pl-10 pr-3.5 py-2 rounded-xl bg-[#141A22] border border-white/10 text-xs text-white placeholder-slate-500 focus:outline-hidden focus:border-[#B8FF00]"
             />
           </div>
         </div>
@@ -418,41 +418,41 @@ const RegisterView: React.FC<{
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
         <div className="space-y-1">
-          <label className="font-mono text-xs text-[#5E7A65] uppercase tracking-wider flex items-center gap-1.5">
-            <BookOpen className="w-3.5 h-3.5 text-[#111714]" />
+          <label className="font-mono text-xs text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+            <BookOpen className="w-3.5 h-3.5 text-slate-400" />
             <span>Curriculum Board</span>
           </label>
           <select
             value={preferredBoard}
             onChange={(e) => setPreferredBoard(e.target.value as CurriculumBoard)}
-            className="w-full px-3 py-2 rounded-xl bg-[#E8EAE1] border border-[#DFE2D7] text-xs text-[#171C18] focus:outline-hidden focus:border-[#111714]"
+            className="w-full px-3 py-2 rounded-xl bg-[#141A22] border border-white/10 text-xs text-white focus:outline-hidden focus:border-[#B8FF00] cursor-pointer"
           >
             {CURRICULUM_BOARDS.map((b) => (
-              <option key={b} value={b}>{b}</option>
+              <option key={b} value={b} className="bg-[#141A22] text-white">{b}</option>
             ))}
           </select>
         </div>
 
         <div className="space-y-1">
-          <label className="font-mono text-xs text-[#5E7A65] uppercase tracking-wider flex items-center gap-1.5">
-            <GraduationCap className="w-3.5 h-3.5 text-[#111714]" />
+          <label className="font-mono text-xs text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+            <GraduationCap className="w-3.5 h-3.5 text-slate-400" />
             <span>Grade / Class</span>
           </label>
           <select
             value={gradeLevel}
             onChange={(e) => setGradeLevel(e.target.value as GradeLevel)}
-            className="w-full px-3 py-2 rounded-xl bg-[#E8EAE1] border border-[#DFE2D7] text-xs text-[#171C18] focus:outline-hidden focus:border-[#111714]"
+            className="w-full px-3 py-2 rounded-xl bg-[#141A22] border border-white/10 text-xs text-white focus:outline-hidden focus:border-[#B8FF00] cursor-pointer"
           >
             {GRADE_LEVELS.map((g) => (
-              <option key={g} value={g}>{g}</option>
+              <option key={g} value={g} className="bg-[#141A22] text-white">{g}</option>
             ))}
           </select>
         </div>
       </div>
 
       <div className="space-y-1">
-        <label className="font-mono text-xs text-[#5E7A65] uppercase tracking-wider flex items-center gap-1.5">
-          <Globe className="w-3.5 h-3.5 text-[#111714]" />
+        <label className="font-mono text-xs text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+          <Globe className="w-3.5 h-3.5 text-slate-400" />
           <span>Instruction Language</span>
         </label>
         <input
@@ -460,34 +460,34 @@ const RegisterView: React.FC<{
           value={preferredLanguage}
           onChange={(e) => setPreferredLanguage(e.target.value)}
           placeholder="e.g. English, Hindi"
-          className="w-full px-3.5 py-2 rounded-xl bg-[#E8EAE1] border border-[#DFE2D7] text-xs text-[#171C18] focus:outline-hidden focus:border-[#111714]"
+          className="w-full px-3.5 py-2 rounded-xl bg-[#141A22] border border-white/10 text-xs text-white placeholder-slate-500 focus:outline-hidden focus:border-[#B8FF00]"
         />
       </div>
 
       <button
         type="submit"
         disabled={isSubmitting || !isConfigured}
-        className="w-full mt-2 py-2.5 px-4 rounded-xl bg-[#111714] text-[#F3F4EC] hover:bg-[#19211C] font-mono text-xs uppercase tracking-wider font-bold transition-all disabled:opacity-50 flex items-center justify-center gap-2 shadow-xs"
+        className="w-full mt-2 py-2.5 px-4 rounded-xl bg-[#B8FF00] text-[#080A0E] hover:bg-[#A3E635] font-mono text-xs uppercase tracking-wider font-bold transition-all disabled:opacity-50 flex items-center justify-center gap-2 shadow-xs cursor-pointer"
       >
         {isSubmitting ? (
           <>
-            <RefreshCw className="w-3.5 h-3.5 animate-spin text-[#C8F36B]" />
+            <RefreshCw className="w-3.5 h-3.5 animate-spin text-[#080A0E]" />
             <span>Creating Profile...</span>
           </>
         ) : (
           <>
-            <Sparkles className="w-3.5 h-3.5 text-[#C8F36B]" />
+            <Sparkles className="w-3.5 h-3.5 text-[#080A0E]" />
             <span>Register Student Account</span>
           </>
         )}
       </button>
 
-      <div className="pt-2 border-t border-[#DFE2D7] text-center text-xs text-[#5E7A65]">
+      <div className="pt-2 border-t border-white/10 text-center text-xs text-slate-400">
         Already registered?{' '}
         <button
           type="button"
           onClick={() => switchMode('login')}
-          className="font-bold text-[#111714] underline underline-offset-2"
+          className="font-bold text-[#B8FF00] underline underline-offset-2 cursor-pointer"
         >
           Sign In
         </button>
@@ -532,37 +532,37 @@ const ForgotPasswordView: React.FC<{
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <p className="text-xs text-[#5E7A65] leading-relaxed">
+      <p className="text-xs text-slate-400 leading-relaxed">
         Enter your registered student email address. We will dispatch a secure recovery link to reset your credentials.
       </p>
 
       {error && (
-        <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-start gap-2">
-          <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-red-600" />
+        <div className="p-3 rounded-xl bg-red-950/40 border border-red-500/30 text-red-200 text-xs flex items-start gap-2">
+          <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-red-400" />
           <span>{error}</span>
         </div>
       )}
 
       {message && (
-        <div className="p-3 rounded-xl bg-[#C8F36B]/20 border border-[#C8F36B]/40 text-[#111714] text-xs flex items-start gap-2">
-          <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-[#5E7A65]" />
+        <div className="p-3 rounded-xl bg-[#B8FF00]/15 border border-[#B8FF00]/30 text-[#B8FF00] text-xs flex items-start gap-2 font-mono">
+          <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-[#B8FF00]" />
           <span>{message}</span>
         </div>
       )}
 
       <div className="space-y-1.5">
-        <label className="font-mono text-xs text-[#5E7A65] uppercase tracking-wider block">
+        <label className="font-mono text-xs text-slate-400 uppercase tracking-wider block">
           Registered Email
         </label>
         <div className="relative">
-          <Mail className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#8DA391]" />
+          <Mail className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="student@example.com"
             required
-            className="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-[#E8EAE1] border border-[#DFE2D7] text-xs text-[#171C18] focus:outline-hidden focus:border-[#111714]"
+            className="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-[#141A22] border border-white/10 text-xs text-white placeholder-slate-500 focus:outline-hidden focus:border-[#B8FF00]"
           />
         </div>
       </div>
@@ -570,7 +570,7 @@ const ForgotPasswordView: React.FC<{
       <button
         type="submit"
         disabled={isSubmitting || !isConfigured}
-        className="w-full py-2.5 px-4 rounded-xl bg-[#111714] text-[#F3F4EC] hover:bg-[#19211C] font-mono text-xs uppercase tracking-wider font-bold transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+        className="w-full py-2.5 px-4 rounded-xl bg-[#B8FF00] text-[#080A0E] hover:bg-[#A3E635] font-mono text-xs uppercase tracking-wider font-bold transition-all disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer shadow-xs"
       >
         {isSubmitting ? 'Sending Recovery Link...' : 'Send Recovery Email'}
       </button>
@@ -579,7 +579,7 @@ const ForgotPasswordView: React.FC<{
         <button
           type="button"
           onClick={() => switchMode('login')}
-          className="text-xs text-[#5E7A65] hover:text-[#111714] underline underline-offset-2"
+          className="text-xs text-slate-400 hover:text-white underline underline-offset-2"
         >
           Back to Sign In
         </button>
@@ -616,29 +616,29 @@ const VerificationSentView: React.FC<{
 
   return (
     <div className="space-y-4 text-center">
-      <div className="w-12 h-12 rounded-2xl bg-[#C8F36B]/20 border border-[#C8F36B]/40 text-[#111714] flex items-center justify-center mx-auto">
-        <Mail className="w-6 h-6 text-[#111714]" />
+      <div className="w-12 h-12 rounded-2xl bg-[#B8FF00]/15 border border-[#B8FF00]/30 text-[#B8FF00] flex items-center justify-center mx-auto">
+        <Mail className="w-6 h-6 text-[#B8FF00]" />
       </div>
 
       <div className="space-y-1">
-        <h3 className="font-mono text-sm uppercase tracking-wider font-bold text-[#111714]">
+        <h3 className="font-mono text-sm uppercase tracking-wider font-bold text-white">
           Verification Email Dispatched
         </h3>
-        <p className="text-xs text-[#5E7A65] leading-relaxed">
-          We sent a confirmation link to <strong className="text-[#171C18]">{email || 'your email'}</strong>. Please verify your address to finalize account activation.
+        <p className="text-xs text-slate-400 leading-relaxed">
+          We sent a confirmation link to <strong className="text-white">{email || 'your email'}</strong>. Please verify your address to finalize account activation.
         </p>
       </div>
 
       {error && (
-        <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs text-left flex items-start gap-2">
-          <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-red-600" />
+        <div className="p-3 rounded-xl bg-red-950/40 border border-red-500/30 text-red-200 text-xs text-left flex items-start gap-2">
+          <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-red-400" />
           <span>{error}</span>
         </div>
       )}
 
       {message && (
-        <div className="p-3 rounded-xl bg-[#C8F36B]/20 border border-[#C8F36B]/40 text-[#111714] text-xs text-left flex items-start gap-2">
-          <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-[#5E7A65]" />
+        <div className="p-3 rounded-xl bg-[#B8FF00]/15 border border-[#B8FF00]/30 text-[#B8FF00] text-xs text-left flex items-start gap-2 font-mono">
+          <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-[#B8FF00]" />
           <span>{message}</span>
         </div>
       )}
@@ -648,7 +648,7 @@ const VerificationSentView: React.FC<{
           type="button"
           onClick={handleResend}
           disabled={isSubmitting}
-          className="py-2.5 px-4 rounded-xl bg-[#111714] text-[#F3F4EC] font-mono text-xs uppercase tracking-wider font-bold transition-all disabled:opacity-50"
+          className="w-full py-2.5 px-4 rounded-xl bg-[#141A22] hover:bg-[#1C2430] text-xs font-semibold text-white border border-white/10 transition-colors disabled:opacity-50 cursor-pointer"
         >
           {isSubmitting ? 'Resending...' : 'Resend Verification Email'}
         </button>
@@ -656,9 +656,9 @@ const VerificationSentView: React.FC<{
         <button
           type="button"
           onClick={() => switchMode('login')}
-          className="py-2 px-3 rounded-xl bg-[#E8EAE1] hover:bg-[#DFE2D7] text-xs text-[#171C18]"
+          className="text-xs text-slate-400 hover:text-white underline underline-offset-2"
         >
-          Return to Sign In
+          Back to Sign In
         </button>
       </div>
     </div>
@@ -742,19 +742,19 @@ const ProfileSettingsView: React.FC<{
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {/* Account Info Header */}
-      <div className="p-3.5 rounded-2xl bg-[#E8EAE1] border border-[#DFE2D7] flex items-center justify-between">
+      <div className="p-3.5 rounded-2xl bg-[#141A22] border border-white/10 flex items-center justify-between">
         <div>
-          <div className="font-mono text-[10px] uppercase tracking-wider text-[#5E7A65]">
+          <div className="font-mono text-[10px] uppercase tracking-wider text-slate-400">
             Signed in as
           </div>
-          <div className="text-xs font-bold text-[#111714]">
+          <div className="text-xs font-bold text-white">
             {userEmail || 'Authenticated User'}
           </div>
         </div>
         <button
           type="button"
           onClick={signOut}
-          className="px-3 py-1.5 rounded-lg bg-red-100 hover:bg-red-200 text-red-700 font-mono text-[11px] font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+          className="px-3 py-1.5 rounded-lg bg-red-950/60 hover:bg-red-900/60 border border-red-500/30 text-red-300 font-mono text-[11px] font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
         >
           <LogOut className="w-3.5 h-3.5" />
           <span>Sign Out</span>
@@ -762,15 +762,15 @@ const ProfileSettingsView: React.FC<{
       </div>
 
       {error && (
-        <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-start gap-2">
-          <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-red-600" />
+        <div className="p-3 rounded-xl bg-red-950/40 border border-red-500/30 text-red-200 text-xs flex items-start gap-2">
+          <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-red-400" />
           <span>{error}</span>
         </div>
       )}
 
       {message && (
-        <div className="p-3 rounded-xl bg-[#C8F36B]/20 border border-[#C8F36B]/40 text-[#111714] text-xs flex items-start gap-2">
-          <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-[#5E7A65]" />
+        <div className="p-3 rounded-xl bg-[#B8FF00]/15 border border-[#B8FF00]/30 text-[#B8FF00] text-xs flex items-start gap-2 font-mono">
+          <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-[#B8FF00]" />
           <span>{message}</span>
         </div>
       )}
@@ -778,28 +778,28 @@ const ProfileSettingsView: React.FC<{
       {/* Email & Password In Bullets */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div className="space-y-1">
-          <label className="font-mono text-xs text-[#5E7A65] uppercase tracking-wider block flex items-center gap-1">
-            <Mail className="w-3 h-3 text-[#5E7A65]" />
+          <label className="font-mono text-xs text-slate-400 uppercase tracking-wider block flex items-center gap-1">
+            <Mail className="w-3 h-3 text-slate-400" />
             <span>Account Email</span>
           </label>
           <input
             type="text"
             readOnly
             value={userEmail || 'student@example.com'}
-            className="w-full px-3 py-2 rounded-xl bg-[#E8EAE1]/80 border border-[#DFE2D7] text-xs text-[#171C18] opacity-80 cursor-not-allowed"
+            className="w-full px-3 py-2 rounded-xl bg-[#141A22] border border-white/10 text-xs text-white opacity-80 cursor-not-allowed"
           />
         </div>
 
         <div className="space-y-1">
-          <label className="font-mono text-xs text-[#5E7A65] uppercase tracking-wider block flex items-center justify-between">
+          <label className="font-mono text-xs text-slate-400 uppercase tracking-wider block flex items-center justify-between">
             <span className="flex items-center gap-1">
-              <Key className="w-3 h-3 text-[#5E7A65]" />
+              <Key className="w-3 h-3 text-slate-400" />
               <span>Password</span>
             </span>
             <button
               type="button"
               onClick={handlePasswordReset}
-              className="text-[10px] text-emerald-800 hover:underline font-mono"
+              className="text-[10px] text-[#B8FF00] hover:underline font-mono"
             >
               {resetSent ? 'Link Sent' : 'Reset Link'}
             </button>
@@ -809,18 +809,18 @@ const ProfileSettingsView: React.FC<{
               type="password"
               readOnly
               value="••••••••••••••••"
-              className="w-full px-3 py-2 rounded-xl bg-[#E8EAE1]/80 border border-[#DFE2D7] text-xs font-mono text-[#171C18] opacity-80 tracking-widest cursor-not-allowed"
+              className="w-full px-3 py-2 rounded-xl bg-[#141A22] border border-white/10 text-xs font-mono text-white opacity-80 tracking-widest cursor-not-allowed"
             />
           </div>
         </div>
       </div>
 
       {/* Student Passion & Interests Section */}
-      <div className="p-3.5 rounded-2xl bg-linear-to-br from-[#E8EAE1] to-[#DFE2D7] border border-[#C8F36B]/40 space-y-2.5">
+      <div className="p-3.5 rounded-2xl bg-[#141A22] border border-white/10 space-y-2.5">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1.5">
-            <Heart className="w-4 h-4 text-emerald-600" />
-            <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#111714]">
+            <Heart className="w-4 h-4 text-[#B8FF00]" />
+            <span className="font-mono text-xs font-bold uppercase tracking-wider text-white">
               Hobbies & Interests Profile
             </span>
           </div>
@@ -830,9 +830,9 @@ const ProfileSettingsView: React.FC<{
               onClose();
               openPassionModal();
             }}
-            className="px-2.5 py-1 rounded-lg bg-[#111714] text-[#F3F4EC] text-[10px] font-mono uppercase font-bold hover:bg-[#19211C] transition-colors flex items-center gap-1 cursor-pointer"
+            className="px-2.5 py-1 rounded-lg bg-[#080A0E] text-[#B8FF00] border border-white/10 text-[10px] font-mono uppercase font-bold hover:bg-[#B8FF00] hover:text-[#080A0E] transition-colors flex items-center gap-1 cursor-pointer"
           >
-            <Sparkles className="w-3 h-3 text-[#C8F36B]" />
+            <Sparkles className="w-3 h-3 text-[#B8FF00]" />
             <span>Change Track</span>
           </button>
         </div>
@@ -843,14 +843,14 @@ const ProfileSettingsView: React.FC<{
             <div className="text-xs font-bold text-[#111714]">
               {currentPassionName}
             </div>
-            <div className="text-[10px] text-[#5E7A65]">
+            <div className="text-[10px] text-slate-400">
               AI synthesizes core physical & mathematical analogies through this field.
             </div>
           </div>
         </div>
 
         <div className="space-y-1 pt-1">
-          <label className="font-mono text-[10px] uppercase tracking-wider text-[#5E7A65] block">
+          <label className="font-mono text-[10px] uppercase tracking-wider text-slate-400 block">
             Specific Sub-Interests / Favorite Elements
           </label>
           <input
@@ -858,13 +858,13 @@ const ProfileSettingsView: React.FC<{
             value={passionDetails}
             onChange={(e) => setPassionDetails(e.target.value)}
             placeholder="e.g. Aerodynamics of swerve shots, stadium grass biology, stud traction..."
-            className="w-full px-3 py-1.5 rounded-xl bg-white/80 border border-[#DFE2D7] text-xs text-[#171C18] focus:outline-hidden focus:border-[#111714]"
+            className="w-full px-3 py-1.5 rounded-xl bg-[#080A0E] border border-white/10 text-xs text-white placeholder-slate-500 focus:outline-hidden focus:border-[#B8FF00]"
           />
         </div>
       </div>
 
       <div className="space-y-1">
-        <label className="font-mono text-xs text-[#5E7A65] uppercase tracking-wider block">
+        <label className="font-mono text-xs text-slate-400 uppercase tracking-wider block">
           Student Display Name
         </label>
         <input
@@ -872,44 +872,44 @@ const ProfileSettingsView: React.FC<{
           value={displayName}
           onChange={(e) => setDisplayName(e.target.value)}
           placeholder="Student Name"
-          className="w-full px-3.5 py-2 rounded-xl bg-[#E8EAE1] border border-[#DFE2D7] text-xs text-[#171C18] focus:outline-hidden focus:border-[#111714]"
+          className="w-full px-3.5 py-2 rounded-xl bg-[#141A22] border border-white/10 text-xs text-white placeholder-slate-500 focus:outline-hidden focus:border-[#B8FF00]"
         />
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
         <div className="space-y-1">
-          <label className="font-mono text-xs text-[#5E7A65] uppercase tracking-wider block">
+          <label className="font-mono text-xs text-slate-400 uppercase tracking-wider block">
             Curriculum Board
           </label>
           <select
             value={preferredBoard}
             onChange={(e) => setPreferredBoard(e.target.value as CurriculumBoard)}
-            className="w-full px-3 py-2 rounded-xl bg-[#E8EAE1] border border-[#DFE2D7] text-xs text-[#171C18] focus:outline-hidden focus:border-[#111714]"
+            className="w-full px-3 py-2 rounded-xl bg-[#141A22] border border-white/10 text-xs text-white focus:outline-hidden focus:border-[#B8FF00] cursor-pointer"
           >
             {CURRICULUM_BOARDS.map((b) => (
-              <option key={b} value={b}>{b}</option>
+              <option key={b} value={b} className="bg-[#141A22] text-white">{b}</option>
             ))}
           </select>
         </div>
 
         <div className="space-y-1">
-          <label className="font-mono text-xs text-[#5E7A65] uppercase tracking-wider block">
+          <label className="font-mono text-xs text-slate-400 uppercase tracking-wider block">
             Grade Level
           </label>
           <select
             value={gradeLevel}
             onChange={(e) => setGradeLevel(e.target.value as GradeLevel)}
-            className="w-full px-3 py-2 rounded-xl bg-[#E8EAE1] border border-[#DFE2D7] text-xs text-[#171C18] focus:outline-hidden focus:border-[#111714]"
+            className="w-full px-3 py-2 rounded-xl bg-[#141A22] border border-white/10 text-xs text-white focus:outline-hidden focus:border-[#B8FF00] cursor-pointer"
           >
             {GRADE_LEVELS.map((g) => (
-              <option key={g} value={g}>{g}</option>
+              <option key={g} value={g} className="bg-[#141A22] text-white">{g}</option>
             ))}
           </select>
         </div>
       </div>
 
       <div className="space-y-1">
-        <label className="font-mono text-xs text-[#5E7A65] uppercase tracking-wider block">
+        <label className="font-mono text-xs text-slate-400 uppercase tracking-wider block">
           Instruction Language
         </label>
         <input
@@ -917,32 +917,32 @@ const ProfileSettingsView: React.FC<{
           value={preferredLanguage}
           onChange={(e) => setPreferredLanguage(e.target.value)}
           placeholder="e.g. English, Hindi"
-          className="w-full px-3.5 py-2 rounded-xl bg-[#E8EAE1] border border-[#DFE2D7] text-xs text-[#171C18] focus:outline-hidden focus:border-[#111714]"
+          className="w-full px-3.5 py-2 rounded-xl bg-[#141A22] border border-white/10 text-xs text-white placeholder-slate-500 focus:outline-hidden focus:border-[#B8FF00]"
         />
       </div>
 
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full py-2.5 px-4 rounded-xl bg-[#111714] text-[#F3F4EC] hover:bg-[#19211C] font-mono text-xs uppercase tracking-wider font-bold transition-all disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer shadow-xs"
+        className="w-full py-2.5 px-4 rounded-xl bg-[#B8FF00] text-[#080A0E] hover:bg-[#A3E635] font-mono text-xs uppercase tracking-wider font-bold transition-all disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer shadow-xs"
       >
         {isSubmitting ? 'Saving Profile...' : 'Save Profile Changes'}
       </button>
 
       {/* Danger Zone: Delete Account */}
-      <div className="pt-3 border-t border-[#DFE2D7]">
+      <div className="pt-3 border-t border-white/10">
         {!showDeleteConfirm ? (
           <button
             type="button"
             onClick={() => setShowDeleteConfirm(true)}
-            className="w-full py-2 px-3 rounded-xl border border-red-200 bg-red-50/50 hover:bg-red-50 text-red-700 text-xs font-mono font-medium flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+            className="w-full py-2 px-3 rounded-xl border border-red-500/30 bg-red-950/20 hover:bg-red-950/40 text-red-400 text-xs font-mono font-medium flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
           >
-            <Trash2 className="w-3.5 h-3.5 text-red-600" />
+            <Trash2 className="w-3.5 h-3.5 text-red-400" />
             <span>Delete Student Account</span>
           </button>
         ) : (
-          <div className="p-3 rounded-xl bg-red-50 border border-red-300 space-y-2">
-            <div className="text-[11px] text-red-800 font-medium">
+          <div className="p-3 rounded-xl bg-red-950/40 border border-red-500/30 space-y-2">
+            <div className="text-[11px] text-red-300 font-medium">
               Are you sure? This will permanently delete your profile, saved topics, and trajectory history.
             </div>
             <div className="flex items-center gap-2">
@@ -957,7 +957,7 @@ const ProfileSettingsView: React.FC<{
               <button
                 type="button"
                 onClick={() => setShowDeleteConfirm(false)}
-                className="py-1.5 px-3 rounded-lg bg-white border border-slate-300 text-slate-700 font-mono text-xs hover:bg-slate-50 transition-colors cursor-pointer"
+                className="py-1.5 px-3 rounded-lg bg-[#141A22] border border-white/10 text-slate-300 font-mono text-xs hover:bg-[#1C2430] transition-colors cursor-pointer"
               >
                 Cancel
               </button>
@@ -1005,20 +1005,20 @@ export const AuthModal: React.FC = () => {
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200"
       role="dialog"
       aria-modal="true"
       aria-labelledby="auth-modal-title"
     >
       <div 
-        className="w-full max-w-md bg-[#F1F1E9] text-[#171C18] rounded-3xl border border-[#DFE2D7] shadow-2xl overflow-hidden flex flex-col"
+        className="w-full max-w-md bg-[#0D1117] text-slate-100 rounded-3xl border border-white/10 shadow-2xl overflow-hidden flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header Bar */}
-        <div className="flex items-center justify-between px-6 py-4 bg-[#111714] text-[#F3F4EC] border-b border-white/10">
+        <div className="flex items-center justify-between px-6 py-4 bg-[#080A0E] text-white border-b border-white/10">
           <div className="flex items-center gap-2.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#C8F36B] shadow-[0_0_8px_rgba(200,243,107,0.6)]" />
-            <h2 id="auth-modal-title" className="font-mono text-xs uppercase tracking-wider font-semibold text-[#F3F4EC]">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#B8FF00] shadow-[0_0_8px_rgba(184,255,0,0.6)]" />
+            <h2 id="auth-modal-title" className="font-mono text-xs uppercase tracking-wider font-semibold text-white">
               {authModalMode === 'login' && 'Student Access • Sign In'}
               {authModalMode === 'register' && 'New Learner • Profile Registration'}
               {authModalMode === 'forgot-password' && 'Account Recovery'}
@@ -1028,7 +1028,7 @@ export const AuthModal: React.FC = () => {
           </div>
           <button
             onClick={closeAuthModal}
-            className="p-1.5 rounded-xl hover:bg-white/10 text-[#8DA391] hover:text-[#F3F4EC] transition-colors focus:outline-hidden focus:ring-2 focus:ring-[#C8F36B]"
+            className="p-1.5 rounded-xl hover:bg-white/10 text-slate-400 hover:text-white transition-colors focus:outline-hidden focus:ring-2 focus:ring-[#B8FF00]"
             aria-label="Close dialog"
           >
             <X className="w-4 h-4" />
@@ -1037,16 +1037,16 @@ export const AuthModal: React.FC = () => {
 
         {/* Protected Navigation Prompt Reason Banner */}
         {authPromptReason && (
-          <div className="px-6 py-2.5 bg-[#B8FF00]/15 border-b border-[#B8FF00]/30 text-[#171C18] text-xs flex items-center gap-2">
-            <Lock className="w-4 h-4 shrink-0 text-[#2E7D32]" />
+          <div className="px-6 py-2.5 bg-[#B8FF00]/10 border-b border-[#B8FF00]/25 text-[#B8FF00] text-xs flex items-center gap-2 font-mono">
+            <Lock className="w-4 h-4 shrink-0 text-[#B8FF00]" />
             <span className="font-semibold">{authPromptReason}</span>
           </div>
         )}
 
         {/* Unconfigured Warning Banner */}
         {!isConfigured && (
-          <div className="px-6 py-2.5 bg-amber-500/10 border-b border-amber-500/20 text-amber-900 text-xs flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 shrink-0 text-amber-600" />
+          <div className="px-6 py-2.5 bg-amber-500/10 border-b border-amber-500/20 text-amber-300 text-xs flex items-center gap-2 font-mono">
+            <AlertCircle className="w-4 h-4 shrink-0 text-amber-400" />
             <span>
               Supabase credentials not configured in this environment
               {configDiagnostics.missingVars.length > 0 && ` (missing: ${configDiagnostics.missingVars.join(', ')})`}.

@@ -13,9 +13,7 @@ import {
   calculateOpticsLab,
   OPTICS_LAB_MODEL,
   calculateThermalLab,
-  THERMAL_LAB_MODEL,
   calculateMechanicsLab,
-  MECHANICS_LAB_MODEL,
 } from '../src/utils/scientificEngines.ts';
 
 console.log('====================================================');

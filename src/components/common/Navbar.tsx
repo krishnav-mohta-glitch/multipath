@@ -11,7 +11,6 @@ import {
   User as UserIcon,
   Layers,
   FolderArchive,
-  Sparkles,
   Lock,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
@@ -211,21 +210,12 @@ export const Navbar: React.FC = () => {
               })}
             </div>
 
-            <div className="h-4 w-px bg-white/10 mx-1 hidden xl:block shrink-0" />
-
-            {/* Quick Action: Explore / Workspace */}
-            <button
-              onClick={() => navigateTo('library')}
-              className="hidden xl:inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-white bg-[#1C2430] hover:bg-[#243040] hover:border-[#B8FF00]/40 border border-white/10 rounded-full transition-all cursor-pointer shrink-0"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-[#B8FF00]" />
-              <span>Explore</span>
-            </button>
+            <div className="h-4 w-px bg-white/10 mx-1 hidden lg:block shrink-0" />
 
             {/* Student Passion Persona Pill */}
             <button
               onClick={openPassionModal}
-              className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#161D26] hover:bg-[#1C2430] text-[#C8D6C9] hover:text-white border border-white/10 text-xs font-mono transition-all cursor-pointer shadow-xs shrink-0"
+              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#161D26] hover:bg-[#1C2430] text-[#C8D6C9] hover:text-white border border-white/10 text-xs font-mono transition-all cursor-pointer shadow-xs shrink-0"
               title="Change your learning passion & personal explanation domain"
             >
               <span>{profile?.passion === 'gaming' ? '🎮' : profile?.passion === 'cricket' ? '🏏' : profile?.passion === 'space' ? '🚀' : profile?.passion === 'music' ? '🎵' : profile?.passion === 'robotics' ? '🤖' : '⚽'}</span>
