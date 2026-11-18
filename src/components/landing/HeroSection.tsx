@@ -1,11 +1,13 @@
 import React, { useEffect, useRef, Suspense } from 'react';
 import { ArrowRight, Compass, ShieldCheck } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
+import { useAuth } from '../../context/AuthContext';
 
 const LearningCoreScene = React.lazy(() => import('../three/LearningCoreScene'));
 
 export const HeroSection: React.FC = () => {
   const { navigateTo, openTopic } = useApp();
+  const { user, openAuthModal } = useAuth();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   // Performant procedural 2D convergence animation (fallback & reduced motion)
@@ -177,45 +179,60 @@ export const HeroSection: React.FC = () => {
             </div>
 
             {/* Authenticated Observatory Access Guarantee */}
-            <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-[#141A22]/80 border border-white/08 max-w-md">
+            <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-[#141A22]/80 border border-white/08 max-w-lg">
               <ShieldCheck className="w-4 h-4 text-[#B8FF00] shrink-0" />
               <span className="font-mono text-xs text-[#E5E7EB]">
-                <strong className="text-white font-semibold">Authenticated Access:</strong> Sign in to unlock full curriculum, 3D labs, and personal trajectory.
+                <strong className="text-white font-semibold">{user ? 'Authenticated Learner:' : 'Public Preview:'}</strong>{' '}
+                {user 
+                  ? 'Full access unlocked to all 74 concept workspaces and simulations.' 
+                  : 'Explore public previews below or sign in to unlock complete 4-path workspaces.'}
               </span>
             </div>
 
             {/* Action CTAs: High-visibility Primary & Guest Exploration */}
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-2">
               <button
-                onClick={() => navigateTo('library')}
+                onClick={() => {
+                  if (user) {
+                    navigateTo('library');
+                  } else {
+                    document.getElementById('curriculum-discovery')?.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 text-xs sm:text-sm font-bold text-[#080A0E] bg-[#B8FF00] hover:bg-[#A3E635] active:scale-[0.98] rounded-full shadow-lg shadow-[#B8FF00]/15 transition-all cursor-pointer"
               >
-                <span>Explore Visual Curriculum</span>
+                <span>{user ? 'Enter Full Curriculum' : 'Explore Curriculum Preview'}</span>
                 <ArrowRight className="w-4 h-4 stroke-[2.4]" />
               </button>
 
               <button
-                onClick={() => openTopic('math-linear-equations', 'explore-experiment')}
+                onClick={() => {
+                  if (user) {
+                    openTopic('math-linear-equations', 'explore-experiment');
+                  } else {
+                    openAuthModal('login', 'Sign in or register to launch live simulation labs.');
+                  }
+                }}
                 className="inline-flex items-center justify-center gap-2 px-6 py-4 text-xs sm:text-sm font-semibold text-white bg-[#141A22] hover:bg-[#1C2430] border border-white/15 rounded-full transition-all cursor-pointer"
               >
                 <Compass className="w-4 h-4 text-[#B8FF00]" />
-                <span>Try Live Simulation Lab</span>
+                <span>{user ? 'Try Live Simulation Lab' : 'Sign In for Live Labs'}</span>
               </button>
             </div>
 
             {/* Concise Scientific Assurance Ledger */}
-            <div className="pt-4 flex flex-wrap items-center gap-4 text-xs font-mono text-[#8B9DAE]">
+            <div className="pt-4 flex flex-wrap items-center gap-4 text-xs font-mono text-[#8DA391]">
               <span className="flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#B8FF00]" />
-                <span>64 Canonical Concepts</span>
+                <span>74 Comprehensive Topics</span>
               </span>
               <span className="flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#38BDF8]" />
-                <span>CBSE &amp; CISCE Classes 6–10</span>
+                <span>CBSE &amp; CISCE Classes 6–10 Active</span>
               </span>
               <span className="flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#A78BFA]" />
-                <span>4 Epistemic Paths</span>
+                <span>4 Epistemic Perspectives</span>
               </span>
             </div>
 

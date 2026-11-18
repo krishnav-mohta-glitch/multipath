@@ -79,7 +79,7 @@ export const SubjectGridPreview: React.FC = () => {
   const featuredTopics = filteredTopics.slice(0, 6);
 
   return (
-    <section id="curriculum-discovery" className="py-16 lg:py-24 bg-[#06080C] text-[#F3F4EC] border-b border-white/10 relative overflow-hidden">
+    <section id="curriculum-discovery" className="py-16 lg:py-24 bg-[#06080C] text-[#F3F4EC] border-b border-white/10 relative overflow-hidden scroll-mt-24 sm:scroll-mt-28">
       
       {/* Background Reticle Grid & Ambient Nebula Glow */}
       <div className="absolute inset-0 cosmic-grid opacity-20 pointer-events-none" />
@@ -164,18 +164,25 @@ export const SubjectGridPreview: React.FC = () => {
         {/* =================================================================== */}
         {/* 2. TACTILE CLASS SEGMENTED SLIDER (Classes 6 through 12)            */}
         {/* =================================================================== */}
-        <div className="p-3 sm:p-4 rounded-3xl bg-[#0D121A]/90 border border-white/10 backdrop-blur-xl flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 text-left shadow-2xl">
+        <div className="p-3.5 sm:p-5 rounded-3xl bg-[#0D121A]/90 border border-white/10 backdrop-blur-xl flex flex-col gap-4 text-left shadow-2xl">
           
-          {/* Class Rail */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0 scrollbar-none">
-            <span className="font-mono text-[10px] uppercase text-[#64748B] tracking-wider shrink-0 font-bold hidden sm:inline px-1">
-              TARGET CLASS:
-            </span>
-            <div className="flex items-center bg-black/60 p-1 rounded-2xl border border-white/10 shrink-0">
+          {/* Target Class Filter Group (Always Visible Labels & Fully Discoverable on Mobile) */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="font-mono text-xs uppercase text-[#8DA391] tracking-wider font-bold">
+                Target Grade / Class:
+              </span>
+              <span className="font-mono text-[11px] text-[#B8FF00] font-semibold">
+                {selectedClass === 'all' ? 'All Grades (6–12)' : `Class ${selectedClass}`}
+              </span>
+            </div>
+
+            {/* Responsive Discoverable Class Buttons (Wraps on Mobile, zero hidden overflow) */}
+            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 p-1.5 rounded-2xl bg-black/60 border border-white/10">
               <button
                 type="button"
                 onClick={() => setSelectedClass('all')}
-                className={`px-3 py-1.5 rounded-xl text-xs font-mono font-semibold transition-all cursor-pointer ${
+                className={`flex-1 sm:flex-initial min-w-[76px] text-center px-3 py-2 rounded-xl text-xs font-mono font-semibold transition-all cursor-pointer ${
                   selectedClass === 'all'
                     ? 'bg-[#B8FF00] text-black font-bold shadow-md shadow-[#B8FF00]/20'
                     : 'text-[#94A3B8] hover:text-white hover:bg-white/5'
@@ -188,7 +195,7 @@ export const SubjectGridPreview: React.FC = () => {
                   key={cls}
                   type="button"
                   onClick={() => setSelectedClass(cls)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-mono font-semibold transition-all cursor-pointer ${
+                  className={`flex-1 sm:flex-initial min-w-[68px] text-center px-3 py-2 rounded-xl text-xs font-mono font-semibold transition-all cursor-pointer ${
                     selectedClass === cls
                       ? 'bg-[#B8FF00] text-black font-bold shadow-md shadow-[#B8FF00]/20'
                       : 'text-[#94A3B8] hover:text-white hover:bg-white/5'
@@ -200,19 +207,25 @@ export const SubjectGridPreview: React.FC = () => {
             </div>
           </div>
 
-          {/* Board Selector Pill */}
-          <div className="flex items-center gap-2 shrink-0">
-            <span className="font-mono text-[10px] uppercase text-[#64748B] tracking-wider hidden lg:inline font-bold">
-              BOARD:
-            </span>
-            <div className="flex items-center bg-black/60 p-1 rounded-2xl border border-white/10 w-full sm:w-auto">
+          {/* Board Selector Group (Always Visible Labels) */}
+          <div className="space-y-2 pt-1 border-t border-white/08">
+            <div className="flex items-center justify-between">
+              <span className="font-mono text-xs uppercase text-[#8DA391] tracking-wider font-bold">
+                Examination Board:
+              </span>
+              <span className="font-mono text-[11px] text-white/80 font-semibold">
+                {selectedBoard === 'all' ? 'CBSE & CISCE (All)' : selectedBoard}
+              </span>
+            </div>
+
+            <div className="flex flex-wrap sm:flex-nowrap items-center gap-1.5 p-1 rounded-2xl bg-black/60 border border-white/10 w-full sm:w-auto">
               <button
                 type="button"
                 onClick={() => setSelectedBoard('all')}
-                className={`flex-1 sm:flex-initial px-3 py-1.5 rounded-xl text-xs font-mono font-semibold transition-all cursor-pointer ${
+                className={`flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs font-mono font-semibold transition-all cursor-pointer text-center ${
                   selectedBoard === 'all'
                     ? 'bg-white text-black font-bold shadow-xs'
-                    : 'text-[#94A3B8] hover:text-white'
+                    : 'text-[#94A3B8] hover:text-white hover:bg-white/5'
                 }`}
               >
                 All Boards
@@ -222,10 +235,10 @@ export const SubjectGridPreview: React.FC = () => {
                   key={board.code}
                   type="button"
                   onClick={() => setSelectedBoard(board.code)}
-                  className={`flex-1 sm:flex-initial px-3 py-1.5 rounded-xl text-xs font-mono font-semibold transition-all cursor-pointer ${
+                  className={`flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs font-mono font-semibold transition-all cursor-pointer text-center ${
                     selectedBoard === board.code
                       ? 'bg-white text-black font-bold shadow-xs'
-                      : 'text-[#94A3B8] hover:text-white'
+                      : 'text-[#94A3B8] hover:text-white hover:bg-white/5'
                   }`}
                 >
                   {board.code}
@@ -301,8 +314,8 @@ export const SubjectGridPreview: React.FC = () => {
                   : `Class ${selectedClass} Official Concepts`}{' '}
                 {activeSubject !== 'all' && `• ${activeSubject.toUpperCase()}`}
               </h3>
-              <span className="font-mono text-[10px] px-2 py-0.5 rounded-full bg-[#141A22] text-[#B8FF00] font-bold">
-                {filteredTopics.length} Active
+              <span className="font-mono text-[10px] px-2.5 py-0.5 rounded-full bg-[#141A22] text-[#B8FF00] font-bold">
+                {selectedClass === 'all' ? `${filteredTopics.length} Total Topics` : `${filteredTopics.length} Topics for Class ${selectedClass}`}
               </span>
             </div>
 
@@ -363,43 +376,43 @@ export const SubjectGridPreview: React.FC = () => {
                     <div className="p-2 space-y-3 flex-1 flex flex-col justify-between">
                       {/* Top Badges */}
                       <div className="flex items-center justify-between gap-2">
-                        <span className="font-mono text-[9px] font-bold px-2 py-0.5 rounded-full bg-black text-[#B8FF00] border border-white/10">
-                          {topic.subjectId.toUpperCase()} • {topic.difficulty.toUpperCase()}
+                        <span className="font-mono text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-black text-[#B8FF00] border border-white/10 capitalize">
+                          {topic.subjectId} • {topic.difficulty}
                         </span>
-                        <span className="font-mono text-[9px] text-[#64748B]">
+                        <span className="font-mono text-[10px] text-[#8DA391] font-semibold">
                           {topic.estimatedMinutes} MINS
                         </span>
                       </div>
 
-                      {/* Title & Overview */}
-                      <div className="space-y-1">
+                      {/* Title & Overview (Priority Readability without Ellipsis) */}
+                      <div className="space-y-1.5">
                         <h4
                           onClick={() => openTopic(topic.id)}
-                          className="font-display text-base font-bold text-white group-hover:text-[#38BDF8] transition-colors line-clamp-1 cursor-pointer"
+                          className="font-display text-base sm:text-lg font-bold text-white group-hover:text-[#38BDF8] transition-colors line-clamp-2 cursor-pointer leading-snug"
                         >
                           {topic.title}
                         </h4>
-                        <p className="text-xs text-[#94A3B8] leading-relaxed line-clamp-2">
+                        <p className="text-xs text-[#CBD5E1] leading-relaxed line-clamp-2">
                           {topic.subtitle || topic.overview}
                         </p>
                       </div>
 
-                      {/* Official Syllabus Provenance */}
+                      {/* Official Syllabus Provenance (Wraps onto second line, zero ellipses truncation) */}
                       {firstMapping && (
-                        <div className="p-2 rounded-xl bg-black/60 border border-white/05 font-mono text-[10px] text-[#64748B] space-y-0.5">
-                          <div className="text-white font-semibold truncate">
+                        <div className="p-2.5 rounded-xl bg-black/60 border border-white/08 font-mono text-[11px] text-[#8DA391] space-y-1">
+                          <div className="text-white font-semibold break-words leading-tight">
                             {firstMapping.boardCode} Class {firstMapping.classLevel} • {firstMapping.subjectName}
                           </div>
-                          <div className="text-[#94A3B8] truncate">
+                          <div className="text-[#94A3B8] break-words text-[10px] leading-tight">
                             {firstMapping.unitName}
                           </div>
                         </div>
                       )}
 
                       {/* 4 Epistemic Paths */}
-                      <div className="pt-1">
-                        <span className="font-mono text-[9px] uppercase tracking-wider text-[#64748B] block mb-1">
-                          4 Parallel Perspectives:
+                      <div className="pt-1 space-y-1.5">
+                        <span className="font-mono text-[10px] uppercase tracking-wider text-[#8DA391] block font-semibold">
+                          4 Learning Perspectives:
                         </span>
                         <div className="grid grid-cols-2 gap-1.5">
                           <button

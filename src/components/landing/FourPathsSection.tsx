@@ -144,7 +144,7 @@ export const FourPathsSection: React.FC = () => {
   const currentPath = pathProfiles.find((p) => p.id === activeTab) || pathProfiles[0];
 
   return (
-    <section id="four-paths-section" className="py-16 lg:py-28 bg-[#0D1117] text-[#F3F4EC] border-b border-white/10 relative overflow-hidden">
+    <section id="four-paths-section" className="py-16 lg:py-28 bg-[#0D1117] text-[#F3F4EC] border-b border-white/10 relative overflow-hidden scroll-mt-24 sm:scroll-mt-28">
       
       {/* Background Reticle Grid */}
       <div className="absolute inset-0 cosmic-grid opacity-20 pointer-events-none" />

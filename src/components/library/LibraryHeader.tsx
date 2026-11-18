@@ -91,7 +91,7 @@ export const LibraryHeader: React.FC<LibraryHeaderProps> = ({
             Scientific Curriculum Library
           </h1>
           <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
-            Explore 64 structured topics across 8 academic disciplines aligned with CBSE &amp; CISCE Classes 6–10.
+            Explore {totalTopicsCount} structured topics across 8 academic disciplines aligned with CBSE &amp; CISCE Classes 6–10.
             Every topic contains four convergent learning paths, interactive simulations, and diagnostic Socratic assessment.
           </p>
         </div>

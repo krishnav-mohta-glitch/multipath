@@ -35,7 +35,7 @@ export const Footer: React.FC = () => {
             <div className="pt-2">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#141A22] border border-white/10 text-[11px] text-[#B8FF00] font-mono">
                 <ShieldCheck className="w-3.5 h-3.5 text-[#B8FF00]" />
-                <span>Observatory V3 • 64 Verified Topics • 8 Domains</span>
+                <span>Observatory V3 • 74 Topics • 8 Academic Disciplines</span>
               </div>
             </div>
           </div>

@@ -61,7 +61,7 @@ export const SubjectProgressMatrix: React.FC<SubjectProgressMatrixProps> = ({
           </h3>
         </div>
         <span className="font-mono text-[10px] text-slate-400 uppercase tracking-wider">
-          8 Disciplines · 64 Canonical Topics
+          8 Disciplines · 74 Topics
         </span>
       </div>
 

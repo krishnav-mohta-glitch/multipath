@@ -1,9 +1,11 @@
 import React from 'react';
 import { ArrowRight, Compass, ShieldCheck } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
+import { useAuth } from '../../context/AuthContext';
 
 export const CTASection: React.FC = () => {
-  const { navigateTo, openTopic } = useApp();
+  const { navigateTo } = useApp();
+  const { user, openAuthModal } = useAuth();
 
   return (
     <section className="py-20 lg:py-32 bg-[#080A0E] text-[#F3F4EC] relative overflow-hidden text-center border-t border-white/10">
@@ -36,24 +38,36 @@ export const CTASection: React.FC = () => {
 
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-3">
-          <button
-            onClick={() => navigateTo('library')}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-9 py-4 text-xs sm:text-sm font-bold text-[#080A0E] bg-[#B8FF00] hover:bg-[#A3E635] active:scale-[0.98] rounded-full shadow-lg shadow-[#B8FF00]/15 transition-all cursor-pointer"
-          >
-            <span>Start Learning (No Account Needed)</span>
-            <ArrowRight className="w-4 h-4 stroke-[2.4]" />
-          </button>
+          {user ? (
+            <button
+              onClick={() => navigateTo('library')}
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-9 py-4 text-xs sm:text-sm font-bold text-[#080A0E] bg-[#B8FF00] hover:bg-[#A3E635] active:scale-[0.98] rounded-full shadow-lg shadow-[#B8FF00]/15 transition-all cursor-pointer"
+            >
+              <span>Enter Full Curriculum</span>
+              <ArrowRight className="w-4 h-4 stroke-[2.4]" />
+            </button>
+          ) : (
+            <button
+              onClick={() => openAuthModal('register', 'Create an account to unlock complete 4-path workspaces, personal trajectory tracking, and 3D simulations.')}
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-9 py-4 text-xs sm:text-sm font-bold text-[#080A0E] bg-[#B8FF00] hover:bg-[#A3E635] active:scale-[0.98] rounded-full shadow-lg shadow-[#B8FF00]/15 transition-all cursor-pointer"
+            >
+              <span>Sign In / Register for Full Access</span>
+              <ArrowRight className="w-4 h-4 stroke-[2.4]" />
+            </button>
+          )}
 
           <button
-            onClick={() => openTopic('math-linear-equations', 'structured-explanation')}
+            onClick={() => {
+              document.getElementById('curriculum-discovery')?.scrollIntoView({ behavior: 'smooth' });
+            }}
             className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-4 text-xs sm:text-sm font-semibold text-white bg-[#141A22] hover:bg-[#1C2430] border border-white/15 rounded-full transition-all cursor-pointer"
           >
-            <Compass className="w-4 h-4 text-[#8B9DAE]" />
-            <span>Launch Linear Equations Demo</span>
+            <Compass className="w-4 h-4 text-[#B8FF00]" />
+            <span>Explore Public Curriculum Preview</span>
           </button>
         </div>
 
-        <div className="pt-6 flex flex-wrap items-center justify-center gap-6 text-xs text-[#8B9DAE] font-mono">
+        <div className="pt-6 flex flex-wrap items-center justify-center gap-6 text-xs text-[#8DA391] font-mono">
           <span className="flex items-center gap-1.5">
             <ShieldCheck className="w-3.5 h-3.5 text-[#B8FF00]" />
             Local-First Privacy
@@ -61,7 +75,7 @@ export const CTASection: React.FC = () => {
           <span>•</span>
           <span>Zero Data Lock-in</span>
           <span>•</span>
-          <span>64 Verified Curriculum Topics</span>
+          <span>74 Topics across 8 Disciplines</span>
         </div>
 
       </div>

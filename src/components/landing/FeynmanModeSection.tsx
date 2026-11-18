@@ -20,7 +20,7 @@ export const FeynmanModeSection: React.FC = () => {
   ];
 
   return (
-    <section className="py-20 lg:py-32 bg-[#F1F1E9] border-b border-[#19211C]/10 text-left">
+    <section id="feynman-section" className="pt-24 pb-20 sm:pt-28 sm:pb-24 lg:py-32 bg-[#F1F1E9] border-b border-[#19211C]/10 text-left scroll-mt-24 sm:scroll-mt-28">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">

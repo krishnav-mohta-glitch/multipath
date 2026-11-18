@@ -119,7 +119,7 @@ export const ConstellationMap: React.FC<ConstellationMapProps> = ({
               Constellation Knowledge Topology
             </h3>
             <span className="font-mono text-[9px] px-2 py-0.5 rounded-full bg-[#141A22] text-[#B8FF00] font-bold border border-white/10">
-              64 NODES
+              {TOPICS.length} NODES
             </span>
           </div>
           <p className="text-xs text-[#8B9DAE]">
@@ -135,7 +135,7 @@ export const ConstellationMap: React.FC<ConstellationMapProps> = ({
           </span>
           <span className="flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-white/20" />
-            <span>Unexplored ({64 - exploredTopicIds.size})</span>
+            <span>Unexplored ({TOPICS.length - exploredTopicIds.size})</span>
           </span>
         </div>
       </div>

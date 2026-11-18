@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Compass,
   BookOpen,
@@ -20,9 +20,44 @@ export const Navbar: React.FC = () => {
   const { currentTab, navigateTo, searchQuery, setSearchQuery, sessionState, dashboardSubTab } = useApp();
   const { user, profile, openAuthModal, openPassionModal, isOnboardingLocked } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeHomeSection, setActiveHomeSection] = useState<'hero' | 'curriculum' | 'paths' | 'feynman'>('hero');
+
+  // Lightweight IntersectionObserver/scroll-listener to reflect active section on Homepage
+  useEffect(() => {
+    if (currentTab !== 'home') return;
+
+    const handleScroll = () => {
+      const scrollPos = window.scrollY + 200;
+      const curriculumElem = document.getElementById('curriculum-discovery');
+      const pathsElem = document.getElementById('four-paths-section');
+      const feynmanElem = document.getElementById('feynman-section');
+
+      const feynmanTop = feynmanElem?.offsetTop ?? Infinity;
+      const pathsTop = pathsElem?.offsetTop ?? Infinity;
+      const curriculumTop = curriculumElem?.offsetTop ?? Infinity;
+
+      if (scrollPos >= feynmanTop) {
+        setActiveHomeSection('feynman');
+      } else if (scrollPos >= pathsTop) {
+        setActiveHomeSection('paths');
+      } else if (scrollPos >= curriculumTop) {
+        setActiveHomeSection('curriculum');
+      } else {
+        setActiveHomeSection('hero');
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [currentTab]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!user) {
+      openAuthModal('login', 'Please sign in or register to search the full curriculum.');
+      return;
+    }
     if (isOnboardingLocked) {
       openPassionModal();
       return;
@@ -31,6 +66,9 @@ export const Navbar: React.FC = () => {
     setMobileMenuOpen(false);
   };
 
+  const isHomeActive = currentTab === 'home' && activeHomeSection === 'hero';
+  const isCurriculumActive = currentTab === 'library' || (currentTab === 'home' && activeHomeSection === 'curriculum');
+
   const navLinks = [
     {
       id: 'home' as const,
@@ -38,20 +76,35 @@ export const Navbar: React.FC = () => {
       shortLabel: 'Home',
       icon: Compass,
       sublabel: 'Overview',
-      isActive: currentTab === 'home',
+      isActive: isHomeActive,
       isLocked: false,
-      onClick: () => navigateTo('home'),
+      onClick: () => {
+        if (currentTab === 'home') {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          navigateTo('home');
+        }
+      },
     },
     {
       id: 'library' as const,
-      label: 'Curriculum',
+      label: user ? 'Curriculum' : 'Curriculum Preview',
       shortLabel: 'Curriculum',
       icon: BookOpen,
-      sublabel: 'CBSE & ICSE 6–12',
-      isActive: currentTab === 'library',
-      isLocked: isOnboardingLocked,
+      sublabel: user ? 'CBSE & ICSE Classes 6–10' : 'Public Syllabus Preview',
+      isActive: isCurriculumActive,
+      isLocked: false,
       onClick: () => {
-        if (isOnboardingLocked) {
+        if (!user) {
+          if (currentTab !== 'home') {
+            navigateTo('home');
+            setTimeout(() => {
+              document.getElementById('curriculum-discovery')?.scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+          } else {
+            document.getElementById('curriculum-discovery')?.scrollIntoView({ behavior: 'smooth' });
+          }
+        } else if (isOnboardingLocked) {
           openPassionModal();
         } else {
           navigateTo('library');
@@ -63,11 +116,13 @@ export const Navbar: React.FC = () => {
       label: 'Workspace',
       shortLabel: 'Workspace',
       icon: Layers,
-      sublabel: '4 Paths & 3D Sandbox',
+      sublabel: user ? '4 Paths & 3D Sandbox' : 'Full Lab — Sign In Required',
       isActive: currentTab === 'workspace',
-      isLocked: isOnboardingLocked,
+      isLocked: !user || isOnboardingLocked,
       onClick: () => {
-        if (isOnboardingLocked) {
+        if (!user) {
+          openAuthModal('login', 'Sign in or register to launch the 4-path interactive learning workspaces.');
+        } else if (isOnboardingLocked) {
           openPassionModal();
         } else {
           navigateTo('workspace');
@@ -82,9 +137,11 @@ export const Navbar: React.FC = () => {
       sublabel: 'Evidence & Mastery',
       isActive: currentTab === 'mylearning' && dashboardSubTab !== 'resources',
       badge: sessionState.savedTopicIds.length > 0 ? sessionState.savedTopicIds.length : undefined,
-      isLocked: isOnboardingLocked,
+      isLocked: !user || isOnboardingLocked,
       onClick: () => {
-        if (isOnboardingLocked) {
+        if (!user) {
+          openAuthModal('login', 'Sign in to access your personal mastery trajectory.');
+        } else if (isOnboardingLocked) {
           openPassionModal();
         } else {
           navigateTo('mylearning', undefined, undefined, 'progress');
@@ -98,9 +155,11 @@ export const Navbar: React.FC = () => {
       icon: FolderArchive,
       sublabel: 'Media Vault',
       isActive: currentTab === 'mylearning' && dashboardSubTab === 'resources',
-      isLocked: isOnboardingLocked,
+      isLocked: !user || isOnboardingLocked,
       onClick: () => {
-        if (isOnboardingLocked) {
+        if (!user) {
+          openAuthModal('login', 'Sign in to access your saved resources vault.');
+        } else if (isOnboardingLocked) {
           openPassionModal();
         } else {
           navigateTo('mylearning', undefined, undefined, 'resources');
@@ -335,12 +394,17 @@ export const Navbar: React.FC = () => {
 
               <button
                 onClick={() => {
-                  navigateTo('library');
-                  setMobileMenuOpen(false);
+                  if (!user) {
+                    setMobileMenuOpen(false);
+                    document.getElementById('curriculum-discovery')?.scrollIntoView({ behavior: 'smooth' });
+                  } else {
+                    navigateTo('library');
+                    setMobileMenuOpen(false);
+                  }
                 }}
                 className="mt-2 w-full flex items-center justify-center gap-2 py-2.5 px-4 text-xs font-bold text-[#080A0E] bg-[#B8FF00] hover:bg-[#A3E635] rounded-xl shadow-xs transition-all cursor-pointer"
               >
-                <span>Browse All 64 Topics</span>
+                <span>{user ? 'Browse All 74 Topics' : 'Preview 74 Curriculum Topics'}</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
 
@@ -368,16 +432,16 @@ export const Navbar: React.FC = () => {
                 ) : (
                   <button
                     onClick={() => {
-                      openAuthModal('login');
+                      openAuthModal('login', 'Sign in to access your personal trajectory, audio/video overviews, and full 4-path workspaces.');
                       setMobileMenuOpen(false);
                     }}
                     className="flex items-center justify-between w-full px-3.5 py-2.5 rounded-xl bg-[#141A22] text-white text-xs border border-white/10"
                   >
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 rounded-full bg-[#B8FF00] animate-pulse" />
-                      <span className="text-xs font-medium">Guest Mode Active</span>
+                      <span className="text-xs font-medium">Guest Visitor • Preview Mode</span>
                     </div>
-                    <span className="text-[11px] font-mono text-[#B8FF00] font-bold">Sign In / Sync</span>
+                    <span className="text-[11px] font-mono text-[#B8FF00] font-bold">Sign In / Register</span>
                   </button>
                 )}
               </div>
