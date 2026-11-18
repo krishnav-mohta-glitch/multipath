@@ -8,11 +8,51 @@ interface UnifiedLearningCanvasProps {
   topic: Topic;
 }
 
+const AMBIENT_PASSION_STYLES: Record<string, { glow: string; border: string; badge: string; text: string }> = {
+  football: {
+    glow: 'from-[#0A1A12]/50 via-[#08120C]/30 to-[#080A0E]',
+    border: 'border-[#10B981]/25',
+    badge: 'bg-[#10B981]/15 text-[#34D399] border-[#10B981]/30',
+    text: 'text-[#34D399]',
+  },
+  gaming: {
+    glow: 'from-[#06B6D4]/15 via-[#8B5CF6]/10 to-[#080A0E]',
+    border: 'border-[#06B6D4]/30',
+    badge: 'bg-[#06B6D4]/15 text-[#67E8F9] border-[#06B6D4]/30',
+    text: 'text-[#67E8F9]',
+  },
+  cricket: {
+    glow: 'from-[#F59E0B]/15 via-[#10B981]/10 to-[#080A0E]',
+    border: 'border-[#F59E0B]/30',
+    badge: 'bg-[#F59E0B]/15 text-[#FCD34D] border-[#F59E0B]/30',
+    text: 'text-[#FCD34D]',
+  },
+  space: {
+    glow: 'from-[#818CF8]/15 via-[#C084FC]/10 to-[#080A0E]',
+    border: 'border-[#818CF8]/30',
+    badge: 'bg-[#818CF8]/15 text-[#A5B4FC] border-[#818CF8]/30',
+    text: 'text-[#A5B4FC]',
+  },
+  music: {
+    glow: 'from-[#F472B6]/15 via-[#38BDF8]/10 to-[#080A0E]',
+    border: 'border-[#F472B6]/30',
+    badge: 'bg-[#F472B6]/15 text-[#F472B6] border-[#F472B6]/30',
+    text: 'text-[#F472B6]',
+  },
+  robotics: {
+    glow: 'from-[#2DD4BF]/15 via-[#F59E0B]/10 to-[#080A0E]',
+    border: 'border-[#2DD4BF]/30',
+    badge: 'bg-[#2DD4BF]/15 text-[#5EEAD4] border-[#2DD4BF]/30',
+    text: 'text-[#5EEAD4]',
+  },
+};
+
 export const UnifiedLearningCanvas: React.FC<UnifiedLearningCanvasProps> = ({ topic }) => {
   const { profile, openPassionModal } = useAuth();
 
   // Active passion (default to student profile passion, or 'football')
   const [activePassionId, setActivePassionId] = useState<string>(profile?.passion || 'football');
+  const ambient = AMBIENT_PASSION_STYLES[activePassionId] || AMBIENT_PASSION_STYLES.football;
 
   return (
     <div className="space-y-16">
@@ -31,8 +71,8 @@ export const UnifiedLearningCanvas: React.FC<UnifiedLearningCanvasProps> = ({ to
                 <h2 className="font-display text-lg sm:text-xl md:text-2xl font-black text-white tracking-tight break-words">
                   The Intuitive Story
                 </h2>
-                <span className="font-mono text-[10px] text-[#B8FF00] bg-[#B8FF00]/10 border border-[#B8FF00]/25 px-2 py-0.5 rounded-md">
-                  Professor Dave Explains &bull; {activePassionId.toUpperCase()}
+                <span className={`font-mono text-[10px] px-2.5 py-0.5 rounded-md border font-bold uppercase tracking-wider ${ambient.badge}`}>
+                  {activePassionId} Lens
                 </span>
               </div>
               <p className="text-xs text-[#8DA391] font-mono break-words">
@@ -45,8 +85,8 @@ export const UnifiedLearningCanvas: React.FC<UnifiedLearningCanvasProps> = ({ to
           </span>
         </div>
 
-        {/* Clean, Decluttered Reading Surface */}
-        <div className="bg-[#080A0E]/80 backdrop-blur-md rounded-3xl border border-white/10 p-6 sm:p-10 md:p-12 shadow-2xl">
+        {/* Clean, Decluttered Reading Surface with Ambient Theme Sheen */}
+        <div className={`bg-gradient-to-br ${ambient.glow} backdrop-blur-md rounded-3xl border ${ambient.border} p-6 sm:p-10 md:p-12 shadow-2xl transition-all duration-300`}>
           <ProfessorDaveExplainsView 
             topic={topic}
             activePassionId={activePassionId}
@@ -79,8 +119,8 @@ export const UnifiedLearningCanvas: React.FC<UnifiedLearningCanvasProps> = ({ to
           </span>
         </div>
 
-        {/* Hands-On Simulation Workbench */}
-        <div className="bg-[#0D1117] rounded-3xl border border-white/10 p-6 sm:p-8 shadow-2xl">
+        {/* Hands-On Simulation Workbench with Ambient Theme Accent */}
+        <div className={`bg-[#0D1117] rounded-3xl border ${ambient.border} p-6 sm:p-8 shadow-2xl transition-all duration-300`}>
           <ExploreExperimentView content={topic.paths['explore-experiment']} topic={topic} />
         </div>
       </section>

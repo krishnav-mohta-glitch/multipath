@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import type { Topic } from '../../../types/topic';
 import { getProfessorDaveStory } from '../../../data/professorDaveStories';
+import { InteractivePassionSandbox } from '../passion/InteractivePassionSandbox';
 
 export interface ProfessorDaveExplainsViewProps {
   topic: Topic;
@@ -136,9 +137,9 @@ export const ProfessorDaveExplainsView: React.FC<ProfessorDaveExplainsViewProps>
       </section>
 
       {/* =================================================================== */}
-      {/* 4. THE REAL-WORLD PASSION CONNECTION (NO NESTED BOXES)              */}
+      {/* 4. THE REAL-WORLD PASSION CONNECTION (INTERACTIVE SANDBOX)          */}
       {/* =================================================================== */}
-      <section className="space-y-5 pt-4 border-t border-white/08">
+      <section className="space-y-6 pt-4 border-t border-white/08">
         <div className="flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider text-[#B8FF00]">
           <span className="text-sm">{story.passionConnection.passionIcon}</span>
           <span>2. How This Works in {story.passionConnection.passionName}</span>
@@ -152,12 +153,11 @@ export const ProfessorDaveExplainsView: React.FC<ProfessorDaveExplainsViewProps>
           {story.passionConnection.explanation}
         </p>
 
-        <div className="p-4 sm:p-5 rounded-2xl bg-white/[0.03] border border-white/10 text-sm sm:text-base text-white font-medium leading-relaxed">
-          <span className="font-mono text-xs font-bold text-[#B8FF00] uppercase tracking-wider block mb-1">
-            Real Numbers in Action:
-          </span>
-          {story.passionConnection.concreteNumbersOrScenario}
-        </div>
+        {/* Live Interactive Passion-Themed Sandbox Widget */}
+        <InteractivePassionSandbox 
+          topic={topic}
+          passionId={activePassionId}
+        />
       </section>
 
       {/* =================================================================== */}
