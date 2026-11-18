@@ -54,7 +54,7 @@ Every topic is structured across four genuinely distinct pedagogical perspective
 - **Socratic Loop**: Asks exactly one targeted guiding question at a time. Evaluates student reasoning before taking the next step.
 - **4-Level Progressive Hints**: Level 1 (Conceptual Nudge) $\rightarrow$ Level 2 (Specific Hint) $\rightarrow$ Level 3 (Next Step) $\rightarrow$ Level 4 (Detailed Walkthrough).
 - **On-Demand Solution**: Reveals complete pedagogical derivations when explicitly requested.
-- **Dual-Engine Architecture**: Seamlessly switches between live Gemini 1.5 Flash AI and deterministic domain evaluators with transparent mode indicators.
+- **Dual-Engine Architecture**: Seamlessly switches between live Gemini 3.8 Flash AI and deterministic domain evaluators with transparent mode indicators.
 
 ### 3. Feynman Mode (Peer-Teaching Diagnosis)
 - **Principle**: Students solidify their understanding by teaching a concept to an inquisitive AI persona learner ("Alex").
