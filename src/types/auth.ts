@@ -38,6 +38,10 @@ export interface StudentProfile {
   preferred_language: string;
   passion?: string | null;
   passion_details?: string | null;
+  interests?: string[];
+  hobbies?: string[];
+  learning_preferences?: string[];
+  subject_familiarity?: Record<string, string>;
   onboarding_completed?: boolean;
   created_at: string;
   updated_at: string;
@@ -52,6 +56,10 @@ export interface SignUpMetadata {
   preferredLanguage: string;
   passion?: string;
   passionDetails?: string;
+  interests?: string[];
+  hobbies?: string[];
+  learningPreferences?: string[];
+  subjectFamiliarity?: Record<string, string>;
 }
 
 export interface ProfileUpdatePayload {
@@ -61,7 +69,42 @@ export interface ProfileUpdatePayload {
   preferred_language?: string;
   passion?: string;
   passion_details?: string;
+  interests?: string[];
+  hobbies?: string[];
+  learning_preferences?: string[];
+  subject_familiarity?: Record<string, string>;
   onboarding_completed?: boolean;
+}
+
+export interface ParsedStudentPreferences {
+  interests: string[];
+  hobbies: string[];
+  learningPreferences: string[];
+  subjectFamiliarity: Record<string, string>;
+  activeInterest: string;
+}
+
+export function parseStudentPreferences(profile?: StudentProfile | null): ParsedStudentPreferences {
+  const fallbackInterest = profile?.passion || 'football';
+  let parsedJson: Partial<ParsedStudentPreferences> = {};
+
+  if (profile?.passion_details) {
+    try {
+      if (profile.passion_details.trim().startsWith('{')) {
+        parsedJson = JSON.parse(profile.passion_details);
+      }
+    } catch {
+      // plain text details, ignore JSON parse
+    }
+  }
+
+  return {
+    interests: profile?.interests || parsedJson.interests || [fallbackInterest],
+    hobbies: profile?.hobbies || parsedJson.hobbies || ['Exploring science'],
+    learningPreferences: profile?.learning_preferences || parsedJson.learningPreferences || ['Step-by-step explanations', 'Interactive experiments'],
+    subjectFamiliarity: profile?.subject_familiarity || parsedJson.subjectFamiliarity || {},
+    activeInterest: parsedJson.activeInterest || fallbackInterest,
+  };
 }
 
 export interface AuthState {

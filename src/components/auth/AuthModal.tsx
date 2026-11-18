@@ -840,14 +840,52 @@ const ProfileSettingsView: React.FC<{
         <div className="flex items-center gap-2">
           <span className="text-xl">🌟</span>
           <div>
-            <div className="text-xs font-bold text-[#111714]">
+            <div className="text-xs font-bold text-white capitalize">
               {currentPassionName}
             </div>
             <div className="text-[10px] text-slate-400">
-              AI synthesizes core physical & mathematical analogies through this field.
+              AI synthesizes core physical &amp; mathematical analogies through this field.
             </div>
           </div>
         </div>
+
+        {/* Display Saved Interests Chips */}
+        {profile?.interests && profile.interests.length > 0 && (
+          <div className="space-y-1 pt-1">
+            <span className="font-mono text-[10px] uppercase tracking-wider text-slate-400 block">
+              Active Interest Domains:
+            </span>
+            <div className="flex flex-wrap gap-1.5">
+              {profile.interests.map((int, i) => (
+                <span
+                  key={i}
+                  className="px-2 py-0.5 rounded-md bg-[#080A0E] border border-white/10 text-[10px] font-mono text-[#B8FF00] capitalize"
+                >
+                  {int}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Display Hobbies & Learning Style Chips */}
+        {profile?.learning_preferences && profile.learning_preferences.length > 0 && (
+          <div className="space-y-1 pt-1">
+            <span className="font-mono text-[10px] uppercase tracking-wider text-slate-400 block">
+              Preferred Learning Style:
+            </span>
+            <div className="flex flex-wrap gap-1.5">
+              {profile.learning_preferences.map((pref, i) => (
+                <span
+                  key={i}
+                  className="px-2 py-0.5 rounded-md bg-white/5 border border-white/10 text-[10px] font-mono text-slate-300"
+                >
+                  {pref}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
 
         <div className="space-y-1 pt-1">
           <label className="font-mono text-[10px] uppercase tracking-wider text-slate-400 block">

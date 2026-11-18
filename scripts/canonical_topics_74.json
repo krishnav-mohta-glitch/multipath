@@ -1,0 +1,1112 @@
+[
+  {
+    "id": "math-linear-equations",
+    "title": "Linear Equations",
+    "subtitle": "Preserving balance, rate of change, and the geometry of constant slope",
+    "subjectId": "mathematics",
+    "difficulty": "Foundational",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "bio-photosynthesis",
+    "title": "Photosynthesis",
+    "subtitle": "Harnessing stellar photons to split water and forge organic chemical bonds",
+    "subjectId": "biology",
+    "difficulty": "Intermediate",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "hist-french-revolution",
+    "title": "Causes of the French Revolution",
+    "subtitle": "Systemic debt, social caste rigidity, Enlightenment philosophy, and climatic shock",
+    "subjectId": "history",
+    "difficulty": "Intermediate",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "eng-understanding-metaphors",
+    "title": "Understanding Metaphors",
+    "subtitle": "Conceptual mapping, cognitive lenses, and the architecture of figurative thought",
+    "subjectId": "english",
+    "difficulty": "Foundational",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "cs-binary-search",
+    "title": "Binary Search & Algorithmic Complexity",
+    "subtitle": "Divide-and-conquer, logarithmic scaling, and search space reduction",
+    "subjectId": "computer-science",
+    "difficulty": "Intermediate",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "phys-newtons-laws",
+    "title": "Newton's Laws of Motion",
+    "subtitle": "Inertia, dynamic force acceleration, and universal mutual interaction",
+    "subjectId": "physics",
+    "difficulty": "Foundational",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "chem-periodic-table",
+    "title": "The Periodic Table & Chemical Bonding",
+    "subtitle": "Valence electron shells, electronegativity, and molecular geometry",
+    "subjectId": "chemistry",
+    "difficulty": "Intermediate",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "geo-plate-tectonics",
+    "title": "Plate Tectonics & Earth Systems",
+    "subtitle": "Mantle convection currents, lithospheric drift, subduction zones, and planetary recycling",
+    "subjectId": "geography",
+    "difficulty": "Foundational",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "math-rational-numbers",
+    "title": "Rational Numbers & Real Properties",
+    "subtitle": "Density, fractional representations, and algebraic operations on Q",
+    "subjectId": "mathematics",
+    "difficulty": "Foundational",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "math-pythagoras-triangles",
+    "title": "Pythagorean Theorem & Triangle Similarity",
+    "subtitle": "Geometric proof, Euclidean ratios, and right-triangle invariant metrics",
+    "subjectId": "mathematics",
+    "difficulty": "Foundational",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "math-quadratic-equations",
+    "title": "Quadratic Equations & The Discriminant",
+    "subtitle": "Parabolic trajectories, roots of ax² + bx + c = 0, and nature of solutions",
+    "subjectId": "mathematics",
+    "difficulty": "Intermediate",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "math-trigonometric-ratios",
+    "title": "Trigonometric Ratios & Height/Distance",
+    "subtitle": "Sine, cosine, tangent invariants, and angular elevation measurement",
+    "subjectId": "mathematics",
+    "difficulty": "Intermediate",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "math-coordinate-geometry",
+    "title": "Cartesian Coordinate Geometry",
+    "subtitle": "Distance formula, section formula, midpoints, and collinearity",
+    "subjectId": "mathematics",
+    "difficulty": "Intermediate",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "math-mensuration-surface-volumes",
+    "title": "Surface Areas & Volumes of Solids",
+    "subtitle": "Cylinders, cones, spheres, and composite solid geometry",
+    "subjectId": "mathematics",
+    "difficulty": "Intermediate",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "math-probability-foundations",
+    "title": "Probability & Event Spaces",
+    "subtitle": "Sample spaces, theoretical probability, complementary events, and odds",
+    "subjectId": "mathematics",
+    "difficulty": "Foundational",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "math-statistics-measures",
+    "title": "Statistics & Measures of Central Tendency",
+    "subtitle": "Mean, median, mode, ogives, and grouped frequency distributions",
+    "subjectId": "mathematics",
+    "difficulty": "Intermediate",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "math-arithmetic-progressions",
+    "title": "Arithmetic Progressions & Series",
+    "subtitle": "Common difference, nth term formula, and Gaussian summation S_n",
+    "subjectId": "mathematics",
+    "difficulty": "Intermediate",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "math-circles-theorems",
+    "title": "Circle Geometry: Chords & Tangents",
+    "subtitle": "Tangent perpendicularity, equal tangents from external points, and cyclic quadrilaterals",
+    "subjectId": "mathematics",
+    "difficulty": "Advanced",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "math-polynomials-factorisation",
+    "title": "Polynomials & Factor Theorem",
+    "subtitle": "Remainder theorem, synthetic division, and polynomial zeroes",
+    "subjectId": "mathematics",
+    "difficulty": "Intermediate",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "math-algebraic-expressions-identities",
+    "title": "Algebraic Identities & Expansions",
+    "subtitle": "Binomial squares, difference of squares, and cubic expansion proofs",
+    "subjectId": "mathematics",
+    "difficulty": "Foundational",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "math-commercial-arithmetic",
+    "title": "Commercial Arithmetic: Interest & GST",
+    "subtitle": "Compound interest, recurring deposits, and value-added tax computation",
+    "subjectId": "mathematics",
+    "difficulty": "Intermediate",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "phys-light-reflection",
+    "title": "Light Reflection & Spherical Mirrors",
+    "subtitle": "Laws of reflection, focal properties, and mirror formula 1/f = 1/v + 1/u",
+    "subjectId": "physics",
+    "difficulty": "Foundational",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "phys-light-refraction-lenses",
+    "title": "Light Refraction & Thin Lenses",
+    "subtitle": "Snell’s Law, refractive index, lens formula 1/f = 1/v - 1/u, and optical power",
+    "subjectId": "physics",
+    "difficulty": "Intermediate",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "phys-current-electricity",
+    "title": "Current Electricity & Circuit Laws",
+    "subtitle": "Ohm’s law, resistivity, series/parallel combinations, and Joule heating",
+    "subjectId": "physics",
+    "difficulty": "Intermediate",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "phys-magnetic-effects",
+    "title": "Magnetic Effects of Electric Current",
+    "subtitle": "Biot-Savart rules, solenoids, Fleming’s Left-Hand Rule, and induction",
+    "subjectId": "physics",
+    "difficulty": "Intermediate",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "phys-work-energy-power",
+    "title": "Work, Mechanical Energy & Power",
+    "subtitle": "W = F·s·cos θ, kinetic/potential energy, conservation laws, and efficiency",
+    "subjectId": "physics",
+    "difficulty": "Foundational",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "phys-gravitation-planetary",
+    "title": "Universal Gravitation & Orbital Motion",
+    "subtitle": "F = G(m₁m₂)/r², free fall acceleration g, and Keplerian orbital speeds",
+    "subjectId": "physics",
+    "difficulty": "Intermediate",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "phys-sound-wave-properties",
+    "title": "Sound Waves: Frequency, Echoes & Resonance",
+    "subtitle": "Longitudinal compression waves, speed v = f·λ, echoes, and auditory thresholds",
+    "subjectId": "physics",
+    "difficulty": "Foundational",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "phys-heat-thermodynamics",
+    "title": "Heat Transfer & Specific Heat Capacity",
+    "subtitle": "Conduction, convection, radiation, Q = mcΔT, and latent heat of fusion",
+    "subjectId": "physics",
+    "difficulty": "Intermediate",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "phys-fluid-pressure-buoyancy",
+    "title": "Fluid Pressure & Archimedes’ Principle",
+    "subtitle": "Hydrostatic pressure P = ρgh, Pascal’s principle, and buoyant upthrust",
+    "subjectId": "physics",
+    "difficulty": "Intermediate",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "phys-motion-kinematics",
+    "title": "Kinematics: 1D Motion & Graphs",
+    "subtitle": "Distance vs displacement, velocity-time curves, and kinematic equations of motion",
+    "subjectId": "physics",
+    "difficulty": "Foundational",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "phys-radioactivity-nuclear",
+    "title": "Radioactivity & Nuclear Physics",
+    "subtitle": "Alpha, beta, gamma decay, half-life N(t) = N₀(½)^(t/T), and mass-energy E = mc²",
+    "subjectId": "physics",
+    "difficulty": "Advanced",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "chem-chemical-reactions",
+    "title": "Chemical Reactions & Equations",
+    "subtitle": "Stoichiometry balancing, reaction taxonomy, and redox electron transfer",
+    "subjectId": "chemistry",
+    "difficulty": "Foundational",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "chem-acids-bases-salts",
+    "title": "Acids, Bases & The pH Scale",
+    "subtitle": "Proton transfer, logarithmic pH = -log[H⁺], neutralization, and indicators",
+    "subjectId": "chemistry",
+    "difficulty": "Intermediate",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "chem-metals-nonmetals",
+    "title": "Metals, Non-Metals & Metallurgy",
+    "subtitle": "Reactivity series, ionic lattice formation, and metallurgical extraction",
+    "subjectId": "chemistry",
+    "difficulty": "Intermediate",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "chem-carbon-compounds",
+    "title": "Carbon Compounds & Functional Groups",
+    "subtitle": "Tetravalency, catenation, homologous series, and IUPAC nomenclature",
+    "subjectId": "chemistry",
+    "difficulty": "Advanced",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "chem-structure-of-atom",
+    "title": "Atomic Structure: Subatomic Particles & Orbitals",
+    "subtitle": "Rutherford scattering, Bohr model, electronic configuration, and isotopes",
+    "subjectId": "chemistry",
+    "difficulty": "Intermediate",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "chem-matter-states",
+    "title": "States of Matter & Kinetic Molecular Theory",
+    "subtitle": "Intermolecular forces, Brownian motion, sublimation, and phase diagrams",
+    "subjectId": "chemistry",
+    "difficulty": "Foundational",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "chem-atoms-molecules-mole",
+    "title": "The Mole Concept & Stoichiometry",
+    "subtitle": "Avogadro’s constant 6.022 × 10²³, molar mass, and empirical formulas",
+    "subjectId": "chemistry",
+    "difficulty": "Advanced",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "chem-water-solutions",
+    "title": "Water: Solutions, Solubility & Hardness",
+    "subtitle": "Universal solvent, hydrogen bonding, water of crystallization, and softening",
+    "subjectId": "chemistry",
+    "difficulty": "Foundational",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "chem-electrolysis-redox",
+    "title": "Electrolysis & Electrochemical Cells",
+    "subtitle": "Faraday’s laws, preferential discharge, electroplating, and refining",
+    "subjectId": "chemistry",
+    "difficulty": "Advanced",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "bio-cell-unit-of-life",
+    "title": "The Cell: Fundamental Unit of Life",
+    "subtitle": "Cell theory, organelle ultrastructure, membrane transport, and prokaryote vs eukaryote",
+    "subjectId": "biology",
+    "difficulty": "Foundational",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "bio-cell-division-genetics",
+    "title": "Cell Division, Mitosis & Mendelian Genetics",
+    "subtitle": "Mitosis vs meiosis, chromosome karyotypes, and Mendel’s laws of inheritance",
+    "subjectId": "biology",
+    "difficulty": "Advanced",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "bio-respiration-metabolism",
+    "title": "Cellular Respiration & Human Metabolism",
+    "subtitle": "Glycolysis, Krebs cycle, electron transport chain, and alveolar gas exchange",
+    "subjectId": "biology",
+    "difficulty": "Intermediate",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "bio-circulatory-system",
+    "title": "The Circulatory System & Double Circulation",
+    "subtitle": "Cardiac anatomy, systemic/pulmonary loops, blood components, and blood pressure",
+    "subjectId": "biology",
+    "difficulty": "Intermediate",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "bio-nervous-system-endocrine",
+    "title": "The Nervous System & Endocrine Regulation",
+    "subtitle": "Neuron action potentials, reflex arcs, brain anatomy, and hormonal homeostasis",
+    "subjectId": "biology",
+    "difficulty": "Advanced",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "bio-tissues-plant-animal",
+    "title": "Plant & Animal Tissues: Structure & Function",
+    "subtitle": "Meristematic, permanent, epithelial, connective, muscular, and vascular tissues",
+    "subjectId": "biology",
+    "difficulty": "Foundational",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "bio-human-excretory-system",
+    "title": "The Excretory System & Renal Osmoregulation",
+    "subtitle": "Kidney anatomy, nephron ultrafiltration, selective reabsorption, and dialysis",
+    "subjectId": "biology",
+    "difficulty": "Advanced",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "bio-plant-transpiration-transport",
+    "title": "Plant Transport: Xylem, Phloem & Transpiration",
+    "subtitle": "Cohesion-tension theory, root absorption, stomatal mechanics, and phloem translocation",
+    "subjectId": "biology",
+    "difficulty": "Intermediate",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "bio-ecosystems-environment",
+    "title": "Ecosystems, Trophic Energy & Environment",
+    "subtitle": "Food webs, 10% energy transfer law, biomagnification, and ozone layer dynamics",
+    "subjectId": "biology",
+    "difficulty": "Foundational",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "hist-indus-valley-civilisation",
+    "title": "The Harappan Civilisation & Urban Planning",
+    "subtitle": "Bronze Age town planning, citadel architecture, drainage engineering, and trade networks",
+    "subjectId": "history",
+    "difficulty": "Foundational",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "hist-vedic-period-empires",
+    "title": "The Vedic Age & the Rise of Mahajanapadas",
+    "subtitle": "Vedic socio-political transitions, Second Urbanisation, iron metallurgy, and the Mauryan Empire",
+    "subjectId": "history",
+    "difficulty": "Intermediate",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "hist-mughal-empire-administration",
+    "title": "The Mughal Empire: Administration, Economy & Culture",
+    "subtitle": "Mansabdari system, Zabt land revenue, religious policies of Akbar, and Indo-Islamic architecture",
+    "subjectId": "history",
+    "difficulty": "Intermediate",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "hist-indian-national-movement",
+    "title": "The Indian National Movement & Freedom Struggle",
+    "subtitle": "From the 1857 Uprising through the Gandhian Mass Movements to Independence and Partition (1947)",
+    "subjectId": "history",
+    "difficulty": "Advanced",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "hist-first-world-war",
+    "title": "The First World War: Causes, Dynamics & Consequences",
+    "subtitle": "Imperialism, militarism, the alliance system, trench warfare, Treaty of Versailles, and the League of Nations",
+    "subjectId": "history",
+    "difficulty": "Intermediate",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "hist-united-nations-charter",
+    "title": "The United Nations: Charter, Organs & Global Governance",
+    "subtitle": "Origins from the ashes of WWII, General Assembly, Security Council veto, specialized agencies, and peacekeeping",
+    "subjectId": "history",
+    "difficulty": "Intermediate",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "civ-indian-constitution-fundamental-rights",
+    "title": "The Indian Constitution: Preamble, Fundamental Rights & Duties",
+    "subtitle": "Constituent Assembly debates, basic structure doctrine, Articles 12-35, and constitutional remedies",
+    "subjectId": "history",
+    "difficulty": "Intermediate",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "civ-parliamentary-democracy",
+    "title": "Union Legislature & Executive: The Parliamentary System",
+    "subtitle": "Lok Sabha, Rajya Sabha, Prime Minister and Council of Ministers, President of India, and legislative processes",
+    "subjectId": "history",
+    "difficulty": "Intermediate",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "civ-judiciary-rule-of-law",
+    "title": "The Judiciary & the Rule of Law",
+    "subtitle": "Supreme Court of India, High Courts, Judicial Review, collegium system, and Public Interest Litigation",
+    "subjectId": "history",
+    "difficulty": "Advanced",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "geo-climate-monsoon-mechanisms",
+    "title": "Climate & Monsoon Mechanisms of the Indian Subcontinent",
+    "subtitle": "Thermal contrast, ITCZ migration, jet streams, El Niño/IOD, and regional rainfall distribution",
+    "subjectId": "geography",
+    "difficulty": "Advanced",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "eng-active-passive-voice",
+    "title": "Active & Passive Voice: Structural Mechanics & Pragmatics",
+    "subtitle": "Syntactic transformations, agent demotion, tense conjugations, and rhetorical purpose in discourse",
+    "subjectId": "english",
+    "difficulty": "Foundational",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "eng-direct-indirect-speech",
+    "title": "Reported Speech: Direct & Indirect Discourse",
+    "subtitle": "Tense backshifting, deictic temporal/spatial shifts, pronoun conversions, and reporting verbs",
+    "subjectId": "english",
+    "difficulty": "Intermediate",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "cs-computational-thinking-algorithms",
+    "title": "Computational Thinking, Algorithms & Complexity",
+    "subtitle": "Decomposition, pattern recognition, abstraction, algorithmic flowcharts, and Big-O efficiency",
+    "subjectId": "computer-science",
+    "difficulty": "Intermediate",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "cs-oop-classes-objects",
+    "title": "Object-Oriented Programming: Classes & Objects",
+    "subtitle": "The four OOP pillars: Encapsulation, Abstraction, Inheritance, and Polymorphism in modern software",
+    "subjectId": "computer-science",
+    "difficulty": "Intermediate",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "math-6-knowing-numbers",
+    "title": "Knowing Our Numbers",
+    "subtitle": "Place value arithmetic, Indian vs International notation, and magnitude estimation",
+    "subjectId": "mathematics",
+    "difficulty": "Foundational",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "sci-6-light-shadows",
+    "title": "Light, Shadows and Reflections",
+    "subtitle": "Rectilinear propagation, opacity, and the geometry of inverted pinhole images",
+    "subjectId": "physics",
+    "difficulty": "Foundational",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "math-7-integers-multiplication",
+    "title": "Multiplication & Division of Integers",
+    "subtitle": "Sign rules, number line vector direction, and why two negatives make a positive",
+    "subjectId": "mathematics",
+    "difficulty": "Intermediate",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "sci-7-heat-transfer",
+    "title": "Heat and Modes of Heat Transfer",
+    "subtitle": "Conduction in solids, convection currents in fluids, and radiation through vacuum",
+    "subjectId": "physics",
+    "difficulty": "Intermediate",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "math-8-linear-equations-1var",
+    "title": "Linear Equations in One Variable",
+    "subtitle": "Balancing multi-step equations with variables on both sides and cross-multiplication",
+    "subjectId": "mathematics",
+    "difficulty": "Intermediate",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "sci-8-force-pressure",
+    "title": "Force and Pressure Dynamics",
+    "subtitle": "Contact vs non-contact forces, pressure distribution, and atmospheric columns",
+    "subjectId": "physics",
+    "difficulty": "Intermediate",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "math-11-limits-derivatives",
+    "title": "Limits & First Principles of Derivatives",
+    "subtitle": "The calculus of infinitesimal intervals, tangent slopes, and instantaneous rates of change",
+    "subjectId": "mathematics",
+    "difficulty": "Advanced",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "phys-11-work-energy-theorem",
+    "title": "Work-Energy Theorem & Conservation of Energy",
+    "subtitle": "Dot product work, conservative forces, potential wells, and mechanical energy conservation",
+    "subjectId": "physics",
+    "difficulty": "Advanced",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "math-12-integrals-calculus",
+    "title": "Definite Integrals & Fundamental Theorem of Calculus",
+    "subtitle": "Riemann sums, area accumulation under curved boundaries, and the differentiation-integration inversion",
+    "subjectId": "mathematics",
+    "difficulty": "Advanced",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  },
+  {
+    "id": "phys-12-electrostatics-coulomb-gauss",
+    "title": "Electrostatics: Coulomb's Law & Gauss's Law",
+    "subtitle": "Inverse-square force fields, electric flux geometry, and closed Gaussian surface symmetry",
+    "subjectId": "physics",
+    "difficulty": "Advanced",
+    "availablePaths": [
+      "structured-explanation",
+      "visual-learning",
+      "examples-applications",
+      "explore-experiment"
+    ],
+    "hasLab": true,
+    "hasFeynman": true
+  }
+]
