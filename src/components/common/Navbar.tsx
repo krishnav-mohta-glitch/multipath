@@ -147,7 +147,7 @@ export const Navbar: React.FC = () => {
           </div>
 
           {/* Desktop Search Capsule */}
-          <div className="hidden lg:flex flex-1 max-w-xs xl:max-w-sm mx-2">
+          <div className="hidden lg:flex flex-1 max-w-[160px] xl:max-w-xs mx-2">
             <form onSubmit={handleSearchSubmit} className="relative w-full">
               <Search className="w-3.5 h-3.5 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#8B9DAE]" />
               <input
@@ -160,7 +160,7 @@ export const Navbar: React.FC = () => {
                     navigateTo('library');
                   }
                 }}
-                className="w-full pl-9 pr-12 py-1.5 text-xs bg-[#161D26]/90 hover:bg-[#1C2430] focus:bg-[#080A0E] border border-white/10 rounded-full text-white placeholder-[#8B9DAE]/70 focus:outline-none focus:ring-1 focus:ring-[#B8FF00] focus:border-[#B8FF00] transition-all"
+                className="w-full pl-9 pr-10 py-1.5 text-xs bg-[#161D26]/90 hover:bg-[#1C2430] focus:bg-[#080A0E] border border-white/10 rounded-full text-white placeholder-[#8B9DAE]/70 focus:outline-none focus:ring-1 focus:ring-[#B8FF00] focus:border-[#B8FF00] transition-all"
               />
               <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-0.5 text-[9px] text-[#8B9DAE] font-mono pointer-events-none">
                 <Command className="w-2.5 h-2.5" />
@@ -175,11 +175,12 @@ export const Navbar: React.FC = () => {
               {navLinks.map((link) => {
                 const Icon = link.icon;
                 const active = link.isActive;
+                const isResourceTab = link.id === 'resources';
                 return (
                   <button
                     key={link.id}
                     onClick={link.onClick}
-                    className={`flex items-center gap-1.5 px-2.5 lg:px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-150 cursor-pointer shrink-0 ${
+                    className={`${isResourceTab ? 'hidden xl:flex' : 'flex'} items-center gap-1.5 px-2.5 lg:px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-150 cursor-pointer shrink-0 ${
                       active
                         ? 'bg-[#B8FF00] text-[#080A0E] font-bold shadow-sm'
                         : 'text-[#E5E7EB] hover:text-white hover:bg-white/08'
@@ -215,7 +216,7 @@ export const Navbar: React.FC = () => {
             {/* Student Passion Persona Pill */}
             <button
               onClick={openPassionModal}
-              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#161D26] hover:bg-[#1C2430] text-[#C8D6C9] hover:text-white border border-white/10 text-xs font-mono transition-all cursor-pointer shadow-xs shrink-0"
+              className="hidden sm:flex items-center gap-1.5 px-2.5 xl:px-3 py-1.5 rounded-full bg-[#161D26] hover:bg-[#1C2430] text-[#C8D6C9] hover:text-white border border-white/10 text-xs font-mono transition-all cursor-pointer shadow-xs shrink-0"
               title="Change your learning passion & personal explanation domain"
             >
               <span>{profile?.passion === 'gaming' ? '🎮' : profile?.passion === 'cricket' ? '🏏' : profile?.passion === 'space' ? '🚀' : profile?.passion === 'music' ? '🎵' : profile?.passion === 'robotics' ? '🤖' : '⚽'}</span>
@@ -226,14 +227,14 @@ export const Navbar: React.FC = () => {
             {user ? (
               <button
                 onClick={() => openAuthModal('profile')}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#161D26] hover:bg-[#1C2430] text-white border border-white/10 text-xs font-medium transition-all shadow-xs cursor-pointer"
+                className="flex items-center gap-2 px-2.5 xl:px-3 py-1.5 rounded-full bg-[#161D26] hover:bg-[#1C2430] text-white border border-white/10 text-xs font-medium transition-all shadow-xs cursor-pointer shrink-0"
                 title="Learner Profile & Telemetry"
               >
-                <div className="w-5 h-5 rounded-full bg-[#B8FF00] text-[#080A0E] font-bold text-[10px] flex items-center justify-center font-mono">
+                <div className="w-5 h-5 rounded-full bg-[#B8FF00] text-[#080A0E] font-bold text-[10px] flex items-center justify-center font-mono shrink-0">
                   {(profile?.display_name || user.email || 'S')[0].toUpperCase()}
                 </div>
                 <div className="flex flex-col text-left">
-                  <span className="font-bold text-[11px] leading-tight max-w-[90px] truncate text-white">
+                  <span className="font-bold text-[11px] leading-tight max-w-[80px] xl:max-w-[100px] truncate text-white">
                     {profile?.display_name || user.email?.split('@')[0]}
                   </span>
                   <span className="font-mono text-[8px] text-[#B8FF00] leading-none">
