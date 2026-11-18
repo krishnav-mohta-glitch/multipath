@@ -56,11 +56,16 @@ export const UnifiedLearningCanvas: React.FC<UnifiedLearningCanvasProps> = ({ to
               01
             </div>
             <div>
-              <h2 className="font-display text-lg sm:text-xl md:text-2xl font-black text-white tracking-tight break-words">
-                Structured Explanation
-              </h2>
+              <div className="flex items-center gap-2 flex-wrap">
+                <h2 className="font-display text-lg sm:text-xl md:text-2xl font-black text-white tracking-tight break-words">
+                  Structured Explanation
+                </h2>
+                <span className="font-mono text-[10px] text-[#B8FF00] bg-[#B8FF00]/10 border border-[#B8FF00]/25 px-2 py-0.5 rounded-md">
+                  Personalized &bull; {activePassionId.toUpperCase()}
+                </span>
+              </div>
               <p className="text-xs text-[#8DA391] font-mono break-words">
-                First-principles conceptual breakdown &amp; textbook syllabus fundamentals
+                First-principles conceptual breakdown &bull; Grounded in real-world {activePassionId} analogies &amp; examples
               </p>
             </div>
           </div>
@@ -71,7 +76,15 @@ export const UnifiedLearningCanvas: React.FC<UnifiedLearningCanvasProps> = ({ to
 
         {/* Structured Explanation Body */}
         <div className="bg-[#0D1117] rounded-3xl border border-white/10 p-6 sm:p-8 shadow-2xl">
-          <StructuredExplanationView content={topic.paths['structured-explanation']} />
+          <StructuredExplanationView 
+            content={topic.paths['structured-explanation']} 
+            topicTitle={topic.title}
+            subjectId={topic.subjectId}
+            passionData={passionData}
+            activePassionId={activePassionId}
+            onSelectPassion={setActivePassionId}
+            onOpenMorePassions={openPassionModal}
+          />
         </div>
       </section>
 
